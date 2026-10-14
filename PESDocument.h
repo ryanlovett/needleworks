@@ -90,6 +90,9 @@
 
 - (NSSize)canvasSize;
 
+/* Printing */
+- (void)		layoutPrintViewsForPrintInfo:(NSPrintInfo *)printInfo;
+
 /* Zooming */
 - (IBAction)	zoomIn:(id)sender;
 - (IBAction)	zoomOut:(id)sender;

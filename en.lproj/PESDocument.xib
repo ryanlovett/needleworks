@@ -207,7 +207,7 @@
             </connections>
         </drawer>
         <userDefaultsController representsSharedInstance="YES" id="100166"/>
-        <splitView dividerStyle="thin" vertical="YES" id="100252" userLabel="Left-Right Split View">
+        <splitView dividerStyle="thin" vertical="YES" id="100252" userLabel="Left-Right Split View" customClass="PrintLayoutSplitView">
             <rect key="frame" x="0.0" y="0.0" width="857" height="613"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>

@@ -21,6 +21,7 @@
 
 #import "PESDocument.h"
 #import "AppDelegate.h"
+#import "PrintScaleAccessoryController.h"
 #import "StitchBlock.h"
 #import "PESDocumentParser.h"
 
@@ -329,10 +330,11 @@ static NSToolbarItemIdentifier const PESDesignInformationItem = @"DesignInformat
 	return YES;
 }
 
-- (NSPrintOperation *)printOperationWithSettings:(NSDictionary *)printSettings error:(NSError **)outError {
-	
-	NSPrintInfo* printInfo = [self printInfo];
-	
+/* Lay out the printed page for the print info's paper size, orientation and
+ margins, and scale the design. This runs each time the print system
+ paginates (see PrintLayoutSplitView), so the layout and the print panel's
+ preview follow any changes made in the print panel. */
+- (void)layoutPrintViewsForPrintInfo:(NSPrintInfo *)printInfo {
     NSSize paperSize = [printInfo paperSize];
     NSRect printableRect = [printInfo imageablePageBounds];
 	
@@ -352,14 +354,8 @@ static NSToolbarItemIdentifier const PESDesignInformationItem = @"DesignInformat
     [printInfo setTopMargin:    marginTB];
     [printInfo setBottomMargin: marginTB];
 	
-	[printInfo setHorizontalPagination:NSPrintingPaginationModeFit];
-	[printInfo setVerticalPagination:NSPrintingPaginationModeFit];
-	//[printInfo setHorizontallyCentered:NO];
-	//[printInfo setVerticallyCentered:NO];
-	
 	CGFloat pageWidth  = paperSize.width - marginLR*2;
 	CGFloat pageHeight = paperSize.height - marginTB*2;
-	//NSLog(@"page size: %f x %f", pageWidth, pageHeight);
 
 	// Expand our split view to occupy the whole page
 	[splitView setFrameSize:NSMakeSize(pageWidth, pageHeight)];
@@ -376,18 +372,28 @@ static NSToolbarItemIdentifier const PESDesignInformationItem = @"DesignInformat
 	 millimetre per inch, 72 points per inch */
 	CGFloat unitsPerPoint = 254.0 / 72;
 
-	// Fetch the print scale preference
-	NSInteger printScale = [[NSUserDefaults standardUserDefaults] integerForKey:@"printScale"];
-
 	// User wants the printed size scaled to fit, keeping its proportions
+	NSInteger printScale = [[NSUserDefaults standardUserDefaults] integerForKey:PESPrintScaleKey];
 	if (printScale == 1 && xdiff > 0 && ydiff > 0) {
 		unitsPerPoint = MAX(xdiff / printSize.width, ydiff / printSize.height);
 	}
 
 	[printView setBounds:NSMakeRect(min.x, min.y, printSize.width * unitsPerPoint, printSize.height * unitsPerPoint)];
+}
+
+- (NSPrintOperation *)printOperationWithSettings:(NSDictionary *)printSettings error:(NSError **)outError {
+	NSPrintInfo* printInfo = [self printInfo];
+	[printInfo setHorizontalPagination:NSPrintingPaginationModeFit];
+	[printInfo setVerticalPagination:NSPrintingPaginationModeFit];
+	[self layoutPrintViewsForPrintInfo:printInfo];
 
 	NSPrintOperation* op = [NSPrintOperation printOperationWithView:splitView printInfo:printInfo];
-	
+
+	/* Let people choose the print scale in the print panel itself */
+	NSPrintPanel *printPanel = [op printPanel];
+	[printPanel addAccessoryController:[[PrintScaleAccessoryController alloc] init]];
+	[printPanel setOptions:[printPanel options] | NSPrintPanelShowsPaperSize | NSPrintPanelShowsOrientation | NSPrintPanelShowsPreview];
+
 	return op;
 }
 
