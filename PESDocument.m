@@ -24,7 +24,8 @@
 #import "StitchBlock.h"
 #import "PESDocumentParser.h"
 
-/* Points per design unit (0.1 mm) at actual size */
+/* Points per design unit (0.1 mm) at 100% zoom. This is the design view's
+ base scale; true life size depends on the screen (see actualSizeZoom). */
 static const CGFloat PESPointsPerUnit = 100.0 / 254;
 
 /* Zoom limits, and the factor each Zoom In or Zoom Out step changes by */
@@ -81,7 +82,7 @@ static NSToolbarItemIdentifier const PESDesignInformationItem = @"DesignInformat
 	[legendPrintView setDelegate:self];
 		
 	/* The design view's bounds are in design units (0.1 mm) and its frame is
-	 in points at actual size. Designs do not always originate from (0, 0);
+	 in points at 100% zoom. Designs do not always originate from (0, 0);
 	 some are even (<0, <0). Keep at least one unit in each direction so
 	 blank or perfectly straight designs still have a valid size. */
 	NSRect designRect = NSMakeRect(min.x, min.y, MAX(max.x - min.x, 1), MAX(max.y - min.y, 1));
@@ -140,6 +141,12 @@ static NSToolbarItemIdentifier const PESDesignInformationItem = @"DesignInformat
 	if (!hasSizedWindow) {
 		hasSizedWindow = YES;
 		NSWindow *window = [mainView window];
+
+		/* Open designs at their actual (life) size */
+		if (numStitches > 0) {
+			[[mainView enclosingScrollView] setMagnification:[self actualSizeZoom]];
+		}
+
 		NSRect screenFrame = [[window screen] visibleFrame];
 		[window setFrame:[self windowWillUseStandardFrame:window defaultFrame:screenFrame] display:YES];
 	}
@@ -184,8 +191,25 @@ static NSToolbarItemIdentifier const PESDesignInformationItem = @"DesignInformat
 	[self setZoom:[[mainView enclosingScrollView] magnification] / PESZoomStep];
 }
 
+/* The zoom at which the design appears at its real, physical size on the
+ screen showing the window, so it can be compared with fabric or a hoop.
+ Falls back to 100% if the display doesn't report its physical size. */
+- (CGFloat) actualSizeZoom {
+	NSScreen *screen = [[mainView window] screen] ?: [NSScreen mainScreen];
+	CGDirectDisplayID displayID = [[[screen deviceDescription] objectForKey:@"NSScreenNumber"] unsignedIntValue];
+	CGSize physicalSize = CGDisplayScreenSize(displayID);
+
+	if (physicalSize.width <= 0) {
+		return 1;
+	}
+
+	CGFloat pointsPerMillimeter = NSWidth([screen frame]) / physicalSize.width;
+	CGFloat zoom = (pointsPerMillimeter / 10) / PESPointsPerUnit;
+	return MIN(MAX(zoom, PESMinimumZoom), PESMaximumZoom);
+}
+
 - (IBAction) zoomToActualSize:(id)sender {
-	[self setZoom:1];
+	[self setZoom:[self actualSizeZoom]];
 }
 
 - (IBAction) zoomToFit:(id)sender {
