@@ -60,35 +60,6 @@ public final class StitchBlock: NSObject {
 		}
 		return thread.number > 0 ? "\(thread.name) (\(thread.number))" : thread.name
 	}
-
-	/// The sewn stitches as one path; jumps and trims move without drawing.
-	private lazy var stitchesPath = path(drawingJumps: false)
-
-	/// Every stitch including jumps and trims, as the needle travels.
-	private lazy var stitchesAndJumpsPath = path(drawingJumps: true)
-
-	private func path(drawingJumps: Bool) -> NSBezierPath {
-		let path = NSBezierPath()
-		for (i, stitch) in stitches.enumerated() {
-			if i == 0 || (stitch.type != .normal && !drawingJumps) {
-				path.move(to: stitch.end)
-			} else {
-				path.line(to: stitch.end)
-			}
-		}
-		return path
-	}
-
-	@objc(drawWithSelection:Jumps:Width:)
-	public func draw(selected: Bool, jumps: Bool, width lineWidth: CGFloat) {
-		let path = jumps ? stitchesAndJumpsPath : stitchesPath
-
-		color.setStroke()
-		path.lineCapStyle = .round
-		path.lineJoinStyle = .round
-		path.lineWidth = lineWidth
-		path.stroke()
-	}
 }
 
 /// A thread in the PEC palette.

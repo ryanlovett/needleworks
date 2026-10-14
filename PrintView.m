@@ -29,30 +29,10 @@
 
 - (void) drawRect:(NSRect) rect {
 	PESDocument* doc = [self delegate];
-	
-	NSGraphicsContext *currentContext = [NSGraphicsContext currentContext];
-	
-	// Get our list of stitch blocks
-	NSArray*		drawList = [doc stitchBlocks];
-	NSEnumerator*	iter;
-	StitchBlock*	stitchblock;
-	
-	//NSLog(@"PrintView::drawRect: rect: %f x %f @ (%f, %f)",
-	//	  rect.size.width, rect.size.height, rect.origin.x, rect.origin.y);
-	//NSLog(@"PrintView::drawRect: frame: %f x %f @ (%f, %f)",
-	//	  [self frame].size.width, [self frame].size.height,
-	//	  [self frame].origin.x, [self frame].origin.y);
-	//NSLog(@"PrintView::drawRect: bounds: %f x %f @ (%f, %f)",
-	//	  [self bounds].size.width, [self bounds].size.height,
-	//	  [self bounds].origin.x, [self bounds].origin.y);
-	
-	// Draw all of the stitches
-	iter = [drawList objectEnumerator];
-	while(stitchblock = [iter nextObject]) {
-		[currentContext saveGraphicsState];
-		[stitchblock drawWithSelection:FALSE Jumps:[doc showJumpStitches] Width:[doc lineWidth]];
-		[currentContext restoreGraphicsState];
-	}	
+
+	[PESRenderer drawStitchBlocks:[doc stitchBlocks]
+						lineWidth:[doc lineWidth]
+				 showJumpStitches:[doc showJumpStitches]];
 }
 
 /* http://developer.apple.com/documentation/Cocoa/Conceptual/CocoaViewsGuide/Optimizing/chapter_8_section_7.html */
