@@ -22,6 +22,8 @@
 
 #import <Cocoa/Cocoa.h>
 
+@class PrintScaleAccessoryController;
+
 @interface PESDocument : NSDocument
 {
 	//int*			jumpStitches;
@@ -55,6 +57,9 @@
 
 	NSTextField*	emptyDesignLabel;
 	BOOL			hasSizedWindow;
+
+	/* The print panel accessory of the current print operation, if any */
+	__weak PrintScaleAccessoryController *printScaleAccessory;
 }
 
 

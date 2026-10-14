@@ -30,4 +30,8 @@ extern NSString * const PESPrintScaleKey;
 
 @property (nonatomic) NSInteger printScale;
 
+/* Set by the document when the design doesn't fit on the page at actual
+ size, which shows a warning under the Scale choice */
+@property (nonatomic) BOOL designTooLarge;
+
 @end

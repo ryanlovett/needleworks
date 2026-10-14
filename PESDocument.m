@@ -379,6 +379,12 @@ static NSToolbarItemIdentifier const PESDesignInformationItem = @"DesignInformat
 	}
 
 	[printView setBounds:NSMakeRect(min.x, min.y, printSize.width * unitsPerPoint, printSize.height * unitsPerPoint)];
+
+	/* Warn in the print panel if the design will be cut off at actual size
+	 (allowing half a point for rounding) */
+	BOOL tooLarge = (printScale != 1) && (xdiff / unitsPerPoint > printSize.width + 0.5 ||
+										  ydiff / unitsPerPoint > printSize.height + 0.5);
+	[printScaleAccessory setDesignTooLarge:tooLarge];
 }
 
 - (NSPrintOperation *)printOperationWithSettings:(NSDictionary *)printSettings error:(NSError **)outError {
@@ -389,9 +395,13 @@ static NSToolbarItemIdentifier const PESDesignInformationItem = @"DesignInformat
 
 	NSPrintOperation* op = [NSPrintOperation printOperationWithView:splitView printInfo:printInfo];
 
-	/* Let people choose the print scale in the print panel itself */
+	/* Let people choose the print scale in the print panel itself. The
+	 accessory's too-large warning is updated whenever the page is laid out
+	 again during pagination. */
 	NSPrintPanel *printPanel = [op printPanel];
-	[printPanel addAccessoryController:[[PrintScaleAccessoryController alloc] init]];
+	PrintScaleAccessoryController *accessory = [[PrintScaleAccessoryController alloc] init];
+	[printPanel addAccessoryController:accessory];
+	printScaleAccessory = accessory;
 	[printPanel setOptions:[printPanel options] | NSPrintPanelShowsPaperSize | NSPrintPanelShowsOrientation | NSPrintPanelShowsPreview];
 
 	return op;

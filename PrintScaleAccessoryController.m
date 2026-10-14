@@ -24,7 +24,9 @@
 NSString * const PESPrintScaleKey = @"printScale";
 
 
-@implementation PrintScaleAccessoryController
+@implementation PrintScaleAccessoryController {
+	NSTextField *_warningLabel;
+}
 
 - (NSArray<NSString *> *)scaleTitles {
 	return @[NSLocalizedString(@"Actual Size", @"Print scale: print the design at its real size"),
@@ -37,10 +39,36 @@ NSString * const PESPrintScaleKey = @"printScale";
 	[popUp addItemsWithTitles:[self scaleTitles]];
 	[popUp bind:NSSelectedIndexBinding toObject:self withKeyPath:@"printScale" options:nil];
 
-	NSStackView *stack = [NSStackView stackViewWithViews:@[label, popUp]];
+	NSStackView *scaleRow = [NSStackView stackViewWithViews:@[label, popUp]];
+
+	/* Size the warning with its text so the panel reserves room for it, then
+	 show it only when it applies */
+	_warningLabel = [NSTextField wrappingLabelWithString:[self warningText]];
+	[_warningLabel setFont:[NSFont systemFontOfSize:[NSFont smallSystemFontSize]]];
+	[_warningLabel setTextColor:[NSColor systemRedColor]];
+	[_warningLabel setPreferredMaxLayoutWidth:320];
+
+	NSStackView *stack = [NSStackView stackViewWithViews:@[scaleRow, _warningLabel]];
+	[stack setOrientation:NSUserInterfaceLayoutOrientationVertical];
+	[stack setAlignment:NSLayoutAttributeLeading];
 	[stack setEdgeInsets:NSEdgeInsetsMake(8, 20, 8, 20)];
 	[stack setFrameSize:[stack fittingSize]];
 	[self setView:stack];
+
+	[self updateWarning];
+}
+
+- (NSString *)warningText {
+	return NSLocalizedString(@"At actual size this design doesn't fit on the page and will be cut off. Try Landscape, a larger paper size, or Fit to Page.", @"Print panel warning when the design is larger than the printable area");
+}
+
+- (void)setDesignTooLarge:(BOOL)designTooLarge {
+	_designTooLarge = designTooLarge;
+	[self updateWarning];
+}
+
+- (void)updateWarning {
+	[_warningLabel setStringValue:([self designTooLarge] ? [self warningText] : @"")];
 }
 
 - (NSInteger)printScale {
