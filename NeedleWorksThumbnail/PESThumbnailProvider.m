@@ -20,7 +20,9 @@
 
 	NSPoint minPoint = [parser minPoint];
 	NSPoint maxPoint = [parser maxPoint];
-	CGSize canvasSize = CGSizeMake(maxPoint.x - minPoint.x, maxPoint.y - minPoint.y);
+	/* Blank or perfectly straight designs have a zero dimension; keep the
+	 canvas at least 1 unit in each direction so scaling stays finite. */
+	CGSize canvasSize = CGSizeMake(MAX(maxPoint.x - minPoint.x, 1), MAX(maxPoint.y - minPoint.y, 1));
 	NSArray<StitchBlock *> *stitchBlocks = [parser stitchBlocks];
 
 	/* Scale to fit the requested maximumSize while preserving aspect ratio
