@@ -22,20 +22,20 @@ public final class PESRenderer: NSObject {
 	/// Whether the renderer can draw in `style` yet.
 	@objc(canDrawStitchStyle:)
 	public class func canDraw(_ style: StitchStyle) -> Bool {
-		style != .realistic
+		true
 	}
 
 	/// Fills `rect` with the fabric color, then draws the stitches in `style`.
 	@objc(drawStitchBlocks:style:fabricColor:lineWidth:showJumpStitches:inRect:)
 	public class func draw(_ stitchBlocks: [StitchBlock], style: StitchStyle, fabricColor: NSColor, lineWidth: CGFloat, showJumpStitches: Bool, in rect: NSRect) {
-		guard style == .shaded, let context = NSGraphicsContext.current?.cgContext else {
+		guard style != .plain, let context = NSGraphicsContext.current?.cgContext else {
 			draw(stitchBlocks, fabricColor: fabricColor, lineWidth: lineWidth, showJumpStitches: showJumpStitches, in: rect)
 			return
 		}
 
 		fabricColor.set()
 		rect.fill()
-		ShadedRenderer.draw(stitchBlocks, in: rect, context: context, showJumpStitches: showJumpStitches)
+		ThreadRenderer.draw(stitchBlocks, realistic: style == .realistic, in: rect, context: context, showJumpStitches: showJumpStitches)
 	}
 
 	/// Draws `rect`, in design units, into an image `pixelsWide` by
