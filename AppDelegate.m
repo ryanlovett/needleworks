@@ -21,8 +21,18 @@
 
 #import "AppDelegate.h"
 #import "InspectorPanelController.h"
+#import "SettingsWindowController.h"
+#import <NeedleWorksKit/NeedleWorksKit-Swift.h>
 
-@implementation AppDelegate
+@implementation AppDelegate {
+	SettingsWindowController *settingsWindowController;
+}
+
++ (void)initialize {
+	if (self == [AppDelegate class]) {
+		[[NSUserDefaults standardUserDefaults] registerDefaults:@{PESStitchStyleKey: @(PESStitchStylePlain)}];
+	}
+}
 
 - (id)init {
 	self = [super init];
@@ -38,6 +48,13 @@
 
 - (IBAction)toggleInspectorPanel:(id)sender {
 	[[self inspectorPanelController] toggleInspectorPanel:sender];
+}
+
+- (IBAction)showSettings:(id)sender {
+	if (settingsWindowController == nil) {
+		settingsWindowController = [[SettingsWindowController alloc] init];
+	}
+	[settingsWindowController showWindow:sender];
 }
 
 /* Don't open a blank window when the application starts */

@@ -22,6 +22,7 @@
 #import "PESDocument.h"
 #import "AppDelegate.h"
 #import "PrintScaleAccessoryController.h"
+#import "SettingsWindowController.h"
 #import <NeedleWorksKit/NeedleWorksKit-Swift.h>
 
 /* Points per design unit (0.1 mm) at 100% zoom. This is the design view's
@@ -102,6 +103,12 @@ static NSToolbarItemIdentifier const PESDesignInformationItem = @"DesignInformat
 	/* Keep the window large enough to be easy to see, move and close, even
 	 for blank designs or designs with very few stitches. */
 	[[mainView window] setContentMinSize:NSMakeSize(480, 300)];
+
+	/* Follow the stitch style in Settings until this window has its own */
+	[[NSNotificationCenter defaultCenter] addObserver:self
+											 selector:@selector(userDefaultsDidChange:)
+												 name:NSUserDefaultsDidChangeNotification
+											   object:nil];
 
 	/* Toolbar with zoom controls and the Design Information panel */
 	NSToolbar *toolbar = [[NSToolbar alloc] initWithIdentifier:@"PESDocumentToolbar"];
@@ -225,6 +232,13 @@ static NSToolbarItemIdentifier const PESDesignInformationItem = @"DesignInformat
 		return numStitches > 0 && zoom > PESMinimumZoom;
 	} else if (action == @selector(zoomToActualSize:) || action == @selector(zoomToFit:)) {
 		return numStitches > 0;
+	} else if (action == @selector(chooseStitchStyle:)) {
+		/* Check the window's style, and offer only the styles that can be drawn */
+		PESStitchStyle style = (PESStitchStyle)[item tag];
+		if ([(id)item isKindOfClass:[NSMenuItem class]]) {
+			[(NSMenuItem *)item setState:(style == [self stitchStyle]) ? NSControlStateValueOn : NSControlStateValueOff];
+		}
+		return [PESRenderer canDrawStitchStyle:style];
 	} else if (action == @selector(printDocument:)) {
 		/* ...and nothing to print */
 		return numStitches > 0 && [super validateUserInterfaceItem:item];
@@ -456,6 +470,23 @@ static NSToolbarItemIdentifier const PESDesignInformationItem = @"DesignInformat
 	showJumpStitches = !showJumpStitches;
 	[mainView setNeedsDisplay:YES];
 	//[[mainView window] performZoom:nil];
+}
+
+- (PESStitchStyle) stitchStyle {
+	PESStitchStyle style = hasOwnStitchStyle ? ownStitchStyle : (PESStitchStyle)[[NSUserDefaults standardUserDefaults] integerForKey:PESStitchStyleKey];
+	return [PESRenderer canDrawStitchStyle:style] ? style : PESStitchStylePlain;
+}
+
+- (IBAction) chooseStitchStyle:(id)sender {
+	ownStitchStyle = (PESStitchStyle)[sender tag];
+	hasOwnStitchStyle = YES;
+	[mainView setNeedsDisplay:YES];
+}
+
+- (void) userDefaultsDidChange:(NSNotification *)notification {
+	if (!hasOwnStitchStyle) {
+		[mainView setNeedsDisplay:YES];
+	}
 }
 
 - (NSPoint) max {

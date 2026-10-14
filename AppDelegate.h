@@ -33,4 +33,6 @@
  Information panel through the responder chain */
 - (IBAction)toggleInspectorPanel:(id)sender;
 
+- (IBAction)showSettings:(id)sender;
+
 @end

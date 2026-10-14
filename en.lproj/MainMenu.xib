@@ -27,6 +27,12 @@
                             <menuItem isSeparatorItem="YES" id="143">
                                 <modifierMask key="keyEquivalentModifierMask" command="YES"/>
                             </menuItem>
+                            <menuItem title="Settings…" keyEquivalent="," id="NWs-01-set">
+                                <connections>
+                                    <action selector="showSettings:" target="383" id="NWs-01-set-a"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem isSeparatorItem="YES" id="NWs-02-sep"/>
                             <menuItem title="Services" id="131">
                                 <menu key="submenu" title="Services" systemMenu="services" id="130"/>
                             </menuItem>
@@ -200,6 +206,28 @@
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="NWz-05-sep"/>
+                            <menuItem title="Stitch Style" id="NWs-10-sty">
+                                <menu key="submenu" title="Stitch Style" id="NWs-11-mnu">
+                                    <items>
+                                        <menuItem title="Plain" tag="0" id="NWs-12-pln">
+                                            <connections>
+                                                <action selector="chooseStitchStyle:" target="-1" id="NWs-12-pln-a"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Shaded" tag="1" id="NWs-13-shd">
+                                            <connections>
+                                                <action selector="chooseStitchStyle:" target="-1" id="NWs-13-shd-a"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Realistic" tag="2" id="NWs-14-rea">
+                                            <connections>
+                                                <action selector="chooseStitchStyle:" target="-1" id="NWs-14-rea-a"/>
+                                            </connections>
+                                        </menuItem>
+                                    </items>
+                                </menu>
+                            </menuItem>
+                            <menuItem isSeparatorItem="YES" id="NWs-15-sep"/>
                             <menuItem title="Show Toolbar" keyEquivalent="t" id="297">
                                 <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
                                 <connections>

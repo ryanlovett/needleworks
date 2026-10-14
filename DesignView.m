@@ -31,6 +31,7 @@
 	PESDocument* doc = [self delegate];
 
 	[PESRenderer drawStitchBlocks:[doc stitchBlocks]
+							 style:[doc stitchStyle]
 					   fabricColor:[doc fabricColor]
 						 lineWidth:[doc lineWidth]
 				  showJumpStitches:[doc showJumpStitches]

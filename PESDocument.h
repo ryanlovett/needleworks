@@ -21,6 +21,7 @@
 
 
 #import <Cocoa/Cocoa.h>
+#import <NeedleWorksKit/NeedleWorksKit-Swift.h>
 
 @class PrintScaleAccessoryController;
 
@@ -45,6 +46,10 @@
 	
 	CGFloat			lineWidth;
 	NSColor*		fabricColor;
+
+	/* The style chosen for this window from View > Stitch Style, if any */
+	PESStitchStyle	ownStitchStyle;
+	BOOL			hasOwnStitchStyle;
 
 	NSMutableArray* stitchBlocks;
 	NSMutableArray* selection;
@@ -89,6 +94,10 @@
 
 - (BOOL)		showJumpStitches;
 - (void)		setShowJumpStitches:(BOOL) show;
+
+/* The window's own stitch style if one was chosen, otherwise the one in Settings */
+- (PESStitchStyle)	stitchStyle;
+- (IBAction)	chooseStitchStyle:(id)sender;
 
 - (NSPoint)		max;
 - (NSPoint)		min;
