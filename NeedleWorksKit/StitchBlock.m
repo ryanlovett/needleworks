@@ -251,8 +251,8 @@
 	[color setStroke];
 	
 	/* testing */
-	[path setLineCapStyle:NSRoundLineCapStyle];
-	[path setLineJoinStyle:NSRoundLineJoinStyle];
+	[path setLineCapStyle:NSLineCapStyleRound];
+	[path setLineJoinStyle:NSLineJoinStyleRound];
 	
 	/* Users can set the line width dynamically */
 	[path setLineWidth:lineWidth];

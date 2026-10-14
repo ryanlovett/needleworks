@@ -31,7 +31,7 @@
 	NSColorPanel *colorPanel = [NSColorPanel sharedColorPanel];
 	// We set the mode to custom color lists
 	//[colorPanel setMode:NSColorListModeColorPanel];
-	[colorPanel setMode:NSWheelModeColorPanel];
+	[colorPanel setMode:NSColorPanelModeWheel];
 /*	
 	// The paths to our .clr files in Needle Works.app/Contents/Resources/
 	NSArray *colorPaths = [[NSBundle mainBundle] pathsForResourcesOfType:@"clr" inDirectory:nil];

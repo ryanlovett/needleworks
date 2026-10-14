@@ -22,7 +22,7 @@
 
 #import <Cocoa/Cocoa.h>
 
-@interface InspectorPanelController : NSWindowController 
+@interface InspectorPanelController : NSWindowController <NSEditorRegistration, NSMenuItemValidation>
 {
     IBOutlet NSObjectController *documentObjectController;
     id inspectedDocument;

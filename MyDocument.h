@@ -46,7 +46,6 @@
 	CGFloat			lineWidth;
 	NSColor*		fabricColor;
 
-	NSData*			pesData;
 	NSMutableArray* stitchBlocks;
 	NSMutableArray* selection;
 	
@@ -73,9 +72,6 @@
 @property (nonatomic, assign) NSInteger numColorChanges;
 //@property (readonly) NSMutableArray *colorLists;
 @property (assign) BOOL isPES;
-
-- (int32_t) readInt32:(unsigned char *)bytes;
-
 
 /* drawing maintenance */
 - (void)		addStitchBlock:(id) object;

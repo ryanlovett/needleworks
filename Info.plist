@@ -15,16 +15,16 @@
 			<string></string>
 			<key>CFBundleTypeName</key>
 			<string>PES Embroidery Design</string>
-			<key>LSItemContentTypes</key>
-			<array>
-				<string>com.brother.pes</string>
-			</array>
 			<key>CFBundleTypeOSTypes</key>
 			<array>
 				<string>.pes</string>
 			</array>
 			<key>CFBundleTypeRole</key>
 			<string>Viewer</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>com.brother.pes</string>
+			</array>
 			<key>NSDocumentClass</key>
 			<string>MyDocument</string>
 		</dict>
@@ -34,25 +34,25 @@
 	<key>CFBundleIconFile</key>
 	<string></string>
 	<key>CFBundleIdentifier</key>
-	<string>org.spacecoaster.${PRODUCT_NAME:identifier}</string>
+	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
 	<string>${PRODUCT_NAME}</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
+	<key>CFBundleShortVersionString</key>
+	<string>0.4</string>
 	<key>CFBundleSignature</key>
 	<string>NDWX</string>
 	<key>CFBundleVersion</key>
 	<string>0.4</string>
-	<key>CFBundleShortVersionString</key>
-	<string>0.4</string>
+	<key>LSMinimumSystemVersion</key>
+	<string>12.0</string>
 	<key>NSMainNibFile</key>
 	<string>MainMenu</string>
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
-	<key>LSMinimumSystemVersion</key>
-	<string>10.5</string>
 	<key>UTExportedTypeDeclarations</key>
 	<array>
 		<dict>

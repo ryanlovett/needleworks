@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 45;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -17,14 +17,56 @@
 		94028B960E67C3E5001CD6B0 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 94028B940E67C3E5001CD6B0 /* MainMenu.xib */; };
 		94028B990E67C3F0001CD6B0 /* MyDocument.xib in Resources */ = {isa = PBXBuildFile; fileRef = 94028B970E67C3F0001CD6B0 /* MyDocument.xib */; };
 		94028CC20E6BB060001CD6B0 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 94028CC00E6BB060001CD6B0 /* Credits.rtf */; };
-		94028E120E6FAC6C001CD6B0 /* StitchBlock.m in Sources */ = {isa = PBXBuildFile; fileRef = 94028B8A0E67C33E001CD6B0 /* StitchBlock.m */; };
 		94028F290E78729B001CD6B0 /* Designer's Gallery.clr in Resources */ = {isa = PBXBuildFile; fileRef = 94028F260E78729B001CD6B0 /* Designer's Gallery.clr */; };
 		94028F2A0E78729B001CD6B0 /* BuzzEdit.clr in Resources */ = {isa = PBXBuildFile; fileRef = 94028F270E78729B001CD6B0 /* BuzzEdit.clr */; };
 		94028F2B0E78729B001CD6B0 /* Amazing Box Max.clr in Resources */ = {isa = PBXBuildFile; fileRef = 94028F280E78729B001CD6B0 /* Amazing Box Max.clr */; };
 		94A2F8B40E9FDEC200C29361 /* NoDividerSplitView.m in Sources */ = {isa = PBXBuildFile; fileRef = 94A2F8B30E9FDEC200C29361 /* NoDividerSplitView.m */; };
 		94C97FD00E96D7590090FD3B /* PrintView.m in Sources */ = {isa = PBXBuildFile; fileRef = 94C97FCF0E96D7590090FD3B /* PrintView.m */; };
+		94E60B21307E110F00C0CD5E /* NeedleWorksPreview.appex in Embed ExtensionKit Extensions */ = {isa = PBXBuildFile; fileRef = 94E60B1A307E110F00C0CD5E /* NeedleWorksPreview.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		94E60B35307E11BD00C0CD5E /* NeedleWorksThumbnail.appex in Embed ExtensionKit Extensions */ = {isa = PBXBuildFile; fileRef = 94E60B2E307E11BD00C0CD5E /* NeedleWorksThumbnail.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		94FC42280E9D41DB00A3B54D /* LegendPrintView.m in Sources */ = {isa = PBXBuildFile; fileRef = 94FC42270E9D41DB00A3B54D /* LegendPrintView.m */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		94E60B1F307E110F00C0CD5E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2A37F4A9FDCFA73011CA2CEA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 94E60B19307E110F00C0CD5E;
+			remoteInfo = NeedleWorksPreview;
+		};
+		94E60B33307E11BD00C0CD5E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2A37F4A9FDCFA73011CA2CEA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 94E60B2D307E11BD00C0CD5E;
+			remoteInfo = NeedleWorksThumbnail;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		94E60B0D307E109F00C0CD5E /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+		94E60B26307E110F00C0CD5E /* Embed ExtensionKit Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(EXTENSIONS_FOLDER_PATH)";
+			dstSubfolderSpec = 16;
+			files = (
+				94E60B21307E110F00C0CD5E /* NeedleWorksPreview.appex in Embed ExtensionKit Extensions */,
+				94E60B35307E11BD00C0CD5E /* NeedleWorksThumbnail.appex in Embed ExtensionKit Extensions */,
+			);
+			name = "Embed ExtensionKit Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		1058C7A7FEA54F5311CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
@@ -42,23 +84,56 @@
 		94028B840E67C323001CD6B0 /* InspectorPanelController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InspectorPanelController.h; sourceTree = "<group>"; };
 		94028B860E67C32F001CD6B0 /* MyDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyDocument.h; sourceTree = "<group>"; };
 		94028B870E67C32F001CD6B0 /* MyDocument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyDocument.m; sourceTree = "<group>"; };
-		94028B890E67C33E001CD6B0 /* StitchBlock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StitchBlock.h; sourceTree = "<group>"; };
-		94028B8A0E67C33E001CD6B0 /* StitchBlock.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StitchBlock.m; sourceTree = "<group>"; };
-		94028B920E67C3D9001CD6B0 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/InspectorPanel.xib; sourceTree = "<group>"; };
-		94028B950E67C3E5001CD6B0 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/MainMenu.xib; sourceTree = "<group>"; };
-		94028B980E67C3F0001CD6B0 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/MyDocument.xib; sourceTree = "<group>"; };
 		94028CC10E6BB060001CD6B0 /* English */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = English; path = English.lproj/Credits.rtf; sourceTree = "<group>"; };
 		94028CDD0E6BB13B001CD6B0 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		94028F260E78729B001CD6B0 /* Designer's Gallery.clr */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Designer's Gallery.clr"; sourceTree = "<group>"; };
 		94028F270E78729B001CD6B0 /* BuzzEdit.clr */ = {isa = PBXFileReference; lastKnownFileType = file; path = BuzzEdit.clr; sourceTree = "<group>"; };
 		94028F280E78729B001CD6B0 /* Amazing Box Max.clr */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Amazing Box Max.clr"; sourceTree = "<group>"; };
+		94930B312251FA3700121BDB /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		94930B322251FAA000121BDB /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MyDocument.xib; sourceTree = "<group>"; };
+		94930B332251FAB600121BDB /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/InspectorPanel.xib; sourceTree = "<group>"; };
 		94A2F8B20E9FDEC200C29361 /* NoDividerSplitView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NoDividerSplitView.h; sourceTree = "<group>"; };
 		94A2F8B30E9FDEC200C29361 /* NoDividerSplitView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NoDividerSplitView.m; sourceTree = "<group>"; };
 		94C97FCE0E96D7590090FD3B /* PrintView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PrintView.h; sourceTree = "<group>"; };
 		94C97FCF0E96D7590090FD3B /* PrintView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PrintView.m; sourceTree = "<group>"; };
+		94E60AF6307E0BFB00C0CD5E /* NeedleWorksKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = NeedleWorksKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		94E60B0F307E109F00C0CD5E /* NeedleWorksRenderCheck */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = NeedleWorksRenderCheck; sourceTree = BUILT_PRODUCTS_DIR; };
+		94E60B1A307E110F00C0CD5E /* NeedleWorksPreview.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.extensionkit-extension"; includeInIndex = 0; path = NeedleWorksPreview.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		94E60B2E307E11BD00C0CD5E /* NeedleWorksThumbnail.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.extensionkit-extension"; includeInIndex = 0; path = NeedleWorksThumbnail.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		94FC42260E9D41DB00A3B54D /* LegendPrintView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LegendPrintView.h; sourceTree = "<group>"; };
 		94FC42270E9D41DB00A3B54D /* LegendPrintView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LegendPrintView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		94E60AFA307E0BFB00C0CD5E /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			publicHeaders = (
+				NeedleWorksKit.h,
+			);
+			target = 94E60AF5307E0BFB00C0CD5E /* NeedleWorksKit */;
+		};
+		94E60B22307E110F00C0CD5E /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 94E60B19307E110F00C0CD5E /* NeedleWorksPreview */;
+		};
+		94E60B36307E11BD00C0CD5E /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 94E60B2D307E11BD00C0CD5E /* NeedleWorksThumbnail */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		94E60AF7307E0BFB00C0CD5E /* NeedleWorksKit */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (94E60AFA307E0BFB00C0CD5E /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = NeedleWorksKit; sourceTree = "<group>"; };
+		94E60B10307E109F00C0CD5E /* NeedleWorksRenderCheck */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = NeedleWorksRenderCheck; sourceTree = "<group>"; };
+		94E60B1B307E110F00C0CD5E /* NeedleWorksPreview */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (94E60B22307E110F00C0CD5E /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = NeedleWorksPreview; sourceTree = "<group>"; };
+		94E60B2F307E11BD00C0CD5E /* NeedleWorksThumbnail */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (94E60B36307E11BD00C0CD5E /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = NeedleWorksThumbnail; sourceTree = "<group>"; };
+/* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		8D15AC330486D014006FF6A4 /* Frameworks */ = {
@@ -66,6 +141,34 @@
 			buildActionMask = 2147483647;
 			files = (
 				8D15AC340486D014006FF6A4 /* Cocoa.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		94E60AF3307E0BFB00C0CD5E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		94E60B0C307E109F00C0CD5E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		94E60B17307E110F00C0CD5E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		94E60B2B307E11BD00C0CD5E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -94,6 +197,10 @@
 			isa = PBXGroup;
 			children = (
 				8D15AC370486D014006FF6A4 /* Needle Works.app */,
+				94E60AF6307E0BFB00C0CD5E /* NeedleWorksKit.framework */,
+				94E60B0F307E109F00C0CD5E /* NeedleWorksRenderCheck */,
+				94E60B1A307E110F00C0CD5E /* NeedleWorksPreview.appex */,
+				94E60B2E307E11BD00C0CD5E /* NeedleWorksThumbnail.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -104,6 +211,10 @@
 				2A37F4ABFDCFA73011CA2CEA /* Classes */,
 				2A37F4AFFDCFA73011CA2CEA /* Other Sources */,
 				2A37F4B8FDCFA73011CA2CEA /* Resources */,
+				94E60AF7307E0BFB00C0CD5E /* NeedleWorksKit */,
+				94E60B10307E109F00C0CD5E /* NeedleWorksRenderCheck */,
+				94E60B1B307E110F00C0CD5E /* NeedleWorksPreview */,
+				94E60B2F307E11BD00C0CD5E /* NeedleWorksThumbnail */,
 				2A37F4C3FDCFA73011CA2CEA /* Frameworks */,
 				19C28FB0FE9D524F11CA2CBB /* Products */,
 			);
@@ -127,8 +238,6 @@
 				94A2F8B30E9FDEC200C29361 /* NoDividerSplitView.m */,
 				94C97FCE0E96D7590090FD3B /* PrintView.h */,
 				94C97FCF0E96D7590090FD3B /* PrintView.m */,
-				94028B890E67C33E001CD6B0 /* StitchBlock.h */,
-				94028B8A0E67C33E001CD6B0 /* StitchBlock.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -168,6 +277,16 @@
 		};
 /* End PBXGroup section */
 
+/* Begin PBXHeadersBuildPhase section */
+		94E60AF1307E0BFB00C0CD5E /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
 /* Begin PBXNativeTarget section */
 		8D15AC270486D014006FF6A4 /* Needle Works */ = {
 			isa = PBXNativeTarget;
@@ -176,10 +295,13 @@
 				8D15AC2B0486D014006FF6A4 /* Resources */,
 				8D15AC300486D014006FF6A4 /* Sources */,
 				8D15AC330486D014006FF6A4 /* Frameworks */,
+				94E60B26307E110F00C0CD5E /* Embed ExtensionKit Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				94E60B20307E110F00C0CD5E /* PBXTargetDependency */,
+				94E60B34307E11BD00C0CD5E /* PBXTargetDependency */,
 			);
 			name = "Needle Works";
 			productInstallPath = "$(HOME)/Applications";
@@ -187,19 +309,135 @@
 			productReference = 8D15AC370486D014006FF6A4 /* Needle Works.app */;
 			productType = "com.apple.product-type.application";
 		};
+		94E60AF5307E0BFB00C0CD5E /* NeedleWorksKit */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 94E60AFB307E0BFB00C0CD5E /* Build configuration list for PBXNativeTarget "NeedleWorksKit" */;
+			buildPhases = (
+				94E60AF1307E0BFB00C0CD5E /* Headers */,
+				94E60AF2307E0BFB00C0CD5E /* Sources */,
+				94E60AF3307E0BFB00C0CD5E /* Frameworks */,
+				94E60AF4307E0BFB00C0CD5E /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				94E60AF7307E0BFB00C0CD5E /* NeedleWorksKit */,
+			);
+			name = NeedleWorksKit;
+			packageProductDependencies = (
+			);
+			productName = NeedleWorksKit;
+			productReference = 94E60AF6307E0BFB00C0CD5E /* NeedleWorksKit.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		94E60B0E307E109F00C0CD5E /* NeedleWorksRenderCheck */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 94E60B13307E109F00C0CD5E /* Build configuration list for PBXNativeTarget "NeedleWorksRenderCheck" */;
+			buildPhases = (
+				94E60B0B307E109F00C0CD5E /* Sources */,
+				94E60B0C307E109F00C0CD5E /* Frameworks */,
+				94E60B0D307E109F00C0CD5E /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				94E60B10307E109F00C0CD5E /* NeedleWorksRenderCheck */,
+			);
+			name = NeedleWorksRenderCheck;
+			packageProductDependencies = (
+			);
+			productName = NeedleWorksRenderCheck;
+			productReference = 94E60B0F307E109F00C0CD5E /* NeedleWorksRenderCheck */;
+			productType = "com.apple.product-type.tool";
+		};
+		94E60B19307E110F00C0CD5E /* NeedleWorksPreview */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 94E60B23307E110F00C0CD5E /* Build configuration list for PBXNativeTarget "NeedleWorksPreview" */;
+			buildPhases = (
+				94E60B16307E110F00C0CD5E /* Sources */,
+				94E60B17307E110F00C0CD5E /* Frameworks */,
+				94E60B18307E110F00C0CD5E /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				94E60B1B307E110F00C0CD5E /* NeedleWorksPreview */,
+			);
+			name = NeedleWorksPreview;
+			packageProductDependencies = (
+			);
+			productName = NeedleWorksPreview;
+			productReference = 94E60B1A307E110F00C0CD5E /* NeedleWorksPreview.appex */;
+			productType = "com.apple.product-type.extensionkit-extension";
+		};
+		94E60B2D307E11BD00C0CD5E /* NeedleWorksThumbnail */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 94E60B37307E11BD00C0CD5E /* Build configuration list for PBXNativeTarget "NeedleWorksThumbnail" */;
+			buildPhases = (
+				94E60B2A307E11BD00C0CD5E /* Sources */,
+				94E60B2B307E11BD00C0CD5E /* Frameworks */,
+				94E60B2C307E11BD00C0CD5E /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				94E60B2F307E11BD00C0CD5E /* NeedleWorksThumbnail */,
+			);
+			name = NeedleWorksThumbnail;
+			packageProductDependencies = (
+			);
+			productName = NeedleWorksThumbnail;
+			productReference = 94E60B2E307E11BD00C0CD5E /* NeedleWorksThumbnail.appex */;
+			productType = "com.apple.product-type.extensionkit-extension";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
 		2A37F4A9FDCFA73011CA2CEA /* Project object */ = {
 			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 2700;
+				LastUpgradeCheck = 1020;
+				TargetAttributes = {
+					94E60AF5307E0BFB00C0CD5E = {
+						CreatedOnToolsVersion = 27.0;
+					};
+					94E60B0E307E109F00C0CD5E = {
+						CreatedOnToolsVersion = 27.0;
+					};
+					94E60B19307E110F00C0CD5E = {
+						CreatedOnToolsVersion = 27.0;
+					};
+					94E60B2D307E11BD00C0CD5E = {
+						CreatedOnToolsVersion = 27.0;
+					};
+				};
+			};
 			buildConfigurationList = C05733CB08A9546B00998B17 /* Build configuration list for PBXProject "Needle Works" */;
-			compatibilityVersion = "Xcode 3.1";
+			compatibilityVersion = "Xcode 10.0";
+			developmentRegion = en;
 			hasScannedForEncodings = 1;
+			knownRegions = (
+				en,
+				English,
+			);
 			mainGroup = 2A37F4AAFDCFA73011CA2CEA /* Needle Works */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
 				8D15AC270486D014006FF6A4 /* Needle Works */,
+				94E60AF5307E0BFB00C0CD5E /* NeedleWorksKit */,
+				94E60B0E307E109F00C0CD5E /* NeedleWorksRenderCheck */,
+				94E60B19307E110F00C0CD5E /* NeedleWorksPreview */,
+				94E60B2D307E11BD00C0CD5E /* NeedleWorksThumbnail */,
 			);
 		};
 /* End PBXProject section */
@@ -219,6 +457,27 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		94E60AF4307E0BFB00C0CD5E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		94E60B18307E110F00C0CD5E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		94E60B2C307E11BD00C0CD5E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -231,20 +490,60 @@
 				94028B820E67C314001CD6B0 /* DesignView.m in Sources */,
 				94028B850E67C323001CD6B0 /* InspectorPanelController.m in Sources */,
 				94028B880E67C32F001CD6B0 /* MyDocument.m in Sources */,
-				94028E120E6FAC6C001CD6B0 /* StitchBlock.m in Sources */,
 				94C97FD00E96D7590090FD3B /* PrintView.m in Sources */,
 				94FC42280E9D41DB00A3B54D /* LegendPrintView.m in Sources */,
 				94A2F8B40E9FDEC200C29361 /* NoDividerSplitView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		94E60AF2307E0BFB00C0CD5E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		94E60B0B307E109F00C0CD5E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		94E60B16307E110F00C0CD5E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		94E60B2A307E11BD00C0CD5E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		94E60B20307E110F00C0CD5E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 94E60B19307E110F00C0CD5E /* NeedleWorksPreview */;
+			targetProxy = 94E60B1F307E110F00C0CD5E /* PBXContainerItemProxy */;
+		};
+		94E60B34307E11BD00C0CD5E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 94E60B2D307E11BD00C0CD5E /* NeedleWorksThumbnail */;
+			targetProxy = 94E60B33307E11BD00C0CD5E /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		94028B910E67C3D9001CD6B0 /* InspectorPanel.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
-				94028B920E67C3D9001CD6B0 /* English */,
+				94930B332251FAB600121BDB /* en */,
 			);
 			name = InspectorPanel.xib;
 			sourceTree = "<group>";
@@ -252,7 +551,7 @@
 		94028B940E67C3E5001CD6B0 /* MainMenu.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
-				94028B950E67C3E5001CD6B0 /* English */,
+				94930B312251FA3700121BDB /* en */,
 			);
 			name = MainMenu.xib;
 			sourceTree = "<group>";
@@ -260,7 +559,7 @@
 		94028B970E67C3F0001CD6B0 /* MyDocument.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
-				94028B980E67C3F0001CD6B0 /* English */,
+				94930B322251FAA000121BDB /* en */,
 			);
 			name = MyDocument.xib;
 			sourceTree = "<group>";
@@ -276,19 +575,542 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		94E60AFC307E0BFB00C0CD5E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALLOW_TARGET_PLATFORM_SPECIALIZATION = YES;
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = NO;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = JMX7NYRBWN;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 27.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = (
+					"@executable_path/../Frameworks",
+					"@loader_path/Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACH_O_TYPE = staticlib;
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
+				MARKETING_VERSION = 1.0;
+				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
+				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu17 gnu++20";
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = org.spacecoaster.NeedleWorksKit;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTED_PLATFORMS = macosx;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = "1,2,7";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+				XROS_DEPLOYMENT_TARGET = 27.0;
+			};
+			name = Debug;
+		};
+		94E60AFD307E0BFB00C0CD5E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALLOW_TARGET_PLATFORM_SPECIALIZATION = YES;
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = NO;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = JMX7NYRBWN;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 27.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = (
+					"@executable_path/../Frameworks",
+					"@loader_path/Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACH_O_TYPE = staticlib;
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
+				MARKETING_VERSION = 1.0;
+				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
+				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu17 gnu++20";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = org.spacecoaster.NeedleWorksKit;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTED_PLATFORMS = macosx;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = "1,2,7";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+				XROS_DEPLOYMENT_TARGET = 27.0;
+			};
+			name = Release;
+		};
+		94E60B14307E109F00C0CD5E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				FRAMEWORK_SEARCH_PATHS = "$(BUILT_PRODUCTS_DIR)";
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/NeedleWorksKit";
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				OTHER_LDFLAGS = (
+					"-framework",
+					NeedleWorksKit,
+					"-framework",
+					Cocoa,
+					"-framework",
+					ImageIO,
+					"-framework",
+					QuickLookThumbnailing,
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		94E60B15307E109F00C0CD5E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				FRAMEWORK_SEARCH_PATHS = "$(BUILT_PRODUCTS_DIR)";
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/NeedleWorksKit";
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				OTHER_LDFLAGS = (
+					"-framework",
+					NeedleWorksKit,
+					"-framework",
+					Cocoa,
+					"-framework",
+					ImageIO,
+					"-framework",
+					QuickLookThumbnailing,
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+		94E60B24307E110F00C0CD5E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = JMX7NYRBWN;
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				FRAMEWORK_SEARCH_PATHS = "$(BUILT_PRODUCTS_DIR)";
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GENERATE_INFOPLIST_FILE = YES;
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/NeedleWorksKit";
+				INFOPLIST_FILE = NeedleWorksPreview/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = NeedleWorksPreview;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 27.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				OTHER_LDFLAGS = (
+					"-framework",
+					NeedleWorksKit,
+					"-framework",
+					QuickLookUI,
+					"-framework",
+					Cocoa,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "org.spacecoaster.Needle-Works.NeedleWorksPreview";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTED_PLATFORMS = macosx;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = "1,2,7";
+				XROS_DEPLOYMENT_TARGET = 27.0;
+			};
+			name = Debug;
+		};
+		94E60B25307E110F00C0CD5E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = JMX7NYRBWN;
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				FRAMEWORK_SEARCH_PATHS = "$(BUILT_PRODUCTS_DIR)";
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GENERATE_INFOPLIST_FILE = YES;
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/NeedleWorksKit";
+				INFOPLIST_FILE = NeedleWorksPreview/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = NeedleWorksPreview;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 27.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				OTHER_LDFLAGS = (
+					"-framework",
+					NeedleWorksKit,
+					"-framework",
+					QuickLookUI,
+					"-framework",
+					Cocoa,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "org.spacecoaster.Needle-Works.NeedleWorksPreview";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTED_PLATFORMS = macosx;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = "1,2,7";
+				XROS_DEPLOYMENT_TARGET = 27.0;
+			};
+			name = Release;
+		};
+		94E60B38307E11BD00C0CD5E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = JMX7NYRBWN;
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				FRAMEWORK_SEARCH_PATHS = "$(BUILT_PRODUCTS_DIR)";
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GENERATE_INFOPLIST_FILE = YES;
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/NeedleWorksKit";
+				INFOPLIST_FILE = NeedleWorksThumbnail/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = NeedleWorksThumbnail;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 27.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				OTHER_LDFLAGS = (
+					"-framework",
+					NeedleWorksKit,
+					"-framework",
+					QuickLookThumbnailing,
+					"-framework",
+					Cocoa,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "org.spacecoaster.Needle-Works.NeedleWorksThumbnail";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTED_PLATFORMS = macosx;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = "1,2,7";
+				XROS_DEPLOYMENT_TARGET = 27.0;
+			};
+			name = Debug;
+		};
+		94E60B39307E11BD00C0CD5E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = JMX7NYRBWN;
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				FRAMEWORK_SEARCH_PATHS = "$(BUILT_PRODUCTS_DIR)";
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GENERATE_INFOPLIST_FILE = YES;
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/NeedleWorksKit";
+				INFOPLIST_FILE = NeedleWorksThumbnail/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = NeedleWorksThumbnail;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 27.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				OTHER_LDFLAGS = (
+					"-framework",
+					NeedleWorksKit,
+					"-framework",
+					QuickLookThumbnailing,
+					"-framework",
+					Cocoa,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "org.spacecoaster.Needle-Works.NeedleWorksThumbnail";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTED_PLATFORMS = macosx;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = "1,2,7";
+				XROS_DEPLOYMENT_TARGET = 27.0;
+			};
+			name = Release;
+		};
 		C05733C808A9546B00998B17 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				COPY_PHASE_STRIP = NO;
+				DEVELOPMENT_TEAM = JMX7NYRBWN;
+				FRAMEWORK_SEARCH_PATHS = "$(BUILT_PRODUCTS_DIR)";
 				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Needle Works_Prefix.pch";
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/NeedleWorksKit";
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
+				OTHER_LDFLAGS = (
+					"-framework",
+					NeedleWorksKit,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "org.spacecoaster.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "Needle Works";
 			};
 			name = Debug;
@@ -297,12 +1119,22 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = JMX7NYRBWN;
+				FRAMEWORK_SEARCH_PATHS = "$(BUILT_PRODUCTS_DIR)";
 				GCC_MODEL_TUNING = G5;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Needle Works_Prefix.pch";
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/NeedleWorksKit";
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
+				OTHER_LDFLAGS = (
+					"-framework",
+					NeedleWorksKit,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "org.spacecoaster.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "Needle Works";
 			};
 			name = Release;
@@ -310,32 +1142,115 @@
 		C05733CC08A9546B00998B17 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
 				ONLY_ACTIVE_ARCH = YES;
-				PREBINDING = NO;
-				SDKROOT = macosx10.5;
+				SDKROOT = macosx;
 			};
 			name = Debug;
 		};
 		C05733CD08A9546B00998B17 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				PREBINDING = NO;
-				SDKROOT = macosx10.5;
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				SDKROOT = macosx;
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		94E60AFB307E0BFB00C0CD5E /* Build configuration list for PBXNativeTarget "NeedleWorksKit" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				94E60AFC307E0BFB00C0CD5E /* Debug */,
+				94E60AFD307E0BFB00C0CD5E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		94E60B13307E109F00C0CD5E /* Build configuration list for PBXNativeTarget "NeedleWorksRenderCheck" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				94E60B14307E109F00C0CD5E /* Debug */,
+				94E60B15307E109F00C0CD5E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		94E60B23307E110F00C0CD5E /* Build configuration list for PBXNativeTarget "NeedleWorksPreview" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				94E60B24307E110F00C0CD5E /* Debug */,
+				94E60B25307E110F00C0CD5E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		94E60B37307E11BD00C0CD5E /* Build configuration list for PBXNativeTarget "NeedleWorksThumbnail" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				94E60B38307E11BD00C0CD5E /* Debug */,
+				94E60B39307E11BD00C0CD5E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		C05733C708A9546B00998B17 /* Build configuration list for PBXNativeTarget "Needle Works" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

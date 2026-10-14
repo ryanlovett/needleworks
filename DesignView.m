@@ -20,8 +20,8 @@
 //  02111-1307, USA.
 
 #import "DesignView.h"
-#import "StitchBlock.h"
 #import "MyDocument.h"
+#import "PESRenderer.h"
 
 @implementation DesignView
 
@@ -30,32 +30,11 @@
 - (void) drawRect:(NSRect) rect {
 	MyDocument* doc = [self delegate];
 
-	NSGraphicsContext *currentContext = [NSGraphicsContext currentContext];
-		
-	/* Get our list of stitch blocks */
-	NSArray*		drawList = [doc stitchBlocks];
-	NSEnumerator*	iter;
-	StitchBlock*	stitchblock;
-
-	/* Draw the background */
-	[[doc fabricColor] set];
-	NSRectFill (rect);
-
-	/* Draw a red box around our view for debugging *
-	NSColor* red = [NSColor redColor];
-	[red setStroke];
-	NSBezierPath* outline = [NSBezierPath bezierPathWithRect:r];
-	[outline setLineWidth:3];
-	[[NSBezierPath bezierPathWithRect:r] stroke];*/
-
-	/* Draw all of the stitches */
-	iter = [drawList objectEnumerator];
-	while(stitchblock = [iter nextObject]) {
-		[currentContext saveGraphicsState];
-		[stitchblock drawWithSelection:FALSE Jumps:[doc showJumpStitches] Width:[doc lineWidth]];
-		[currentContext restoreGraphicsState];
-	}
-    
+	[PESRenderer drawStitchBlocks:[doc stitchBlocks]
+					   fabricColor:[doc fabricColor]
+						 lineWidth:[doc lineWidth]
+				  showJumpStitches:[doc showJumpStitches]
+							inRect:rect];
 }
 
 /* http://developer.apple.com/documentation/Cocoa/Conceptual/CocoaViewsGuide/Optimizing/chapter_8_section_7.html */

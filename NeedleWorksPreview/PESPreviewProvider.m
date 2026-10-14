@@ -1,0 +1,51 @@
+//
+//  PESPreviewProvider.m
+//  NeedleWorksPreview
+//
+
+#import "PESPreviewProvider.h"
+#import "PESDocumentParser.h"
+#import "PESRenderer.h"
+
+@implementation PESPreviewProvider
+
+- (void)providePreviewForFileRequest:(QLFilePreviewRequest *)request
+					completionHandler:(void (^)(QLPreviewReply * _Nullable reply, NSError * _Nullable error))handler {
+	NSError *parseError = nil;
+	PESDocumentParser *parser = [[PESDocumentParser alloc] initWithContentsOfURL:request.fileURL error:&parseError];
+	if (parser == nil) {
+		handler(nil, parseError);
+		return;
+	}
+
+	NSPoint minPoint = [parser minPoint];
+	NSPoint maxPoint = [parser maxPoint];
+	CGSize canvasSize = CGSizeMake(maxPoint.x - minPoint.x, maxPoint.y - minPoint.y);
+	NSArray<StitchBlock *> *stitchBlocks = [parser stitchBlocks];
+
+	QLPreviewReply *reply = [[QLPreviewReply alloc] initWithContextSize:canvasSize
+																isBitmap:NO
+															drawingBlock:^BOOL(CGContextRef _Nonnull context, QLPreviewReply * _Nonnull reply, NSError * _Nullable __autoreleasing * _Nullable error) {
+		NSGraphicsContext *nsContext = [NSGraphicsContext graphicsContextWithCGContext:context flipped:YES];
+		[NSGraphicsContext saveGraphicsState];
+		[NSGraphicsContext setCurrentContext:nsContext];
+
+		/* Translate so the design's min point maps to the context's origin, matching
+		 the app's own DesignView, which sets its bounds origin to the document's min. */
+		CGContextTranslateCTM(context, -minPoint.x, -minPoint.y);
+
+		NSRect rect = NSMakeRect(minPoint.x, minPoint.y, canvasSize.width, canvasSize.height);
+		[PESRenderer drawStitchBlocks:stitchBlocks
+						   fabricColor:[NSColor whiteColor]
+							 lineWidth:2.0
+					  showJumpStitches:NO
+								inRect:rect];
+
+		[NSGraphicsContext restoreGraphicsState];
+		return YES;
+	}];
+
+	handler(reply, nil);
+}
+
+@end
