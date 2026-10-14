@@ -32,6 +32,11 @@
 		[NSGraphicsContext saveGraphicsState];
 		[NSGraphicsContext setCurrentContext:nsContext];
 
+		/* Flip so (0,0) is top-left, as the thumbnail extension does; the
+		 context itself isn't flipped. */
+		CGContextTranslateCTM(context, 0, canvasSize.height);
+		CGContextScaleCTM(context, 1, -1);
+
 		/* Translate so the design's min point maps to the context's origin, matching
 		 the app's own DesignView, which sets its bounds origin to the document's min. */
 		CGContextTranslateCTM(context, -minPoint.x, -minPoint.y);

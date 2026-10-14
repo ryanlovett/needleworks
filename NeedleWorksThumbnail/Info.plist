@@ -8,10 +8,13 @@
 		<string>com.apple.quicklook.thumbnail</string>
 		<key>NSExtensionPrincipalClass</key>
 		<string>PESThumbnailProvider</string>
-		<key>QLSupportedContentTypes</key>
-		<array>
-			<string>com.brother.pes</string>
-		</array>
+		<key>NSExtensionAttributes</key>
+		<dict>
+			<key>QLSupportedContentTypes</key>
+			<array>
+				<string>com.brother.pes</string>
+			</array>
+		</dict>
 	</dict>
 </dict>
 </plist>
