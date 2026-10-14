@@ -133,6 +133,32 @@
 	 scrolling. If the screen is smaller than the design, the scroll view
 	 will help us out. */
 	[[mainView window] performZoom:nil];
+
+	/* A blank design has nothing to draw, so say so rather than showing an
+	 empty window. */
+	if (numStitches == 0) {
+		emptyDesignLabel = [NSTextField labelWithString:NSLocalizedString(@"This design has no stitches.", @"Shown in the window of a design with no stitches")];
+		[emptyDesignLabel setFont:[NSFont systemFontOfSize:[NSFont systemFontSize] + 2]];
+		[emptyDesignLabel setTranslatesAutoresizingMaskIntoConstraints:NO];
+
+		NSView *contentView = [[mainView window] contentView];
+		[contentView addSubview:emptyDesignLabel];
+		[NSLayoutConstraint activateConstraints:@[
+			[[emptyDesignLabel centerXAnchor] constraintEqualToAnchor:[contentView centerXAnchor]],
+			[[emptyDesignLabel centerYAnchor] constraintEqualToAnchor:[contentView centerYAnchor]]
+		]];
+		[self updateEmptyDesignLabelColor];
+	}
+}
+
+/* Keep the empty design message readable on both light and dark fabrics */
+- (void) updateEmptyDesignLabelColor {
+	NSColor *rgb = [fabricColor colorUsingColorSpace:[NSColorSpace sRGBColorSpace]];
+	CGFloat brightness = 1;
+	if (rgb != nil) {
+		brightness = 0.299 * [rgb redComponent] + 0.587 * [rgb greenComponent] + 0.114 * [rgb blueComponent];
+	}
+	[emptyDesignLabel setTextColor:[NSColor colorWithWhite:(brightness > 0.5 ? 0 : 1) alpha:0.55]];
 }
 
 // Since we are a new document and haven't been saved we need to explicitly set our
@@ -292,6 +318,7 @@
 - (void) setFabricColor:(NSColor*) c {
 	fabricColor = c;
 	[[mainView enclosingScrollView] setBackgroundColor:c];
+	[self updateEmptyDesignLabelColor];
 	[mainView setNeedsDisplay:YES];
 }
 

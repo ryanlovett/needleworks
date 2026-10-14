@@ -56,6 +56,8 @@
 	IBOutlet id		printView;
 	IBOutlet id		splitView;
 	IBOutlet id		legendPrintView;
+
+	NSTextField*	emptyDesignLabel;
 }
 
 
