@@ -33,7 +33,7 @@ struct ThreadRenderer {
 	private static let toneLevels = 3
 
 	/// The distance between the grooves of the twist, along the thread, and
-	/// their angle from straight across it.
+	/// their angle from straight across it, in the middle of the thread.
 	private static let twistPitch: CGFloat = 2.2
 	private static let twistAngle: CGFloat = .pi / 4
 
@@ -134,17 +134,18 @@ struct ThreadRenderer {
 		context.clip()
 		context.drawLinearGradient(gradient, start: CGPoint(x: 0, y: -r), end: CGPoint(x: 0, y: r), options: [])
 
-		/* The plies' twist: slanted grooves, each with a lit ridge beside it */
+		/* The plies' twist: grooves winding around the thread, each with a lit
+		 * ridge beside it. A groove keeps the same angle around the thread, so
+		 * seen from above it is an S-curve, steepest at the edges, where the
+		 * thread curves away. */
 		if realistic {
 			let grooves = CGMutablePath()
 			let ridges = CGMutablePath()
-			let slant = width * tan(Self.twistAngle)
-			var x = -r - slant + Self.twistPitch * CGFloat(random.next())
+			let run = r * tan(Self.twistAngle)	/* along the thread per radian around it */
+			var x = -r - run * .pi + Self.twistPitch * CGFloat(random.next())
 			while x < length + r {
-				grooves.move(to: CGPoint(x: x, y: -r))
-				grooves.addLine(to: CGPoint(x: x + slant, y: r))
-				ridges.move(to: CGPoint(x: x + 0.5, y: -r))
-				ridges.addLine(to: CGPoint(x: x + 0.5 + slant, y: r))
+				Self.addHelix(to: grooves, at: x, radius: r, run: run)
+				Self.addHelix(to: ridges, at: x + 0.5, radius: r, run: run)
 				x += Self.twistPitch
 			}
 			context.setLineWidth(0.35)
@@ -161,6 +162,21 @@ struct ThreadRenderer {
 			context.drawLinearGradient(endShade, start: CGPoint(x: -r * 0.6, y: 0), end: CGPoint(x: length + r * 0.6, y: 0), options: [])
 		}
 		context.restoreGState()
+	}
+
+	/// Adds the visible half of a turn of a helix around a thread along the
+	/// x axis, starting at the edge y = -radius at `x`.
+	private static func addHelix(to path: CGMutablePath, at x: CGFloat, radius: CGFloat, run: CGFloat) {
+		let steps = 4
+		for step in 0...steps {
+			let angle = -CGFloat.pi / 2 + .pi * CGFloat(step) / CGFloat(steps)
+			let point = CGPoint(x: x + run * (angle + .pi / 2), y: radius * sin(angle))
+			if step == 0 {
+				path.move(to: point)
+			} else {
+				path.addLine(to: point)
+			}
+		}
 	}
 
 	/// A loose jump thread: a thin strand in the thread's color.
