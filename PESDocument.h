@@ -91,4 +91,10 @@
 
 - (NSSize)canvasSize;
 
+/* Zooming */
+- (IBAction)	zoomIn:(id)sender;
+- (IBAction)	zoomOut:(id)sender;
+- (IBAction)	zoomToActualSize:(id)sender;
+- (IBAction)	zoomToFit:(id)sender;
+
 @end

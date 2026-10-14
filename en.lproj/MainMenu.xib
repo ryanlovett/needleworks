@@ -180,6 +180,32 @@
                 <menuItem title="View" id="295">
                     <menu key="submenu" title="View" id="296">
                         <items>
+                            <menuItem title="Actual Size" keyEquivalent="0" id="NWz-01-act">
+                                <connections>
+                                    <action selector="zoomToActualSize:" target="-1" id="NWz-01-act-a"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Zoom to Fit" keyEquivalent="9" id="NWz-02-fit">
+                                <connections>
+                                    <action selector="zoomToFit:" target="-1" id="NWz-02-fit-a"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Zoom In" keyEquivalent="+" id="NWz-03-zin">
+                                <connections>
+                                    <action selector="zoomIn:" target="-1" id="NWz-03-zin-a"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Zoom In" hidden="YES" allowsKeyEquivalentWhenHidden="YES" keyEquivalent="=" id="NWz-06-zeq" userLabel="Zoom In (⌘=)">
+                                <connections>
+                                    <action selector="zoomIn:" target="-1" id="NWz-06-zeq-a"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Zoom Out" keyEquivalent="-" id="NWz-04-zou">
+                                <connections>
+                                    <action selector="zoomOut:" target="-1" id="NWz-04-zou-a"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem isSeparatorItem="YES" id="NWz-05-sep"/>
                             <menuItem title="Show Toolbar" keyEquivalent="t" id="297">
                                 <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
                                 <connections>

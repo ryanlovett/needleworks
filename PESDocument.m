@@ -23,6 +23,14 @@
 #import "StitchBlock.h"
 #import "PESDocumentParser.h"
 
+/* Points per design unit (0.1 mm) at actual size */
+static const CGFloat PESPointsPerUnit = 100.0 / 254;
+
+/* Zoom limits, and the factor each Zoom In or Zoom Out step changes by */
+static const CGFloat PESMinimumZoom = 0.1;
+static const CGFloat PESMaximumZoom = 16;
+static const CGFloat PESZoomStep = M_SQRT2;
+
 @implementation PESDocument
 
 /*
@@ -61,44 +69,33 @@
 	[splitView setDelegate:self];
 	[legendPrintView setDelegate:self];
 		
-	NSRect			r;
-	r.origin.x = min.x;
-	r.origin.y = min.y;
-	r.size.width = max.x - min.x;
-	r.size.height = max.y - min.y;
-	
-	/* We set the bounds origin since designs do not always originate
-	 from (0, 0). Some are even (<0, <0). */
-	[mainView setBoundsOrigin:min];
-	
-	/* Resize the clip view using the proper DPI */
-	CGFloat actualScale = 100.0f / 254;
-	NSView *clipView = [mainView superview];
-	NSSize clipViewFrameSize = [clipView frame].size;
-	NSSize actualSize = NSMakeSize((clipViewFrameSize.width / actualScale), (clipViewFrameSize.height / actualScale));
-	[clipView setBoundsSize:actualSize];
-	
-	[mainView setFrame:r];
+	/* The design view's bounds are in design units (0.1 mm) and its frame is
+	 in points at actual size. Designs do not always originate from (0, 0);
+	 some are even (<0, <0). Keep at least one unit in each direction so
+	 blank or perfectly straight designs still have a valid size. */
+	NSRect designRect = NSMakeRect(min.x, min.y, MAX(max.x - min.x, 1), MAX(max.y - min.y, 1));
+	[mainView setFrame:NSMakeRect(0, 0, NSWidth(designRect) * PESPointsPerUnit, NSHeight(designRect) * PESPointsPerUnit)];
+	[mainView setBounds:designRect];
+
+	NSScrollView *scrollView = [mainView enclosingScrollView];
 
 	/* Fill the area around a centered design with the fabric color, so the
 	 design appears to sit on one continuous piece of fabric. */
-	[[mainView enclosingScrollView] setBackgroundColor:fabricColor];
-		
+	[scrollView setBackgroundColor:fabricColor];
+
+	/* Users zoom with the View menu or by pinching on a trackpad; there is
+	 nothing to zoom in a blank design */
+	[scrollView setAllowsMagnification:(numStitches > 0)];
+	[scrollView setMinMagnification:PESMinimumZoom];
+	[scrollView setMaxMagnification:PESMaximumZoom];
+
 	/* Keep the window large enough to be easy to see, move and close, even
 	 for blank designs or designs with very few stitches. */
-	NSSize minContentSize = NSMakeSize(400, 300);
-	[[mainView window] setContentMinSize:minContentSize];
+	[[mainView window] setContentMinSize:NSMakeSize(400, 300)];
 
-	/* We set the maximum size of the window's content to be no larger than the content itself. (plus the scrollbar troughs?) We don't want the user dragging the window beyond so that it exposes the Land of Infinite Grey. */
-	/* TODO: I might need to disable this when I implement zooming. */
-	/* We also scale the max dimensions to the proper DPI since the view will be too. */
-	r.size.width = MAX((max.x - min.x) * actualScale + 16, minContentSize.width);
-	r.size.height = MAX((max.y - min.y) * actualScale + 16, minContentSize.height);
-	[[mainView window] setContentMaxSize:r.size];
-		
-	/* We zoom the window so that the entire design is visible without 
-	 scrolling. If the screen is smaller than the design, the scroll view
-	 will help us out. */
+	/* We zoom the window so that the entire design is visible without
+	 scrolling (see windowWillUseStandardFrame:defaultFrame:). If the screen
+	 is smaller than the design, the scroll view will help us out. */
 	[[mainView window] performZoom:nil];
 
 	/* A blank design has nothing to draw, so say so rather than showing an
@@ -116,6 +113,69 @@
 		]];
 		[self updateEmptyDesignLabelColor];
 	}
+}
+
+/* The window's standard ("zoomed") frame fits the whole design at the
+ current zoom, within the screen, keeping the window's top-left corner. */
+- (NSRect)windowWillUseStandardFrame:(NSWindow *)window defaultFrame:(NSRect)newFrame {
+	NSScrollView *scrollView = [mainView enclosingScrollView];
+	CGFloat zoom = [scrollView magnification];
+
+	/* Everything in the window other than the visible design area, such as
+	 scrollers and borders, stays the same size */
+	NSSize contentSize = [[window contentView] frame].size;
+	NSSize visibleSize = [[scrollView contentView] frame].size;
+	NSSize designSize = [mainView frame].size;
+	contentSize.width += designSize.width * zoom - visibleSize.width;
+	contentSize.height += designSize.height * zoom - visibleSize.height;
+
+	NSRect frame = [window frameRectForContentRect:NSMakeRect(0, 0, contentSize.width, contentSize.height)];
+	NSSize minSize = [window minSize];
+	frame.size.width = MIN(MAX(NSWidth(frame), minSize.width), NSWidth(newFrame));
+	frame.size.height = MIN(MAX(NSHeight(frame), minSize.height), NSHeight(newFrame));
+
+	frame.origin.x = MIN(NSMinX([window frame]), NSMaxX(newFrame) - NSWidth(frame));
+	frame.origin.y = MAX(NSMaxY([window frame]) - NSHeight(frame), NSMinY(newFrame));
+	return frame;
+}
+
+/* Zoom by setting the scroll view's magnification, keeping the center of
+ the visible area in place */
+- (void) setZoom:(CGFloat)zoom {
+	NSScrollView *scrollView = [mainView enclosingScrollView];
+	NSRect visible = [[scrollView contentView] bounds];
+	[scrollView setMagnification:zoom centeredAtPoint:NSMakePoint(NSMidX(visible), NSMidY(visible))];
+}
+
+- (IBAction) zoomIn:(id)sender {
+	[self setZoom:[[mainView enclosingScrollView] magnification] * PESZoomStep];
+}
+
+- (IBAction) zoomOut:(id)sender {
+	[self setZoom:[[mainView enclosingScrollView] magnification] / PESZoomStep];
+}
+
+- (IBAction) zoomToActualSize:(id)sender {
+	[self setZoom:1];
+}
+
+- (IBAction) zoomToFit:(id)sender {
+	[[mainView enclosingScrollView] magnifyToFitRect:[mainView frame]];
+}
+
+- (BOOL) validateUserInterfaceItem:(id<NSValidatedUserInterfaceItem>)item {
+	SEL action = [item action];
+	CGFloat zoom = [[mainView enclosingScrollView] magnification];
+
+	/* There's nothing to zoom in a blank design */
+	if (action == @selector(zoomIn:)) {
+		return numStitches > 0 && zoom < PESMaximumZoom;
+	} else if (action == @selector(zoomOut:)) {
+		return numStitches > 0 && zoom > PESMinimumZoom;
+	} else if (action == @selector(zoomToActualSize:) || action == @selector(zoomToFit:)) {
+		return numStitches > 0;
+	}
+	return [super validateUserInterfaceItem:item];
 }
 
 /* Keep the empty design message readable on both light and dark fabrics */
