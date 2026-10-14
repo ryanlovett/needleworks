@@ -178,8 +178,15 @@
 	// Determine the physical size of our design
 	CGFloat w = _maxPoint.x - _minPoint.x;
 	CGFloat h = _maxPoint.y - _minPoint.y;
-	_designSize = [[NSString alloc] initWithFormat:@"%.2f\" x %.2f\" (%.0f mm x %.0f mm)",
-			w / 254, h / 254, w / 10, h / 10];
+	/* Show the size in the user's preferred units first, with the other
+	 units in parentheses */
+	NSString *inches = [NSString stringWithFormat:@"%.2f\" x %.2f\"", w / 254, h / 254];
+	NSString *millimeters = [NSString stringWithFormat:@"%.0f mm x %.0f mm", w / 10, h / 10];
+	if ([[NSLocale currentLocale] usesMetricSystem]) {
+		_designSize = [NSString stringWithFormat:@"%@ (%@)", millimeters, inches];
+	} else {
+		_designSize = [NSString stringWithFormat:@"%@ (%@)", inches, millimeters];
+	}
 
 	return self;
 }

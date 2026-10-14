@@ -19,6 +19,7 @@
 		94028CC20E6BB060001CD6B0 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 94028CC00E6BB060001CD6B0 /* Credits.rtf */; };
 		94A2F8B40E9FDEC200C29361 /* NoDividerSplitView.m in Sources */ = {isa = PBXBuildFile; fileRef = 94A2F8B30E9FDEC200C29361 /* NoDividerSplitView.m */; };
 		94C3C1A00000000000000003 /* CenteringClipView.m in Sources */ = {isa = PBXBuildFile; fileRef = 94C3C1A00000000000000002 /* CenteringClipView.m */; };
+		94C3C1A00000000000000033 /* PrintHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 94C3C1A00000000000000032 /* PrintHeaderView.m */; };
 		94C3C1A00000000000000023 /* PrintScaleAccessoryController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94C3C1A00000000000000022 /* PrintScaleAccessoryController.m */; };
 		94C3C1A00000000000000013 /* PrintLayoutSplitView.m in Sources */ = {isa = PBXBuildFile; fileRef = 94C3C1A00000000000000012 /* PrintLayoutSplitView.m */; };
 		94C97FD00E96D7590090FD3B /* PrintView.m in Sources */ = {isa = PBXBuildFile; fileRef = 94C97FCF0E96D7590090FD3B /* PrintView.m */; };
@@ -92,6 +93,8 @@
 		94A2F8B30E9FDEC200C29361 /* NoDividerSplitView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NoDividerSplitView.m; sourceTree = "<group>"; };
 		94C3C1A00000000000000001 /* CenteringClipView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CenteringClipView.h; sourceTree = "<group>"; };
 		94C3C1A00000000000000002 /* CenteringClipView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CenteringClipView.m; sourceTree = "<group>"; };
+		94C3C1A00000000000000031 /* PrintHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PrintHeaderView.h; sourceTree = "<group>"; };
+		94C3C1A00000000000000032 /* PrintHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PrintHeaderView.m; sourceTree = "<group>"; };
 		94C3C1A00000000000000021 /* PrintScaleAccessoryController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PrintScaleAccessoryController.h; sourceTree = "<group>"; };
 		94C3C1A00000000000000022 /* PrintScaleAccessoryController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PrintScaleAccessoryController.m; sourceTree = "<group>"; };
 		94C3C1A00000000000000011 /* PrintLayoutSplitView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PrintLayoutSplitView.h; sourceTree = "<group>"; };
@@ -240,6 +243,8 @@
 				94A2F8B30E9FDEC200C29361 /* NoDividerSplitView.m */,
 				94C3C1A00000000000000001 /* CenteringClipView.h */,
 				94C3C1A00000000000000002 /* CenteringClipView.m */,
+				94C3C1A00000000000000031 /* PrintHeaderView.h */,
+				94C3C1A00000000000000032 /* PrintHeaderView.m */,
 				94C3C1A00000000000000021 /* PrintScaleAccessoryController.h */,
 				94C3C1A00000000000000022 /* PrintScaleAccessoryController.m */,
 				94C3C1A00000000000000011 /* PrintLayoutSplitView.h */,
@@ -495,6 +500,7 @@
 				94FC42280E9D41DB00A3B54D /* LegendPrintView.m in Sources */,
 				94A2F8B40E9FDEC200C29361 /* NoDividerSplitView.m in Sources */,
 				94C3C1A00000000000000003 /* CenteringClipView.m in Sources */,
+				94C3C1A00000000000000033 /* PrintHeaderView.m in Sources */,
 				94C3C1A00000000000000023 /* PrintScaleAccessoryController.m in Sources */,
 				94C3C1A00000000000000013 /* PrintLayoutSplitView.m in Sources */,
 			);
