@@ -43,6 +43,7 @@ static const CGFloat DesignViewMaximumImagePixels = 12e6;
 	NSArray *requestedSettings;
 
 	BOOL liveMagnifying;
+	CGFloat shownMagnification;
 }
 
 @synthesize delegate;
@@ -155,6 +156,7 @@ static BOOL SamePixels(CGContextRef context, NSRect a, NSRect b) {
 - (void) viewWillMoveToWindow:(NSWindow *)newWindow {
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:NSScrollViewWillStartLiveMagnifyNotification object:nil];
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:NSScrollViewDidEndLiveMagnifyNotification object:nil];
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:NSViewBoundsDidChangeNotification object:nil];
 }
 
 - (void) viewDidMoveToWindow {
@@ -162,7 +164,34 @@ static BOOL SamePixels(CGContextRef context, NSRect a, NSRect b) {
 	if (scrollView != nil) {
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(willStartLiveMagnify:) name:NSScrollViewWillStartLiveMagnifyNotification object:scrollView];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didEndLiveMagnify:) name:NSScrollViewDidEndLiveMagnifyNotification object:scrollView];
+
+		/* Zooming changes the clip view's bounds */
+		NSClipView *clipView = [scrollView contentView];
+		[clipView setPostsBoundsChangedNotifications:YES];
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(clipViewBoundsDidChange:) name:NSViewBoundsDidChangeNotification object:clipView];
 	}
+}
+
+/* When the zoom changes, AppKit can scale what the view last drew without
+ asking it to draw again, for example when a window is restored zoomed in.
+ Redraw at the new zoom once AppKit's display pass is over. */
+- (void) clipViewBoundsDidChange:(NSNotification *)notification {
+	CGFloat magnification = [[self enclosingScrollView] magnification];
+	if (magnification == shownMagnification || liveMagnifying) {
+		return;
+	}
+	shownMagnification = magnification;
+
+	__weak DesignView *weakSelf = self;
+	dispatch_async(dispatch_get_main_queue(), ^{
+		[weakSelf setNeedsDisplay:YES];
+	});
+}
+
+/* Moving to a screen with a different resolution needs a new image */
+- (void) viewDidChangeBackingProperties {
+	[super viewDidChangeBackingProperties];
+	[self setNeedsDisplay:YES];
 }
 
 - (void) willStartLiveMagnify:(NSNotification *)notification {
@@ -171,7 +200,15 @@ static BOOL SamePixels(CGContextRef context, NSRect a, NSRect b) {
 
 - (void) didEndLiveMagnify:(NSNotification *)notification {
 	liveMagnifying = NO;
-	[self setNeedsDisplay:YES];
+	shownMagnification = [[self enclosingScrollView] magnification];
+
+	/* AppKit redraws for the final zoom before telling us the gesture has
+	 ended, so that redraw showed the scaled image. Ask for a sharp one once
+	 AppKit's own display pass is over, or the request is lost. */
+	__weak DesignView *weakSelf = self;
+	dispatch_async(dispatch_get_main_queue(), ^{
+		[weakSelf setNeedsDisplay:YES];
+	});
 }
 
 /* http://developer.apple.com/documentation/Cocoa/Conceptual/CocoaViewsGuide/Optimizing/chapter_8_section_7.html */
