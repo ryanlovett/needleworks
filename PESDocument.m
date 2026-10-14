@@ -226,6 +226,9 @@ static NSToolbarItemIdentifier const PESDesignInformationItem = @"DesignInformat
 		return numStitches > 0 && zoom > PESMinimumZoom;
 	} else if (action == @selector(zoomToActualSize:) || action == @selector(zoomToFit:)) {
 		return numStitches > 0;
+	} else if (action == @selector(printDocument:)) {
+		/* ...and nothing to print */
+		return numStitches > 0 && [super validateUserInterfaceItem:item];
 	}
 	return [super validateUserInterfaceItem:item];
 }
