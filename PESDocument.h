@@ -47,8 +47,6 @@
 	NSMutableArray* stitchBlocks;
 	NSMutableArray* selection;
 	
-	NSSize			origPrintViewSizePortrait;
-	NSSize			origPrintViewSizeLandscape;
 	
 	IBOutlet id		mainView;
 	IBOutlet id		printView;

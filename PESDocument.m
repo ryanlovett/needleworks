@@ -59,8 +59,6 @@ static NSToolbarItemIdentifier const PESDesignInformationItem = @"DesignInformat
 		fabricColor = [NSColor whiteColor];
 		showJumpStitches = YES;
 
-		origPrintViewSizePortrait = NSMakeSize(0, 0);
-		origPrintViewSizeLandscape = NSMakeSize(0, 0);
     }
     return self;
 }
@@ -366,64 +364,28 @@ static NSToolbarItemIdentifier const PESDesignInformationItem = @"DesignInformat
 	// Expand our split view to occupy the whole page
 	[splitView setFrameSize:NSMakeSize(pageWidth, pageHeight)];
 	
+	/* The printed design view's frame is in printer points (1/72 inch) and
+	 its bounds are in design units (0.1 mm), so the bounds size sets the
+	 printed scale. Work it out from the view's current frame each time, since
+	 the frame changes with the paper size and orientation. */
+	NSSize printSize = [printView frame].size;
 	CGFloat xdiff = max.x - min.x;
 	CGFloat ydiff = max.y - min.y;
-	CGFloat factor;
-	
-	// Set our printed design view's bounds and save it
-	NSRect npb;
-	if ([printInfo orientation] == NSPaperOrientationPortrait) {
-		if (origPrintViewSizePortrait.width == 0 && origPrintViewSizePortrait.height == 0) {
-			origPrintViewSizePortrait = [printView bounds].size;
-		}		
-		npb = NSMakeRect(min.x, min.y,
-						 origPrintViewSizePortrait.width, origPrintViewSizePortrait.height);
-	} else {
-		if (origPrintViewSizeLandscape.width == 0 && origPrintViewSizeLandscape.height == 0) {
-			origPrintViewSizeLandscape = [printView bounds].size;
-		}
-		npb = NSMakeRect(min.x, min.y,
-						 origPrintViewSizeLandscape.width, origPrintViewSizeLandscape.height);
-	}
-	
+
+	/* Design units per printer point at actual size: 254 tenths of a
+	 millimetre per inch, 72 points per inch */
+	CGFloat unitsPerPoint = 254.0 / 72;
+
 	// Fetch the print scale preference
 	NSInteger printScale = [[NSUserDefaults standardUserDefaults] integerForKey:@"printScale"];
 
-	// User wants the printed size scaled to fit
-	if (printScale == 1) {
-				
-		// If the design's aspect ratio is wider than the design's portion of our page,
-		// our bounds must be scaled to fit it by width, otherwise by height.
-		if ((xdiff/ydiff) >= (pageWidth/pageHeight)) {
-			//NSLog(@"Design is wide.");
-			factor = xdiff/npb.size.width;
-		} else {			
-			//NSLog(@"Design is tall.");
-			factor = ydiff/npb.size.height;
-		}
+	// User wants the printed size scaled to fit, keeping its proportions
+	if (printScale == 1 && xdiff > 0 && ydiff > 0) {
+		unitsPerPoint = MAX(xdiff / printSize.width, ydiff / printSize.height);
 	}
-	// User wants the design printed at actual size
-	else {
-		factor = 1 + 254/100.0f; // why 3.54?		
-	}
-	
-	npb.size.width *= factor;
-	npb.size.height *= factor;
 
-	//NSLog(@"design size: %f x %f", xdiff, ydiff);
-	//NSLog(@"old frame: %f x %f (%f, %f)",
-	//	  [printView frame].size.width, [printView frame].size.height,
-	//	  [printView frame].origin.x, [printView frame].origin.y);
-	//NSLog(@"old bounds: %f x %f (%f, %f)",
-	//	  [printView bounds].size.width, [printView bounds].size.height,
-	//	  [printView bounds].origin.x, [printView bounds].origin.y);
+	[printView setBounds:NSMakeRect(min.x, min.y, printSize.width * unitsPerPoint, printSize.height * unitsPerPoint)];
 
-	[printView setBounds:npb];
-
-	//NSLog(@"new bounds: %f x %f (%f, %f)",
-	//	  [printView bounds].size.width, [printView bounds].size.height,
-	//	  [printView bounds].origin.x, [printView bounds].origin.y);
-	
 	NSPrintOperation* op = [NSPrintOperation printOperationWithView:splitView printInfo:printInfo];
 	
 	return op;
