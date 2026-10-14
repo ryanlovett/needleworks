@@ -4,8 +4,7 @@
 //
 
 #import "PESPreviewProvider.h"
-#import "PESDocumentParser.h"
-#import "PESRenderer.h"
+#import <NeedleWorksKit/NeedleWorksKit-Swift.h>
 
 @implementation PESPreviewProvider
 

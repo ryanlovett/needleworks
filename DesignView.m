@@ -21,7 +21,7 @@
 
 #import "DesignView.h"
 #import "PESDocument.h"
-#import "PESRenderer.h"
+#import <NeedleWorksKit/NeedleWorksKit-Swift.h>
 
 @implementation DesignView
 

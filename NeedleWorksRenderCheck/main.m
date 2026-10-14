@@ -22,9 +22,7 @@
 
 #import <Cocoa/Cocoa.h>
 #import <QuickLookThumbnailing/QuickLookThumbnailing.h>
-#import "PESDocumentParser.h"
-#import "PESRenderer.h"
-#import "StitchBlock.h"
+#import <NeedleWorksKit/NeedleWorksKit-Swift.h>
 
 static int renderDirectly(NSString *inputPath, NSString *outputPath) {
 	NSURL *url = [NSURL fileURLWithPath:inputPath];

@@ -22,8 +22,7 @@
 #import "PESDocument.h"
 #import "AppDelegate.h"
 #import "PrintScaleAccessoryController.h"
-#import "StitchBlock.h"
-#import "PESDocumentParser.h"
+#import <NeedleWorksKit/NeedleWorksKit-Swift.h>
 
 /* Points per design unit (0.1 mm) at 100% zoom. This is the design view's
  base scale; true life size depends on the screen (see actualSizeZoom). */

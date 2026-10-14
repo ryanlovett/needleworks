@@ -20,7 +20,7 @@
 //  02111-1307, USA.
 
 #import "LegendPrintView.h"
-#import "StitchBlock.h"
+#import <NeedleWorksKit/NeedleWorksKit-Swift.h>
 #import "PESDocument.h"
 
 @implementation LegendPrintView
