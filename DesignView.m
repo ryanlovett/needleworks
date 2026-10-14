@@ -23,12 +23,90 @@
 #import "PESDocument.h"
 #import <NeedleWorksKit/NeedleWorksKit-Swift.h>
 
-@implementation DesignView
+/* The largest image of the whole design the view keeps for redrawing and
+ zooming, in pixels (48 MB). Beyond this zoom only part of the design is
+ visible, and drawing just that part is fast. */
+static const CGFloat DesignViewMaximumImagePixels = 12e6;
+
+@implementation DesignView {
+	/* The whole design drawn at the zoom it was last shown at, the area it
+	 covers in design units, and the settings it was drawn with */
+	NSImage *designImage;
+	NSRect designImageRect;
+	NSArray *designImageSettings;
+
+	/* Images are drawn in the background, one at a time; each request has a
+	 new number, so only the latest one is used */
+	dispatch_queue_t renderQueue;
+	NSUInteger renderNumber;
+	NSRect requestedRect;
+	NSArray *requestedSettings;
+
+	BOOL liveMagnifying;
+}
 
 @synthesize delegate;
 
+/* Everything besides the zoom that changes how the design looks */
+- (NSArray *) drawingSettings {
+	PESDocument *doc = [self delegate];
+	return @[@([doc stitchStyle]), @([doc showJumpStitches]), @([doc lineWidth]), [doc fabricColor]];
+}
+
+/* Whether two areas cover the same pixels, allowing for rounding */
+static BOOL SamePixels(CGContextRef context, NSRect a, NSRect b) {
+	CGRect da = CGContextConvertRectToDeviceSpace(context, a);
+	CGRect db = CGContextConvertRectToDeviceSpace(context, b);
+	return fabs(CGRectGetMinX(da) - CGRectGetMinX(db)) < 0.01 && fabs(CGRectGetMinY(da) - CGRectGetMinY(db)) < 0.01 &&
+		fabs(CGRectGetWidth(da) - CGRectGetWidth(db)) < 0.01 && fabs(CGRectGetHeight(da) - CGRectGetHeight(db)) < 0.01;
+}
+
++ (NSImage *) imageOfStitchBlocks:(NSArray *)stitchBlocks settings:(NSArray *)settings rect:(NSRect)rect pixelRect:(CGRect)pixelRect {
+	return [PESRenderer imageOfStitchBlocks:stitchBlocks
+									  style:[settings[0] integerValue]
+								fabricColor:settings[3]
+								  lineWidth:[settings[2] doubleValue]
+						   showJumpStitches:[settings[1] boolValue]
+									   rect:rect
+								 pixelsWide:(NSInteger)CGRectGetWidth(pixelRect)
+								 pixelsHigh:(NSInteger)CGRectGetHeight(pixelRect)];
+}
+
 - (void) drawRect:(NSRect) rect {
 	PESDocument* doc = [self delegate];
+	CGContextRef context = [[NSGraphicsContext currentContext] CGContext];
+	NSArray *settings = [self drawingSettings];
+
+	/* The pixels the design covers at the current zoom, and the area those
+	 whole pixels cover in design units, so an image of it lines up with the
+	 screen's pixels */
+	CGRect pixelRect = CGRectIntegral(CGContextConvertRectToDeviceSpace(context, [self bounds]));
+	NSRect imageRect = CGContextConvertRectToUserSpace(context, pixelRect);
+	BOOL imageFits = CGRectGetWidth(pixelRect) * CGRectGetHeight(pixelRect) <= DesignViewMaximumImagePixels;
+	BOOL haveImage = designImage != nil && [designImageSettings isEqual:settings];
+
+	if (haveImage && SamePixels(context, designImageRect, imageRect)) {
+		[designImage drawInRect:designImageRect];
+		return;
+	}
+
+	/* While zooming, scale the image last drawn; a sharp one is drawn when
+	 the zoom settles */
+	if (haveImage && (liveMagnifying || imageFits)) {
+		[designImage drawInRect:designImageRect];
+		if (!liveMagnifying && imageFits) {
+			[self requestImageWithSettings:settings rect:imageRect pixelRect:pixelRect context:context];
+		}
+		return;
+	}
+
+	if (imageFits) {
+		designImage = [DesignView imageOfStitchBlocks:[doc stitchBlocks] settings:settings rect:imageRect pixelRect:pixelRect];
+		designImageRect = imageRect;
+		designImageSettings = settings;
+		[designImage drawInRect:designImageRect];
+		return;
+	}
 
 	[PESRenderer drawStitchBlocks:[doc stitchBlocks]
 							 style:[doc stitchStyle]
@@ -36,6 +114,64 @@
 						 lineWidth:[doc lineWidth]
 				  showJumpStitches:[doc showJumpStitches]
 							inRect:rect];
+}
+
+/* Draws an image of the design in the background, then shows it */
+- (void) requestImageWithSettings:(NSArray *)settings rect:(NSRect)rect pixelRect:(CGRect)pixelRect context:(CGContextRef)context {
+	if ([requestedSettings isEqual:settings] && SamePixels(context, requestedRect, rect)) {
+		return;
+	}
+	requestedRect = rect;
+	requestedSettings = settings;
+
+	if (renderQueue == nil) {
+		renderQueue = dispatch_queue_create("org.spacecoaster.NeedleWorks.DesignView", DISPATCH_QUEUE_SERIAL);
+	}
+	NSUInteger number = ++renderNumber;
+	NSArray *stitchBlocks = [[[self delegate] stitchBlocks] copy];
+	__weak DesignView *weakSelf = self;
+	dispatch_async(renderQueue, ^{
+		/* Skip requests that a newer one has replaced */
+		DesignView *view = weakSelf;
+		if (view == nil || number != view->renderNumber) {
+			return;
+		}
+		view = nil;
+		NSImage *image = [DesignView imageOfStitchBlocks:stitchBlocks settings:settings rect:rect pixelRect:pixelRect];
+		dispatch_async(dispatch_get_main_queue(), ^{
+			DesignView *view = weakSelf;
+			if (view == nil || number != view->renderNumber) {
+				return;
+			}
+			view->designImage = image;
+			view->designImageRect = rect;
+			view->designImageSettings = settings;
+			view->requestedSettings = nil;
+			[view setNeedsDisplay:YES];
+		});
+	});
+}
+
+- (void) viewWillMoveToWindow:(NSWindow *)newWindow {
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:NSScrollViewWillStartLiveMagnifyNotification object:nil];
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:NSScrollViewDidEndLiveMagnifyNotification object:nil];
+}
+
+- (void) viewDidMoveToWindow {
+	NSScrollView *scrollView = [self enclosingScrollView];
+	if (scrollView != nil) {
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(willStartLiveMagnify:) name:NSScrollViewWillStartLiveMagnifyNotification object:scrollView];
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didEndLiveMagnify:) name:NSScrollViewDidEndLiveMagnifyNotification object:scrollView];
+	}
+}
+
+- (void) willStartLiveMagnify:(NSNotification *)notification {
+	liveMagnifying = YES;
+}
+
+- (void) didEndLiveMagnify:(NSNotification *)notification {
+	liveMagnifying = NO;
+	[self setNeedsDisplay:YES];
 }
 
 /* http://developer.apple.com/documentation/Cocoa/Conceptual/CocoaViewsGuide/Optimizing/chapter_8_section_7.html */

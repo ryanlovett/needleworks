@@ -38,6 +38,34 @@ public final class PESRenderer: NSObject {
 		ShadedRenderer.draw(stitchBlocks, in: rect, context: context, showJumpStitches: showJumpStitches)
 	}
 
+	/// Draws `rect`, in design units, into an image `pixelsWide` by
+	/// `pixelsHigh`, with the top of the design at the top of the image. It
+	/// can be called on any thread.
+	@objc(imageOfStitchBlocks:style:fabricColor:lineWidth:showJumpStitches:rect:pixelsWide:pixelsHigh:)
+	public class func image(of stitchBlocks: [StitchBlock], style: StitchStyle, fabricColor: NSColor, lineWidth: CGFloat, showJumpStitches: Bool, rect: NSRect, pixelsWide: Int, pixelsHigh: Int) -> NSImage? {
+		guard pixelsWide > 0, pixelsHigh > 0, rect.width > 0, rect.height > 0,
+			  let context = CGContext(data: nil, width: pixelsWide, height: pixelsHigh, bitsPerComponent: 8, bytesPerRow: 0,
+									  space: CGColorSpace(name: CGColorSpace.sRGB)!, bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue) else {
+			return nil
+		}
+
+		/* Flip so y points down, as in the design view */
+		context.translateBy(x: 0, y: CGFloat(pixelsHigh))
+		context.scaleBy(x: CGFloat(pixelsWide) / rect.width, y: -CGFloat(pixelsHigh) / rect.height)
+		context.translateBy(x: -rect.minX, y: -rect.minY)
+
+		/* The current graphics context belongs to this thread */
+		let previous = NSGraphicsContext.current
+		NSGraphicsContext.current = NSGraphicsContext(cgContext: context, flipped: true)
+		draw(stitchBlocks, style: style, fabricColor: fabricColor, lineWidth: lineWidth, showJumpStitches: showJumpStitches, in: rect)
+		NSGraphicsContext.current = previous
+
+		guard let image = context.makeImage() else {
+			return nil
+		}
+		return NSImage(cgImage: image, size: rect.size)
+	}
+
 	/// Fills `rect` with the fabric color, then draws the stitches.
 	@objc(drawStitchBlocks:fabricColor:lineWidth:showJumpStitches:inRect:)
 	public class func draw(_ stitchBlocks: [StitchBlock], fabricColor: NSColor, lineWidth: CGFloat, showJumpStitches: Bool, in rect: NSRect) {
