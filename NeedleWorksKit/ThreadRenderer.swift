@@ -112,7 +112,8 @@ struct ThreadRenderer {
 		let tangent = SIMD3<Double>(Double(dx / length), Double(dy / length), 0)
 		let tl = simd_dot(tangent, Self.light), th = simd_dot(tangent, Self.halfway)
 		let diffuse = sqrt(max(0, 1 - tl * tl))
-		let specular = pow(sqrt(max(0, 1 - th * th)), 40)
+		/* Realistic thread's highlight is more directional, as polyester's is */
+		let specular = pow(sqrt(max(0, 1 - th * th)), realistic ? 60 : 40)
 		let gradient = gradient(color: color, diffuse: diffuse, specular: specular, tone: tone)
 
 		context.saveGState()
@@ -206,9 +207,21 @@ struct ThreadRenderer {
 		}
 
 		let base = (0.62 + 0.38 * Double(key.diffuse) / Self.levels) * (1 + 0.02 * Double(tone))
-		let crown = base + 0.55 * Double(key.specular) / Self.levels + 0.08
-		let colors = [Self.shade(color, base * 0.55), Self.shade(color, base * 0.92), Self.shade(color, crown), Self.shade(color, base * 0.92), Self.shade(color, base * 0.5)]
-		let gradient = CGGradient(colorsSpace: Self.colorSpace, colors: colors as CFArray, locations: [0, 0.25, 0.45, 0.7, 1])!
+		let specular = Double(key.specular) / Self.levels
+		let colors: [CGColor]
+		let locations: [CGFloat]
+		if realistic {
+			/* Most machine thread is trilobal polyester, whose fibers act like
+			 * tiny prisms: a narrow, bright highlight along the crown */
+			let crown = base + 0.9 * specular + 0.12
+			colors = [Self.shade(color, base * 0.55), Self.shade(color, base * 0.9), Self.shade(color, base), Self.shade(color, crown), Self.shade(color, base), Self.shade(color, base * 0.9), Self.shade(color, base * 0.5)]
+			locations = [0, 0.25, 0.38, 0.44, 0.5, 0.7, 1]
+		} else {
+			let crown = base + 0.55 * specular + 0.08
+			colors = [Self.shade(color, base * 0.55), Self.shade(color, base * 0.92), Self.shade(color, crown), Self.shade(color, base * 0.92), Self.shade(color, base * 0.5)]
+			locations = [0, 0.25, 0.45, 0.7, 1]
+		}
+		let gradient = CGGradient(colorsSpace: Self.colorSpace, colors: colors as CFArray, locations: locations)!
 		gradients[key] = gradient
 		return gradient
 	}
