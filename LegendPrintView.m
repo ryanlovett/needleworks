@@ -40,7 +40,7 @@
 	//	  rect.size.width, rect.size.height, rect.origin.x, rect.origin.y);
 	
 	
-	NSColorList* firstColorList = [[doc colorLists] objectAtIndex:0];
+	NSColorList* firstColorList = [[doc colorLists] firstObject];
 	NSArray* colorKeys = [firstColorList allKeys];
 	NSString* colorKey;
 	 
@@ -66,10 +66,17 @@
 	 
 	iter = [drawList objectEnumerator];
 	while(stitchblock = [iter nextObject]) {
-		// Fetch our stitch color
-		colorKey = [colorKeys objectAtIndex:[stitchblock colorIndex]-1];
-		threadColor = [firstColorList colorWithKey:colorKey];
-		//threadColor = [stitchblock color];
+		// Fetch our stitch color. The color lists cover PEC palette
+		// indices 1-61; for anything else (or if no color list loaded),
+		// fall back to the block's own color and a generic label.
+		NSUInteger colorIndex = [stitchblock colorIndex];
+		if (colorIndex >= 1 && colorIndex <= [colorKeys count]) {
+			colorKey = [colorKeys objectAtIndex:colorIndex - 1];
+			threadColor = [firstColorList colorWithKey:colorKey];
+		} else {
+			colorKey = [NSString stringWithFormat:NSLocalizedString(@"Color %lu", @"Legend label for a thread color with no name"), (unsigned long)colorIndex];
+			threadColor = [stitchblock color];
+		}
 
 		// Set where our legend entry starts
 		p = NSMakePoint(x, y);
@@ -82,7 +89,7 @@
 		[NSBezierPath fillRect:box];
 	
 		// Set the color label
-		str = [colorKeys objectAtIndex:[stitchblock colorIndex]-1];
+		str = colorKey;
 		// Draw the label
 		[str drawAtPoint:NSMakePoint(p.x + boxWidth + boxWidth/4, p.y) withAttributes:attribs];
 	
