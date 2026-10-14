@@ -28,7 +28,7 @@
     id inspectedDocument;
 }
 
-@property (assign) id inspectedDocument;
+@property (strong) id inspectedDocument;
 
 - (void)toggleInspectorPanel:(id)sender;
 

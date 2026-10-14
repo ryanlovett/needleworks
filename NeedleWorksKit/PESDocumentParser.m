@@ -26,7 +26,6 @@
 	NSData *pesData = [NSData dataWithContentsOfURL:url];
 
 	if (pesData == nil) {
-		[self release];
 		return nil;
 	}
 
@@ -38,7 +37,6 @@
 		if (outError != NULL) {
 			*outError = [NSError errorWithDomain:NSOSStatusErrorDomain code:unimpErr userInfo:NULL];
 		}
-		[self release];
 		return nil;
 	}
 
@@ -99,7 +97,6 @@
 
 			/* Save our block */
 			[self addStitchBlock:curBlock];
-			[curBlock release];
 		}
 		// color switch, start a new block
 		else if (val1 == 254 && val2 == 176) {
@@ -118,7 +115,6 @@
 
 			/* Save our block */
 			[self addStitchBlock:curBlock];
-			[curBlock release];
 
 			/* Start a new stitch */
 			tempStitches = [NSBezierPath bezierPath];
@@ -202,12 +198,6 @@
 			w / 254, h / 254, w / 10, h / 10];
 
 	return self;
-}
-
-- (void)dealloc {
-	[_stitchBlocks release];
-	[_designSize release];
-	[super dealloc];
 }
 
 - (int32_t)readInt32:(unsigned char *)bytes {

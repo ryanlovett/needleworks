@@ -20,7 +20,7 @@
 //  02111-1307, USA.
 
 #import "DesignView.h"
-#import "MyDocument.h"
+#import "PESDocument.h"
 #import "PESRenderer.h"
 
 @implementation DesignView
@@ -28,7 +28,7 @@
 @synthesize delegate;
 
 - (void) drawRect:(NSRect) rect {
-	MyDocument* doc = [self delegate];
+	PESDocument* doc = [self delegate];
 
 	[PESRenderer drawStitchBlocks:[doc stitchBlocks]
 					   fabricColor:[doc fabricColor]
@@ -45,7 +45,7 @@
     if ([self inLiveResize]) {
 		// A change in size has required the view to be invalidated.
         NSRect rects[4];
-        int count;
+        NSInteger count;
 		
         [self getRectsExposedDuringLiveResize:rects count:&count];
 		

@@ -26,7 +26,7 @@
 				<string>com.brother.pes</string>
 			</array>
 			<key>NSDocumentClass</key>
-			<string>MyDocument</string>
+			<string>PESDocument</string>
 		</dict>
 	</array>
 	<key>CFBundleExecutable</key>

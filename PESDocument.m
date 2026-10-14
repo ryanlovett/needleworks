@@ -1,5 +1,5 @@
 //
-//  MyDocument.m
+//  PESDocument.m
 //  Needle Works
 //
 //  Copyright 2008 Ryan Lovett <ryan@spacecoaster.org>. All rights reserved.
@@ -19,11 +19,11 @@
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 //  02111-1307, USA.
 
-#import "MyDocument.h"
+#import "PESDocument.h"
 #import "StitchBlock.h"
 #import "PESDocumentParser.h"
 
-@implementation MyDocument
+@implementation PESDocument
 
 /*
  Designated initializer for new documents: creates the people array
@@ -33,9 +33,8 @@
     if (self) {
 		stitchBlocks = [[NSMutableArray alloc] init];
 		selection = [[NSMutableArray alloc] init];
-		docName = [[NSString alloc] initWithString:@""];
-		docSize = [[NSString alloc] initWithString:@""];
-		docDate = [[NSString alloc] initWithString:@""];
+		docName = @"";
+		docSize = @"";
 		lineWidth = 2;
 		fabricColor = [NSColor whiteColor];
 		showJumpStitches = YES;
@@ -69,7 +68,7 @@
 				}*/
 				[[self colorLists] addObject:colorList];
 			} else {
-				NSLog(@"Cannot find %s color list\n", [path lastPathComponent]);
+				NSLog(@"Cannot find %@ color list", [path lastPathComponent]);
 			}
 			
 		}
@@ -79,21 +78,11 @@
     return self;
 }
 
-- (void)dealloc {
-	//NSLog(@"MyDocument::dealloc\n");
-	[stitchBlocks release];
-	[selection release];
-	[docName release];
-	[docSize release];
-	[docDate release];
-	[super dealloc];
-}
-
 /*
  windowNibName returns the name of the document's nib file
  */
 - (NSString *) windowNibName {
-    return @"MyDocument";
+    return @"PESDocument";
 }
 
 - (void)windowControllerDidLoadNib:(NSWindowController *) aController {
@@ -151,8 +140,6 @@
 
 	self.docSize = [[fileAttributes objectForKey:NSFileSize] stringValue];
 
-	docDate = [fileModificationDate description];
-
 	PESDocumentParser *parser = [[PESDocumentParser alloc] initWithContentsOfURL:anUrl error:outError];
 
 	if (parser == nil) {
@@ -169,8 +156,6 @@
 	numColorChanges = [parser numColorChanges];
 	numStitches = [parser numStitches];
 	self.designSize = [parser designSize];
-
-	[parser release];
 
 	return YES;
 }
@@ -231,7 +216,7 @@
 	}
 	
 	// Fetch the print scale preference
-	int printScale = [[NSUserDefaults standardUserDefaults] integerForKey:@"printScale"];
+	NSInteger printScale = [[NSUserDefaults standardUserDefaults] integerForKey:@"printScale"];
 
 	// User wants the printed size scaled to fit
 	if (printScale == 1) {
@@ -288,8 +273,6 @@
 }
 
 - (void) setStitchBlocks:(NSMutableArray*) arr {
-	[arr retain];
-	[stitchBlocks release];
 	stitchBlocks = arr;
 }
 
@@ -298,8 +281,6 @@
 }
 
 - (void) setFabricColor:(NSColor*) c {
-	[c retain];
-	[fabricColor release];
 	fabricColor = c;
 	[mainView setNeedsDisplay:YES];
 }
@@ -347,7 +328,6 @@
 @synthesize docName;
 @synthesize fileSize;
 @synthesize docSize;
-@synthesize fileModificationDate;
 @synthesize designSize;
 @synthesize numStitches;
 @synthesize numColors;

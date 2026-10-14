@@ -21,14 +21,14 @@
 
 #import "PrintView.h"
 #import "StitchBlock.h"
-#import "MyDocument.h"
+#import "PESDocument.h"
 
 @implementation PrintView
 
 @synthesize delegate;
 
 - (void) drawRect:(NSRect) rect {
-	MyDocument* doc = [self delegate];
+	PESDocument* doc = [self delegate];
 	
 	NSGraphicsContext *currentContext = [NSGraphicsContext currentContext];
 	
@@ -63,7 +63,7 @@
     if ([self inLiveResize]) {
 		// A change in size has required the view to be invalidated.
         NSRect rects[4];
-        int count;
+        NSInteger count;
 		
         [self getRectsExposedDuringLiveResize:rects count:&count];
 		

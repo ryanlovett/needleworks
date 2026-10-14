@@ -1,5 +1,5 @@
 //
-//  MyDocument.h
+//  PESDocument.h
 //  Needle Works
 //
 //  Copyright 2008 Ryan Lovett <ryan@spacecoaster.org>. All rights reserved.
@@ -22,7 +22,7 @@
 
 #import <Cocoa/Cocoa.h>
 
-@interface MyDocument : NSDocument
+@interface PESDocument : NSDocument
 {
 	//int*			jumpStitches;
 	//int				numJumpStitches;
@@ -40,8 +40,6 @@
 	NSString*		designSize;
 	NSString*		docSize;
 	NSString*		docName;
-	NSString*		docDate;
-	NSDate*			fileModificationDate;
 	
 	CGFloat			lineWidth;
 	NSColor*		fabricColor;
@@ -63,7 +61,6 @@
 
 @property (nonatomic, copy) NSString *fileName;
 @property (nonatomic, copy) NSNumber *fileSize;
-@property (nonatomic, copy) NSDate *fileModificationDate;
 @property (nonatomic, copy) NSString *docName;
 @property (nonatomic, copy) NSString *docSize;
 @property (nonatomic, copy) NSString *designSize;

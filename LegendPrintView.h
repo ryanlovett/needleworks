@@ -20,13 +20,13 @@
 //  02111-1307, USA.
 
 #import <Cocoa/Cocoa.h>
-#import "MyDocument.h"
+#import "PESDocument.h"
 
 @interface LegendPrintView : NSView {
-	MyDocument* delegate;
+	__weak PESDocument* delegate;
 }
 
-@property (nonatomic, retain) MyDocument* delegate;
+@property (nonatomic, weak) PESDocument* delegate;
 
 
 @end

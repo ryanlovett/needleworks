@@ -20,8 +20,10 @@
 //  02111-1307, USA.
 
 #import "InspectorPanelController.h"
-#import "MyDocument.h"
+#import "PESDocument.h"
 
+
+static void *ActiveDocumentContext = &ActiveDocumentContext;
 
 @implementation InspectorPanelController
 
@@ -52,20 +54,20 @@
 	}//*/
 	
 	/* If the main document was switched ... */
-    if (mainDocument != self.inspectedDocument && [mainDocument isKindOfClass:[MyDocument class]]) {
+    if (mainDocument != self.inspectedDocument && [mainDocument isKindOfClass:[PESDocument class]]) {
 		/* ... and we had been looking at another main document... */
 		if (self.inspectedDocument) {
 			/* finish doing stuff with it */
 			//NSLog(@"finished with inspected document");
 			[documentObjectController commitEditing];
 		}
-		//self.inspectedDocument = (mainDocument && [mainDocument isKindOfClass:[MyDocument class]]) ? mainDocument : nil;   
+		//self.inspectedDocument = (mainDocument && [mainDocument isKindOfClass:[PESDocument class]]) ? mainDocument : nil;   
 		if (mainDocument) {
-			if ([mainDocument isKindOfClass:[MyDocument class]]) {
-				//NSLog(@"mainDocument is MyDocument");
+			if ([mainDocument isKindOfClass:[PESDocument class]]) {
+				//NSLog(@"mainDocument is PESDocument");
 				self.inspectedDocument = mainDocument;
 			} else {
-				//NSLog(@"mainDocument is not MyDocument");
+				//NSLog(@"mainDocument is not PESDocument");
 				self.inspectedDocument = nil;
 			}
 		} else {
@@ -76,14 +78,14 @@
 }
 
 
-/* KVO change notification: if the context is the InspectorPanelController
- * class, this is a notification that the value associated with the keypath we
+/* KVO change notification: if the context is ActiveDocumentContext, this is a
+ * notification that the value associated with the keypath we
  * observed ([NSApp].mainWindow.windowController.document) changed, hence the
  * active document changed. If the context is something else, pass it up the
  * chain. */
 - (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
 	//NSLog(@"InspectorPanelController::observeValueForKeyPath\n");
-    if (context == [InspectorPanelController class]) {
+    if (context == ActiveDocumentContext) {
 		//NSLog(@"keyPath:"); NSLog(keyPath);
 		[self activeDocumentChanged];
     } else {
@@ -95,14 +97,14 @@
  * document. */
 - (void) objectDidBeginEditing:(id)editor {
 	//NSLog(@"InspectorPanelController::objectDidBeginEditing\n");
-	if ([inspectedDocument isKindOfClass:[MyDocument class]]) {
+	if ([inspectedDocument isKindOfClass:[PESDocument class]]) {
 		[inspectedDocument objectDidBeginEditing:editor];
 	}
 }
 
 - (void) objectDidEndEditing:(id)editor {
 	//NSLog(@"InspectorPanelController::objectDidEndEditing\n");
-	if ([inspectedDocument isKindOfClass:[MyDocument class]]) {
+	if ([inspectedDocument isKindOfClass:[PESDocument class]]) {
 		[inspectedDocument objectDidEndEditing:editor];
 	}
 }
@@ -127,7 +129,7 @@
 		addObserver:self
 		forKeyPath:@"mainWindow.windowController.document"
 		options:0
-		context:[InspectorPanelController class]
+		context:ActiveDocumentContext
 	];
 	
 	/* It's documented to do nothing, but still a good idea to invoke... */

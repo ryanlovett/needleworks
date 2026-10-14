@@ -23,18 +23,10 @@
 
 @implementation StitchBlock
 
-- (void) dealloc {
-	//NSLog(@"StitchBlock::dealloc\n");
-	[stitches release];
-	[stitchesAndJumps release];
-
-	[super dealloc];
-}
-
 /* This color map comes from the Embroidery Reader code */
 - (void) setColorIndex:(NSUInteger) index {
 	colorIndex = index;
-	r = 0, g = 0, b = 0;
+	r = 0; g = 0; b = 0;
 	
 	switch (colorIndex) {
 		case 1:
