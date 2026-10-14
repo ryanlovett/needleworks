@@ -113,11 +113,16 @@
 	
 	[mainView setFrame:r];
 		
+	/* Keep the window large enough to be easy to see, move and close, even
+	 for blank designs or designs with very few stitches. */
+	NSSize minContentSize = NSMakeSize(400, 300);
+	[[mainView window] setContentMinSize:minContentSize];
+
 	/* We set the maximum size of the window's content to be no larger than the content itself. (plus the scrollbar troughs?) We don't want the user dragging the window beyond so that it exposes the Land of Infinite Grey. */
 	/* TODO: I might need to disable this when I implement zooming. */
 	/* We also scale the max dimensions to the proper DPI since the view will be too. */
-	r.size.width = (max.x - min.x)  * actualScale + 16;
-	r.size.height = (max.y - min.y) * actualScale + 16;
+	r.size.width = MAX((max.x - min.x) * actualScale + 16, minContentSize.width);
+	r.size.height = MAX((max.y - min.y) * actualScale + 16, minContentSize.height);
 	[[mainView window] setContentMaxSize:r.size];
 		
 	/* We zoom the window so that the entire design is visible without 
