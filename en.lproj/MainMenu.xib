@@ -267,7 +267,11 @@
             </items>
         </menu>
         <customObject id="377" userLabel="Inspector Panel Controller" customClass="InspectorPanelController"/>
-        <customObject id="383" customClass="AppDelegate"/>
+        <customObject id="383" customClass="AppDelegate">
+            <connections>
+                <outlet property="inspectorPanelController" destination="377" id="NWt-01-ipc"/>
+            </connections>
+        </customObject>
         <window title="Preferences" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="386" userLabel="Preferences">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" bottomStrut="YES"/>

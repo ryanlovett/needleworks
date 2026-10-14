@@ -21,9 +21,16 @@
 
 #import <Cocoa/Cocoa.h>
 
+@class InspectorPanelController;
 
 @interface AppDelegate : NSObject {
 
 }
+
+@property (strong) IBOutlet InspectorPanelController *inspectorPanelController;
+
+/* Lets document windows (e.g. their toolbars) show or hide the Design
+ Information panel through the responder chain */
+- (IBAction)toggleInspectorPanel:(id)sender;
 
 @end

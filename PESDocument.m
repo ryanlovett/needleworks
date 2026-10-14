@@ -20,6 +20,7 @@
 //  02111-1307, USA.
 
 #import "PESDocument.h"
+#import "AppDelegate.h"
 #import "StitchBlock.h"
 #import "PESDocumentParser.h"
 
@@ -30,6 +31,16 @@ static const CGFloat PESPointsPerUnit = 100.0 / 254;
 static const CGFloat PESMinimumZoom = 0.1;
 static const CGFloat PESMaximumZoom = 16;
 static const CGFloat PESZoomStep = M_SQRT2;
+
+/* Document window toolbar items */
+static NSToolbarItemIdentifier const PESZoomOutItem = @"ZoomOut";
+static NSToolbarItemIdentifier const PESZoomInItem = @"ZoomIn";
+static NSToolbarItemIdentifier const PESZoomToFitItem = @"ZoomToFit";
+static NSToolbarItemIdentifier const PESActualSizeItem = @"ActualSize";
+static NSToolbarItemIdentifier const PESDesignInformationItem = @"DesignInformation";
+
+@interface PESDocument () <NSToolbarDelegate>
+@end
 
 @implementation PESDocument
 
@@ -91,12 +102,16 @@ static const CGFloat PESZoomStep = M_SQRT2;
 
 	/* Keep the window large enough to be easy to see, move and close, even
 	 for blank designs or designs with very few stitches. */
-	[[mainView window] setContentMinSize:NSMakeSize(400, 300)];
+	[[mainView window] setContentMinSize:NSMakeSize(480, 300)];
 
-	/* We zoom the window so that the entire design is visible without
-	 scrolling (see windowWillUseStandardFrame:defaultFrame:). If the screen
-	 is smaller than the design, the scroll view will help us out. */
-	[[mainView window] performZoom:nil];
+	/* Toolbar with zoom controls and the Design Information panel */
+	NSToolbar *toolbar = [[NSToolbar alloc] initWithIdentifier:@"PESDocumentToolbar"];
+	[toolbar setDelegate:self];
+	[toolbar setAllowsUserCustomization:YES];
+	[toolbar setAutosavesConfiguration:YES];
+	[toolbar setDisplayMode:NSToolbarDisplayModeIconOnly];
+	[[mainView window] setToolbar:toolbar];
+
 
 	/* A blank design has nothing to draw, so say so rather than showing an
 	 empty window. */
@@ -115,6 +130,21 @@ static const CGFloat PESZoomStep = M_SQRT2;
 	}
 }
 
+/* Once the window is on screen (and has any tab bar it's going to get), we
+ size it so that the entire design is visible without scrolling (see
+ windowWillUseStandardFrame:defaultFrame:). If the screen is smaller than
+ the design, the scroll view will help us out. */
+- (void) showWindows {
+	[super showWindows];
+
+	if (!hasSizedWindow) {
+		hasSizedWindow = YES;
+		NSWindow *window = [mainView window];
+		NSRect screenFrame = [[window screen] visibleFrame];
+		[window setFrame:[self windowWillUseStandardFrame:window defaultFrame:screenFrame] display:YES];
+	}
+}
+
 /* The window's standard ("zoomed") frame fits the whole design at the
  current zoom, within the screen, keeping the window's top-left corner. */
 - (NSRect)windowWillUseStandardFrame:(NSWindow *)window defaultFrame:(NSRect)newFrame {
@@ -122,14 +152,13 @@ static const CGFloat PESZoomStep = M_SQRT2;
 	CGFloat zoom = [scrollView magnification];
 
 	/* Everything in the window other than the visible design area, such as
-	 scrollers and borders, stays the same size */
-	NSSize contentSize = [[window contentView] frame].size;
+	 the title bar, toolbar, scrollers and borders, stays the same size */
+	NSRect frame = [window frame];
 	NSSize visibleSize = [[scrollView contentView] frame].size;
 	NSSize designSize = [mainView frame].size;
-	contentSize.width += designSize.width * zoom - visibleSize.width;
-	contentSize.height += designSize.height * zoom - visibleSize.height;
+	frame.size.width += designSize.width * zoom - visibleSize.width;
+	frame.size.height += designSize.height * zoom - visibleSize.height;
 
-	NSRect frame = [window frameRectForContentRect:NSMakeRect(0, 0, contentSize.width, contentSize.height)];
 	NSSize minSize = [window minSize];
 	frame.size.width = MIN(MAX(NSWidth(frame), minSize.width), NSWidth(newFrame));
 	frame.size.height = MIN(MAX(NSHeight(frame), minSize.height), NSHeight(newFrame));
@@ -176,6 +205,62 @@ static const CGFloat PESZoomStep = M_SQRT2;
 		return numStitches > 0;
 	}
 	return [super validateUserInterfaceItem:item];
+}
+
+#pragma mark Toolbar
+
+- (NSArray<NSToolbarItemIdentifier> *) toolbarDefaultItemIdentifiers:(NSToolbar *)toolbar {
+	return @[PESZoomOutItem, PESZoomInItem, PESZoomToFitItem,
+			 NSToolbarFlexibleSpaceItemIdentifier, PESDesignInformationItem];
+}
+
+- (NSArray<NSToolbarItemIdentifier> *) toolbarAllowedItemIdentifiers:(NSToolbar *)toolbar {
+	return @[PESZoomOutItem, PESZoomInItem, PESZoomToFitItem, PESActualSizeItem,
+			 PESDesignInformationItem, NSToolbarSpaceItemIdentifier,
+			 NSToolbarFlexibleSpaceItemIdentifier];
+}
+
+- (NSToolbarItem *) toolbar:(NSToolbar *)toolbar itemForItemIdentifier:(NSToolbarItemIdentifier)identifier willBeInsertedIntoToolbar:(BOOL)flag {
+	NSString *label, *toolTip, *symbol;
+	SEL action;
+
+	if ([identifier isEqualToString:PESZoomOutItem]) {
+		label = NSLocalizedString(@"Zoom Out", @"Toolbar item");
+		toolTip = NSLocalizedString(@"Make the design smaller", @"Toolbar item tooltip");
+		symbol = @"minus.magnifyingglass";
+		action = @selector(zoomOut:);
+	} else if ([identifier isEqualToString:PESZoomInItem]) {
+		label = NSLocalizedString(@"Zoom In", @"Toolbar item");
+		toolTip = NSLocalizedString(@"Make the design larger", @"Toolbar item tooltip");
+		symbol = @"plus.magnifyingglass";
+		action = @selector(zoomIn:);
+	} else if ([identifier isEqualToString:PESZoomToFitItem]) {
+		label = NSLocalizedString(@"Zoom to Fit", @"Toolbar item");
+		toolTip = NSLocalizedString(@"Fit the design to the window", @"Toolbar item tooltip");
+		symbol = @"arrow.up.left.and.down.right.magnifyingglass";
+		action = @selector(zoomToFit:);
+	} else if ([identifier isEqualToString:PESActualSizeItem]) {
+		label = NSLocalizedString(@"Actual Size", @"Toolbar item");
+		toolTip = NSLocalizedString(@"Show the design at its actual size", @"Toolbar item tooltip");
+		symbol = @"1.magnifyingglass";
+		action = @selector(zoomToActualSize:);
+	} else if ([identifier isEqualToString:PESDesignInformationItem]) {
+		label = NSLocalizedString(@"Design Info", @"Toolbar item");
+		toolTip = NSLocalizedString(@"Show or hide the Design Information panel", @"Toolbar item tooltip");
+		symbol = @"info.circle";
+		action = @selector(toggleInspectorPanel:);
+	} else {
+		return nil;
+	}
+
+	NSToolbarItem *item = [[NSToolbarItem alloc] initWithItemIdentifier:identifier];
+	[item setLabel:label];
+	[item setPaletteLabel:label];
+	[item setToolTip:toolTip];
+	[item setImage:[NSImage imageWithSystemSymbolName:symbol accessibilityDescription:label]];
+	[item setAction:action];
+	[item setBordered:YES];
+	return item;
 }
 
 /* Keep the empty design message readable on both light and dark fabrics */

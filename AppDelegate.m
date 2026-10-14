@@ -20,6 +20,7 @@
 //  02111-1307, USA.
 
 #import "AppDelegate.h"
+#import "InspectorPanelController.h"
 
 @implementation AppDelegate
 
@@ -33,6 +34,10 @@
 	//[colorPanel setMode:NSColorListModeColorPanel];
 	[colorPanel setMode:NSColorPanelModeWheel];
 	return self;
+}
+
+- (IBAction)toggleInspectorPanel:(id)sender {
+	[[self inspectorPanelController] toggleInspectorPanel:sender];
 }
 
 /* Don't open a blank window when the application starts */

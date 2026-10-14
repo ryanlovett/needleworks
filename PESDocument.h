@@ -56,6 +56,7 @@
 	IBOutlet id		legendPrintView;
 
 	NSTextField*	emptyDesignLabel;
+	BOOL			hasSizedWindow;
 }
 
 
