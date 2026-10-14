@@ -59,7 +59,7 @@
 	 
 	// Set our font and its attributes
 	NSString *str;
-	NSFont   *fnt = [NSFont fontWithName:@"Lucida Sans" size:textHeight];
+	NSFont   *fnt = [NSFont systemFontOfSize:textHeight];
 	NSMutableDictionary* attribs = [[NSMutableDictionary alloc] init];		
 	[attribs setObject:black forKey:NSForegroundColorAttributeName];
 	[attribs setObject:fnt forKey:NSFontAttributeName];
