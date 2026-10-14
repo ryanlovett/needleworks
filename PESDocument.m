@@ -112,6 +112,10 @@
 	[clipView setBoundsSize:actualSize];
 	
 	[mainView setFrame:r];
+
+	/* Fill the area around a centered design with the fabric color, so the
+	 design appears to sit on one continuous piece of fabric. */
+	[[mainView enclosingScrollView] setBackgroundColor:fabricColor];
 		
 	/* Keep the window large enough to be easy to see, move and close, even
 	 for blank designs or designs with very few stitches. */
@@ -287,6 +291,7 @@
 
 - (void) setFabricColor:(NSColor*) c {
 	fabricColor = c;
+	[[mainView enclosingScrollView] setBackgroundColor:c];
 	[mainView setNeedsDisplay:YES];
 }
 

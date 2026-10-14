@@ -21,6 +21,7 @@
 		94028F2A0E78729B001CD6B0 /* BuzzEdit.clr in Resources */ = {isa = PBXBuildFile; fileRef = 94028F270E78729B001CD6B0 /* BuzzEdit.clr */; };
 		94028F2B0E78729B001CD6B0 /* Amazing Box Max.clr in Resources */ = {isa = PBXBuildFile; fileRef = 94028F280E78729B001CD6B0 /* Amazing Box Max.clr */; };
 		94A2F8B40E9FDEC200C29361 /* NoDividerSplitView.m in Sources */ = {isa = PBXBuildFile; fileRef = 94A2F8B30E9FDEC200C29361 /* NoDividerSplitView.m */; };
+		94C3C1A00000000000000003 /* CenteringClipView.m in Sources */ = {isa = PBXBuildFile; fileRef = 94C3C1A00000000000000002 /* CenteringClipView.m */; };
 		94C97FD00E96D7590090FD3B /* PrintView.m in Sources */ = {isa = PBXBuildFile; fileRef = 94C97FCF0E96D7590090FD3B /* PrintView.m */; };
 		94E60B21307E110F00C0CD5E /* NeedleWorksPreview.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 94E60B1A307E110F00C0CD5E /* NeedleWorksPreview.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		94E60B35307E11BD00C0CD5E /* NeedleWorksThumbnail.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 94E60B2E307E11BD00C0CD5E /* NeedleWorksThumbnail.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -93,6 +94,8 @@
 		94930B332251FAB600121BDB /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/InspectorPanel.xib; sourceTree = "<group>"; };
 		94A2F8B20E9FDEC200C29361 /* NoDividerSplitView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NoDividerSplitView.h; sourceTree = "<group>"; };
 		94A2F8B30E9FDEC200C29361 /* NoDividerSplitView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NoDividerSplitView.m; sourceTree = "<group>"; };
+		94C3C1A00000000000000001 /* CenteringClipView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CenteringClipView.h; sourceTree = "<group>"; };
+		94C3C1A00000000000000002 /* CenteringClipView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CenteringClipView.m; sourceTree = "<group>"; };
 		94C97FCE0E96D7590090FD3B /* PrintView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PrintView.h; sourceTree = "<group>"; };
 		94C97FCF0E96D7590090FD3B /* PrintView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PrintView.m; sourceTree = "<group>"; };
 		94E60AF6307E0BFB00C0CD5E /* NeedleWorksKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = NeedleWorksKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -235,6 +238,8 @@
 				94FC42270E9D41DB00A3B54D /* LegendPrintView.m */,
 				94A2F8B20E9FDEC200C29361 /* NoDividerSplitView.h */,
 				94A2F8B30E9FDEC200C29361 /* NoDividerSplitView.m */,
+				94C3C1A00000000000000001 /* CenteringClipView.h */,
+				94C3C1A00000000000000002 /* CenteringClipView.m */,
 				94C97FCE0E96D7590090FD3B /* PrintView.h */,
 				94C97FCF0E96D7590090FD3B /* PrintView.m */,
 			);
@@ -491,6 +496,7 @@
 				94C97FD00E96D7590090FD3B /* PrintView.m in Sources */,
 				94FC42280E9D41DB00A3B54D /* LegendPrintView.m in Sources */,
 				94A2F8B40E9FDEC200C29361 /* NoDividerSplitView.m in Sources */,
+				94C3C1A00000000000000003 /* CenteringClipView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
