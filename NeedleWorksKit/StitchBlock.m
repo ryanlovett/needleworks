@@ -23,210 +23,104 @@
 
 @implementation StitchBlock
 
-/* This color map comes from the Embroidery Reader code */
+/* The PEC thread palette, indexed from 1: Brother thread names, thread
+ numbers (0 if none) and colors. The colors are those of the BuzzEdit color
+ list, which agree with the palette libpes verified against a Brother Innovis
+ 955 (https://github.com/frno7/libpes). */
+static const struct {
+	const char *name;
+	int number;
+	unsigned char r, g, b;
+} PECThreads[] = {
+	{ "Prussian Blue",       7,  26,  10, 148 },
+	{ "Blue",              405,  15, 117, 255 },
+	{ "Teal Green",        534,   0, 147,  76 },
+	{ "Corn Flower Blue",   70, 186, 189, 254 },
+	{ "Red",               800, 236,   0,   0 },
+	{ "Reddish Brown",     337, 228, 153,  90 },
+	{ "Magenta",           620, 204,  72, 171 },
+	{ "Light Lilac",       810, 253, 196, 250 },
+	{ "Lilac",             612, 221, 132, 205 },
+	{ "Mint Green",        502, 107, 221, 138 },
+	{ "Deep Gold",         214, 228, 169,  69 },
+	{ "Orange",            208, 255, 189,  69 },
+	{ "Yellow",            205, 255, 230,   0 },
+	{ "Lime Green",        513, 108, 217,   0 },
+	{ "Brass",             328, 193, 169,  65 },
+	{ "Silver",              5, 181, 173, 151 },
+	{ "Russet Brown",      330, 186, 156,  95 },
+	{ "Cream Brown",        10, 250, 245, 158 },
+	{ "Pewter",            704, 128, 128, 128 },
+	{ "Black",             900,   0,   0,   0 },
+	{ "Ultramarine",       406,   0,  28, 223 },
+	{ "Royal Purple",      869, 223,   0, 184 },
+	{ "Dark Gray",         707,  98,  98,  98 },
+	{ "Dark Brown",         58, 105,  38,  13 },
+	{ "Deep Rose",          86, 255,   0,  96 },
+	{ "Light Brown",       323, 191, 130,   0 },
+	{ "Salmon Pink",        79, 243, 145, 120 },
+	{ "Vermilion",          30, 255, 104,   5 },
+	{ "White",               1, 240, 240, 240 },
+	{ "Violet",            613, 200,  50, 205 },
+	{ "Seacrest",          542, 176, 191, 155 },
+	{ "Sky Blue",           19, 101, 191, 235 },
+	{ "Pumpkin",           126, 255, 186,   4 },
+	{ "Cream Yellow",      812, 255, 240, 108 },
+	{ "Khaki",             348, 254, 202,  21 },
+	{ "Clay Brown",        339, 243, 129,   1 },
+	{ "Leaf Green",        509,  55, 169,  35 },
+	{ "Peacock Blue",      415,  35,  70,  95 },
+	{ "Gray",              817, 166, 166, 149 },
+	{ "Warm Gray",         399, 206, 191, 166 },
+	{ "Dark Olive",        517, 150, 170,   2 },
+	{ "Linen",             307, 255, 227, 198 },
+	{ "Pink",               85, 255, 153, 215 },
+	{ "Deep Green",        808,   0, 112,   4 },
+	{ "Lavender",          804, 237, 204, 251 },
+	{ "Wisteria Violet",   607, 192, 137, 216 },
+	{ "Beige",             843, 231, 217, 180 },
+	{ "Carmine",           807, 233,  14, 134 },
+	{ "Amber Red",         333, 207, 104,  41 },
+	{ "Olive Green",       519,  64, 134,  21 },
+	{ "Dark Fuschia",      107, 219,  23, 151 },
+	{ "Tangerine",         209, 255, 167,   4 },
+	{ "Light Blue",         17, 185, 255, 255 },
+	{ "Emerald Green",     507,  34, 137,  39 },
+	{ "Purple",            614, 182,  18, 205 },
+	{ "Moss Green",        515,   0, 170,   0 },
+	{ "Flesh Pink",        124, 254, 169, 220 },
+	{ "Harvest Gold",      206, 254, 213,  16 },
+	{ "Electric Blue",     420,   0, 151, 223 },
+	{ "Lemon Yellow",      202, 255, 255, 132 },
+	{ "Fresh Green",        27, 207, 231, 116 },
+	{ "Applique Material",   0, 255, 200, 100 },
+	{ "Applique Position",   0, 255, 200, 150 },
+	{ "Applique",            0, 255, 200, 200 },
+};
+
+static const NSUInteger PECThreadCount = sizeof(PECThreads) / sizeof(PECThreads[0]);
+
 - (void) setColorIndex:(NSUInteger) index {
 	colorIndex = index;
-	r = 0; g = 0; b = 0;
-	
-	switch (colorIndex) {
-		case 1:
-			r = 14.0f; g = 31.0f; b = 124.0f;
-			break;
-		case 2:
-			r = 10.0f; g = 85.0f; b = 163.0f;
-			break;
-		case 3:
-			r = 48.0f; g = 135.0f; b = 119.0f;
-			break;
-		case 4:
-			r = 75.0f; g = 107.0f; b = 175.0f;
-			break;
-		case 5:
-			r = 237.0f; g = 23.0f; b = 31.0f;
-			break;
-		case 6:
-			r = 209.0f; g = 92.0f; b = 0.0f;
-			break;
-		case 7:
-			r = 145.0f; g = 54.0f; b = 151.0f;
-			break;
-		case 8:
-			r = 228.0f; g = 154.0f; b = 203.0f;
-			break;
-		case 9:
-			r = 145.0f; g = 95.0f; b = 172.0f;
-			break;
-		case 10:
-			r = 157.0f; g = 214.0f; b = 125.0f;
-			break;
-		case 11:
-			r = 232.0f; g = 169.0f; b = 0.0f;
-			break;
-		case 12:
-			r = 254.0f; g = 186.0f; b = 53.0f;
-			break;
-		case 13:
-			r = 255.0f; g = 255.0f; b = 0.0f;
-			break;
-		case 14:
-			r = 112.0f; g = 188.0f; b = 31.0f;
-			break;
-		case 15:
-			r = 145.0f; g = 95.0f; b = 172.0f;
-			break;
-		case 16:
-			r = 168.0f; g = 168.0f; b = 168.0f;
-			break;
-		case 17:
-			r = 123.0f; g = 111.0f; b = 0.0f;
-			break;
-		case 18:
-			r = 255.0f; g = 255.0f; b = 179.0f;
-			break;
-		case 19:
-			r = 79.0f; g = 85.0f; b = 86.0f;
-			break;
-		case 20:
-			r = 0.0f; g = 0.0f; b = 0.0f;
-			break;
-		case 21:
-			r = 11.0f; g = 61.0f; b = 145.0f;
-			break;
-		case 22:
-			r = 119.0f; g = 1.0f; b = 118.0f;
-			break;
-		case 23:
-			r = 41.0f; g = 49.0f; b = 51.0f;
-			break;
-		case 24:
-			r = 42.0f; g = 19.0f; b = 1.0f;
-			break;
-		case 25:
-			r = 246.0f; g = 74.0f; b = 138.0f;
-			break;
-		case 26:
-			r = 178.0f; g = 118.0f; b = 36.0f;
-			break;
-		case 27:
-			r = 252.0f; g = 187.0f; b = 196.0f;
-			break;
-		case 28:
-			r = 254.0f; g = 55.0f; b = 15.0f;
-			break;
-		case 29:
-			r = 240.0f; g = 240.0f; b = 240.0f;
-			break;
-		case 30:
-			r = 106.0f; g = 28.0f; b = 138.0f;
-			break;
-		case 31:
-			r = 168.0f; g = 221.0f; b = 196.0f;
-			break;
-		case 32:
-			r = 37.0f; g = 132.0f; b = 187.0f;
-			break;
-		case 33:
-			r = 254.0f; g = 179.0f; b = 67.0f;
-			break;
-		case 34:
-			r = 255.0f; g = 240.0f; b = 141.0f;
-			break;
-		case 35:
-			r = 208.0f; g = 166.0f; b = 96.0f;
-			break;
-		case 36:
-			r = 209.0f; g = 84.0f; b = 0.0f;
-			break;
-		case 37:
-			r = 102.0f; g = 186.0f; b = 73.0f;
-			break;
-		case 38:
-			r = 19.0f; g = 74.0f; b = 70.0f;
-			break;
-		case 39:
-			r = 135.0f; g = 135.0f; b = 135.0f;
-			break;
-		case 40:
-			r = 216.0f; g = 202.0f; b = 198.0f;
-			break;
-		case 41:
-			r = 67.0f; g = 86.0f; b = 7.0f;
-			break;
-		case 42:
-			r = 254.0f; g = 227.0f; b = 197.0f;
-			break;
-		case 43:
-			r = 249.0f; g = 147.0f; b = 188.0f;
-			break;
-		case 44:
-			r = 0.0f; g = 56.0f; b = 34.0f;
-			break;
-		case 45:
-			r = 178.0f; g = 175.0f; b = 212.0f;
-			break;
-		case 46:
-			r = 104.0f; g = 106.0f; b = 176.0f;
-			break;
-		case 47:
-			r = 239.0f; g = 227.0f; b = 185.0f;
-			break;
-		case 48:
-			r = 247.0f; g = 56.0f; b = 102.0f;
-			break;
-		case 49:
-			r = 181.0f; g = 76.0f; b = 100.0f;
-			break;
-		case 50:
-			r = 19.0f; g = 43.0f; b = 26.0f;
-			break;
-		case 51:
-			r = 199.0f; g = 1.0f; b = 85.0f;
-			break;
-		case 52:
-			r = 254.0f; g = 158.0f; b = 50.0f;
-			break;
-		case 53:
-			r = 168.0f; g = 222.0f; b = 235.0f;
-			break;
-		case 54:
-			r = 0.0f; g = 103.0f; b = 26.0f;
-			break;
-		case 55:
-			r = 78.0f; g = 41.0f; b = 144.0f;
-			break;
-		case 56:
-			r = 47.0f; g = 126.0f; b = 32.0f;
-			break;
-		case 57:
-			r = 253.0f; g = 217.0f; b = 222.0f;
-			break;
-		case 58:
-			r = 255.0f; g = 217.0f; b = 17.0f;
-			break;
-		case 59:
-			r = 9.0f; g = 91.0f; b = 166.0f;
-			break;
-		case 60:
-			r = 240.0f; g = 249.0f; b = 112.0f;
-			break;
-		case 61:
-			r = 227.0f; g = 243.0f; b = 91.0f;
-			break;
-		case 62:
-			r = 255.0f; g = 200.0f; b = 100.0f;
-			break;
-		case 63:
-			r = 255.0f; g = 200.0f; b = 150.0f;
-			break;
-		case 64:
-			r = 255.0f; g = 200.0f; b = 200.0f;
-			break;
-		default:
-			r = 1.0f; g = 1.0f; b = 1.0f;
-			break;
+
+	if (colorIndex >= 1 && colorIndex <= PECThreadCount) {
+		[self setColor:[NSColor colorWithSRGBRed:PECThreads[colorIndex - 1].r / 255.0
+										   green:PECThreads[colorIndex - 1].g / 255.0
+											blue:PECThreads[colorIndex - 1].b / 255.0
+										   alpha:1.0]];
+	} else {
+		[self setColor:[NSColor blackColor]];
 	}
-	
-	[self setColor:[NSColor colorWithCalibratedRed:r/255 green:g/255 blue:b/255 alpha: 1.0f]];
+}
+
+- (NSString *) threadName {
+	if (colorIndex < 1 || colorIndex > PECThreadCount) {
+		return nil;
+	}
+
+	NSString *name = [NSString stringWithUTF8String:PECThreads[colorIndex - 1].name];
+	int number = PECThreads[colorIndex - 1].number;
+	return (number > 0) ? [NSString stringWithFormat:@"%@ (%d)", name, number] : name;
 }
 
 - (NSUInteger) colorIndex {
@@ -239,7 +133,6 @@
 	path = (jumps) ? [self stitchesAndJumps] : [self stitches];
 	
 	/* Set the color we're about to stroke with */
-	//[[NSColor colorWithCalibratedRed:r/255 green:g/255 blue:b/255 alpha: 1.0f] setStroke];
 	[color setStroke];
 	
 	/* testing */

@@ -39,41 +39,8 @@
 		fabricColor = [NSColor whiteColor];
 		showJumpStitches = YES;
 
-		colorLists = [[NSMutableArray alloc] init];
 		origPrintViewSizePortrait = NSMakeSize(0, 0);
 		origPrintViewSizeLandscape = NSMakeSize(0, 0);
-		
-		// Our application's shared color panel
-		NSColorPanel *colorPanel = [NSColorPanel sharedColorPanel];
-		
-		// The paths to our .clr files in Needle Works.app/Contents/Resources/
-		NSArray *colorPaths = [[NSBundle mainBundle] pathsForResourcesOfType:@"clr" inDirectory:nil];
-		NSEnumerator *colorPathIter;
-		NSColorList *colorList;
-		
-		NSArray *colorNames;
-		NSEnumerator *colorNameIter;
-		NSString *path, *pathBasename;
-		
-		colorPathIter = [colorPaths objectEnumerator];
-		while (path = [colorPathIter nextObject]) {
-			pathBasename = [path lastPathComponent];
-			colorList = [[NSColorList alloc] initWithName:[pathBasename stringByDeletingPathExtension] fromFile:path];
-			if (colorList != nil) {
-				[colorPanel attachColorList:colorList];
-				colorNames = [colorList allKeys];
-				colorNameIter = [colorNames objectEnumerator];
-				/*while (colorStr = [colorNameIter nextObject]) {
-					NSLog(colorStr);
-				}*/
-				[[self colorLists] addObject:colorList];
-			} else {
-				NSLog(@"Cannot find %@ color list", [path lastPathComponent]);
-			}
-			
-		}
-		
-		//NSLog(@"colorLists count: %d", [[self colorLists] count]);
     }
     return self;
 }
@@ -352,10 +319,6 @@
 
 - (NSSize)canvasSize {
 	return NSMakeSize(max.x - min.x, max.y - min.y);
-}
-
-- (NSMutableArray*)colorLists {
-	return colorLists;
 }
 
 /*

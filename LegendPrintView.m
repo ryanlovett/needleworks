@@ -40,8 +40,6 @@
 	//	  rect.size.width, rect.size.height, rect.origin.x, rect.origin.y);
 	
 	
-	NSColorList* firstColorList = [[doc colorLists] firstObject];
-	NSArray* colorKeys = [firstColorList allKeys];
 	NSString* colorKey;
 	 
 	CGFloat textHeight = 6;
@@ -66,16 +64,12 @@
 	 
 	iter = [drawList objectEnumerator];
 	while(stitchblock = [iter nextObject]) {
-		// Fetch our stitch color. The color lists cover PEC palette
-		// indices 1-61; for anything else (or if no color list loaded),
-		// fall back to the block's own color and a generic label.
-		NSUInteger colorIndex = [stitchblock colorIndex];
-		if (colorIndex >= 1 && colorIndex <= [colorKeys count]) {
-			colorKey = [colorKeys objectAtIndex:colorIndex - 1];
-			threadColor = [firstColorList colorWithKey:colorKey];
-		} else {
-			colorKey = [NSString stringWithFormat:NSLocalizedString(@"Color %lu", @"Legend label for a thread color with no name"), (unsigned long)colorIndex];
-			threadColor = [stitchblock color];
+		// Fetch our stitch color, with a generic label for colors that
+		// aren't in the PEC palette
+		threadColor = [stitchblock color];
+		colorKey = [stitchblock threadName];
+		if (colorKey == nil) {
+			colorKey = [NSString stringWithFormat:NSLocalizedString(@"Color %lu", @"Legend label for a thread color with no name"), (unsigned long)[stitchblock colorIndex]];
 		}
 
 		// Set where our legend entry starts

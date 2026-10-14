@@ -32,34 +32,6 @@
 	// We set the mode to custom color lists
 	//[colorPanel setMode:NSColorListModeColorPanel];
 	[colorPanel setMode:NSColorPanelModeWheel];
-/*	
-	// The paths to our .clr files in Needle Works.app/Contents/Resources/
-	NSArray *colorPaths = [[NSBundle mainBundle] pathsForResourcesOfType:@"clr" inDirectory:nil];
-	NSEnumerator *colorPathIter;
-	NSColorList *colorList;
-	
-	NSArray *colorNames;
-	NSEnumerator *colorNameIter;
-	NSString *path, *pathBasename, *colorStr;
-	
-	colorPathIter = [colorPaths objectEnumerator];
-	while (path = [colorPathIter nextObject]) {
-		pathBasename = [path lastPathComponent];
-		//colorList = [[NSColorList alloc] initWithName:[pathBasename substringToIndex:([pathBasename length] - 4)] fromFile:path];
-		colorList = [[NSColorList alloc] initWithName:[pathBasename stringByDeletingPathExtension] fromFile:path];
-		if (colorList != nil) {
-			[colorPanel attachColorList:colorList];
-			colorNames = [colorList allKeys];
-			colorNameIter = [colorNames objectEnumerator];
-			while (colorStr = [colorNameIter nextObject]) {
-				//NSLog(colorStr);
-			}
-			[colorLists addObject:colorList];
-		} else {
-			NSLog(@"Cannot find %s color list\n", [path lastPathComponent]);
-		}		
-	}
-*/
 	return self;
 }
 

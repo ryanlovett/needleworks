@@ -24,7 +24,6 @@
 
 @interface StitchBlock : NSObject {
 	NSColor *color;
-	CGFloat r, g, b;
 	
 	// You cannot modify the type of the path element so we can't change
 	// lineto to moveto or vice versa. We just create both to save time.
@@ -41,6 +40,10 @@
 @property (copy) NSBezierPath *stitchesAndJumps;
 @property (assign) NSUInteger colorIndex;
 @property (assign) NSUInteger numStitches;
+
+// The thread's name and Brother thread number, e.g. "Prussian Blue (7)",
+// or nil if the color index isn't in the PEC palette.
+@property (readonly) NSString *threadName;
 
 - (void) drawWithSelection:(BOOL)selected Jumps:(BOOL)jumps Width:(CGFloat)lineWidth;
 - (void) scale:(CGFloat)factor;

@@ -47,8 +47,6 @@
 	NSMutableArray* stitchBlocks;
 	NSMutableArray* selection;
 	
-	NSMutableArray *colorLists;
-	
 	NSSize			origPrintViewSizePortrait;
 	NSSize			origPrintViewSizeLandscape;
 	
@@ -69,7 +67,6 @@
 @property (nonatomic, assign) NSInteger numStitches;
 @property (nonatomic, assign) NSInteger numColors;
 @property (nonatomic, assign) NSInteger numColorChanges;
-//@property (readonly) NSMutableArray *colorLists;
 @property (assign) BOOL isPES;
 
 /* drawing maintenance */
@@ -93,7 +90,5 @@
 - (NSPoint)		min;
 
 - (NSSize)canvasSize;
-
-- (NSMutableArray*) colorLists;
 
 @end
