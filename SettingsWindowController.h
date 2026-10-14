@@ -25,6 +25,9 @@
  PESStitchStyle). Each window can choose its own from View > Stitch Style. */
 extern NSString * const PESStitchStyleKey;
 
+/* The names of the stitch styles, in PESStitchStyle order */
+NSArray<NSString *> *PESStitchStyleTitles(void);
+
 /* The Settings window */
 @interface SettingsWindowController : NSWindowController
 

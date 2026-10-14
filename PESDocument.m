@@ -40,6 +40,7 @@ static NSToolbarItemIdentifier const PESZoomInItem = @"ZoomIn";
 static NSToolbarItemIdentifier const PESZoomToFitItem = @"ZoomToFit";
 static NSToolbarItemIdentifier const PESActualSizeItem = @"ActualSize";
 static NSToolbarItemIdentifier const PESDesignInformationItem = @"DesignInformation";
+static NSToolbarItemIdentifier const PESStitchStyleItem = @"StitchStyle";
 
 @interface PESDocument () <NSToolbarDelegate>
 @end
@@ -249,13 +250,13 @@ static NSToolbarItemIdentifier const PESDesignInformationItem = @"DesignInformat
 #pragma mark Toolbar
 
 - (NSArray<NSToolbarItemIdentifier> *) toolbarDefaultItemIdentifiers:(NSToolbar *)toolbar {
-	return @[PESZoomOutItem, PESZoomInItem, PESZoomToFitItem,
+	return @[PESZoomOutItem, PESZoomInItem, PESZoomToFitItem, PESStitchStyleItem,
 			 NSToolbarFlexibleSpaceItemIdentifier, PESDesignInformationItem];
 }
 
 - (NSArray<NSToolbarItemIdentifier> *) toolbarAllowedItemIdentifiers:(NSToolbar *)toolbar {
 	return @[PESZoomOutItem, PESZoomInItem, PESZoomToFitItem, PESActualSizeItem,
-			 PESDesignInformationItem, NSToolbarSpaceItemIdentifier,
+			 PESStitchStyleItem, PESDesignInformationItem, NSToolbarSpaceItemIdentifier,
 			 NSToolbarFlexibleSpaceItemIdentifier];
 }
 
@@ -283,6 +284,8 @@ static NSToolbarItemIdentifier const PESDesignInformationItem = @"DesignInformat
 		toolTip = NSLocalizedString(@"Show the design at its actual size", @"Toolbar item tooltip");
 		symbol = @"1.magnifyingglass";
 		action = @selector(zoomToActualSize:);
+	} else if ([identifier isEqualToString:PESStitchStyleItem]) {
+		return [self stitchStyleToolbarItem:identifier willBeInsertedIntoToolbar:flag];
 	} else if ([identifier isEqualToString:PESDesignInformationItem]) {
 		label = NSLocalizedString(@"Design Info", @"Toolbar item");
 		toolTip = NSLocalizedString(@"Show or hide the Design Information panel", @"Toolbar item tooltip");
@@ -477,15 +480,65 @@ static NSToolbarItemIdentifier const PESDesignInformationItem = @"DesignInformat
 	return [PESRenderer canDrawStitchStyle:style] ? style : PESStitchStylePlain;
 }
 
+/* A pop-up showing the window's stitch style, which changes it like View >
+ Stitch Style does */
+- (NSToolbarItem *) stitchStyleToolbarItem:(NSToolbarItemIdentifier)identifier willBeInsertedIntoToolbar:(BOOL)flag {
+	/* The pop-up's items aren't validated through the window's responder
+	 chain, so it sends its action straight to the document, and offers the
+	 styles the renderer can draw */
+	NSPopUpButton *popUp = [[NSPopUpButton alloc] initWithFrame:NSZeroRect pullsDown:NO];
+	[popUp setAutoenablesItems:NO];
+	NSArray *titles = PESStitchStyleTitles();
+	for (NSUInteger style = 0; style < [titles count]; style++) {
+		[popUp addItemWithTitle:titles[style]];
+		[[popUp lastItem] setTag:(NSInteger)style];
+		[[popUp lastItem] setEnabled:[PESRenderer canDrawStitchStyle:(PESStitchStyle)style]];
+	}
+	[popUp setTarget:self];
+	[popUp setAction:@selector(chooseStitchStyle:)];
+	[popUp selectItemWithTag:[self stitchStyle]];
+	if (flag) {
+		stitchStylePopUp = popUp;
+	}
+
+	NSString *label = NSLocalizedString(@"Stitch Style", @"Toolbar item");
+	NSToolbarItem *item = [[NSToolbarItem alloc] initWithItemIdentifier:identifier];
+	[item setLabel:label];
+	[item setPaletteLabel:label];
+	[item setToolTip:NSLocalizedString(@"Choose how stitches look in this window", @"Toolbar item tooltip")];
+	[item setView:popUp];
+
+	/* When the window is too narrow for the pop-up, the toolbar's overflow
+	 menu shows the styles as a submenu */
+	NSMenu *menu = [[NSMenu alloc] initWithTitle:label];
+	for (NSUInteger style = 0; style < [titles count]; style++) {
+		NSMenuItem *menuItem = [menu addItemWithTitle:titles[style] action:@selector(chooseStitchStyle:) keyEquivalent:@""];
+		[menuItem setTag:(NSInteger)style];
+	}
+	NSMenuItem *menuForm = [[NSMenuItem alloc] initWithTitle:label action:NULL keyEquivalent:@""];
+	[menuForm setSubmenu:menu];
+	[item setMenuFormRepresentation:menuForm];
+	return item;
+}
+
+- (void) showStitchStyle {
+	[stitchStylePopUp selectItemWithTag:[self stitchStyle]];
+	[mainView setNeedsDisplay:YES];
+}
+
 - (IBAction) chooseStitchStyle:(id)sender {
+	/* The sender is a menu item, or the toolbar's pop-up */
+	if ([sender isKindOfClass:[NSPopUpButton class]]) {
+		sender = [sender selectedItem];
+	}
 	ownStitchStyle = (PESStitchStyle)[sender tag];
 	hasOwnStitchStyle = YES;
-	[mainView setNeedsDisplay:YES];
+	[self showStitchStyle];
 }
 
 - (void) userDefaultsDidChange:(NSNotification *)notification {
 	if (!hasOwnStitchStyle) {
-		[mainView setNeedsDisplay:YES];
+		[self showStitchStyle];
 	}
 }
 

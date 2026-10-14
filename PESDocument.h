@@ -65,6 +65,9 @@
 
 	/* The print panel accessory of the current print operation, if any */
 	__weak PrintScaleAccessoryController *printScaleAccessory;
+
+	/* The toolbar's stitch style pop-up, if it's in the toolbar */
+	__weak NSPopUpButton *stitchStylePopUp;
 }
 
 

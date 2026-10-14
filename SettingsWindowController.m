@@ -24,6 +24,12 @@
 
 NSString * const PESStitchStyleKey = @"stitchStyle";
 
+NSArray<NSString *> *PESStitchStyleTitles(void) {
+	return @[NSLocalizedString(@"Plain", @"Stitch style: lines"),
+			 NSLocalizedString(@"Shaded", @"Stitch style: shaded thread"),
+			 NSLocalizedString(@"Realistic", @"Stitch style: realistic thread")];
+}
+
 
 @implementation SettingsWindowController
 
@@ -46,9 +52,7 @@ NSString * const PESStitchStyleKey = @"stitchStyle";
 
 	NSPopUpButton *popUp = [[NSPopUpButton alloc] initWithFrame:NSZeroRect pullsDown:NO];
 	[popUp setAutoenablesItems:NO];
-	NSArray *titles = @[NSLocalizedString(@"Plain", @"Stitch style: lines"),
-						NSLocalizedString(@"Shaded", @"Stitch style: shaded thread"),
-						NSLocalizedString(@"Realistic", @"Stitch style: realistic thread")];
+	NSArray *titles = PESStitchStyleTitles();
 	for (NSUInteger style = 0; style < [titles count]; style++) {
 		[popUp addItemWithTitle:titles[style]];
 		[[popUp lastItem] setEnabled:[PESRenderer canDrawStitchStyle:(PESStitchStyle)style]];
