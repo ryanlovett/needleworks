@@ -22,7 +22,7 @@ public final class PESRenderer: NSObject {
 	/// Whether the renderer can draw in `style` yet.
 	@objc(canDrawStitchStyle:)
 	public class func canDraw(_ style: StitchStyle) -> Bool {
-		true
+		style != .realistic || RealisticRenderer.shared != nil
 	}
 
 	/// Fills `rect` with the fabric color, then draws the stitches in `style`.
@@ -33,9 +33,24 @@ public final class PESRenderer: NSObject {
 			return
 		}
 
+		if style == .realistic, let renderer = RealisticRenderer.shared {
+			/* Draw on the GPU at the context's resolution, then copy it in,
+			 * flipped so the top of the image is at the top of `rect` */
+			let pixels = context.convertToDeviceSpace(rect).integral
+			if let image = renderer.image(of: stitchBlocks, fabricColor: fabricColor, showJumpStitches: showJumpStitches,
+										  rect: rect, pixelsWide: Int(pixels.width), pixelsHigh: Int(pixels.height)) {
+				context.saveGState()
+				context.translateBy(x: 0, y: rect.minY + rect.maxY)
+				context.scaleBy(x: 1, y: -1)
+				context.draw(image, in: rect)
+				context.restoreGState()
+				return
+			}
+		}
+
 		fabricColor.set()
 		rect.fill()
-		ThreadRenderer.draw(stitchBlocks, realistic: style == .realistic, in: rect, context: context, showJumpStitches: showJumpStitches)
+		ShadedRenderer.draw(stitchBlocks, in: rect, context: context, showJumpStitches: showJumpStitches)
 	}
 
 	/// Draws `rect`, in design units, into an image `pixelsWide` by
