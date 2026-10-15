@@ -51,7 +51,7 @@ static const CGFloat DesignViewMaximumImagePixels = 12e6;
 /* Everything besides the zoom that changes how the design looks */
 - (NSArray *) drawingSettings {
 	PESDocument *doc = [self delegate];
-	return @[@([doc stitchStyle]), @([doc showJumpStitches]), @([doc lineWidth]), [doc fabricColor]];
+	return @[@([doc stitchStyle]), @([doc showJumpStitches]), @([doc lineWidth]), [doc fabricColor], @([doc showsFabricTexture])];
 }
 
 /* Whether two areas cover the same pixels, allowing for rounding */
@@ -66,6 +66,7 @@ static BOOL SamePixels(CGContextRef context, NSRect a, NSRect b) {
 	return [PESRenderer imageOfStitchBlocks:stitchBlocks
 									  style:[settings[0] integerValue]
 								fabricColor:settings[3]
+							  fabricTexture:[settings[4] boolValue]
 								  lineWidth:[settings[2] doubleValue]
 						   showJumpStitches:[settings[1] boolValue]
 									   rect:rect
@@ -112,6 +113,7 @@ static BOOL SamePixels(CGContextRef context, NSRect a, NSRect b) {
 	[PESRenderer drawStitchBlocks:[doc stitchBlocks]
 							 style:[doc stitchStyle]
 					   fabricColor:[doc fabricColor]
+					 fabricTexture:[doc showsFabricTexture]
 						 lineWidth:[doc lineWidth]
 				  showJumpStitches:[doc showJumpStitches]
 							inRect:rect];

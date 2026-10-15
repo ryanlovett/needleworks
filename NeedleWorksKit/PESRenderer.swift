@@ -25,19 +25,23 @@ public final class PESRenderer: NSObject {
 		style != .realistic || RealisticRenderer.shared != nil
 	}
 
-	/// Fills `rect` with the fabric color, then draws the stitches in `style`.
-	@objc(drawStitchBlocks:style:fabricColor:lineWidth:showJumpStitches:inRect:)
-	public class func draw(_ stitchBlocks: [StitchBlock], style: StitchStyle, fabricColor: NSColor, lineWidth: CGFloat, showJumpStitches: Bool, in rect: NSRect) {
+	/// Fills `rect` with the fabric, as a woven texture if `fabricTexture`,
+	/// then draws the stitches in `style`.
+	@objc(drawStitchBlocks:style:fabricColor:fabricTexture:lineWidth:showJumpStitches:inRect:)
+	public class func draw(_ stitchBlocks: [StitchBlock], style: StitchStyle, fabricColor: NSColor, fabricTexture: Bool, lineWidth: CGFloat, showJumpStitches: Bool, in rect: NSRect) {
+		drawFabric(fabricColor, texture: fabricTexture, in: rect)
+
 		guard style != .plain, let context = NSGraphicsContext.current?.cgContext else {
-			draw(stitchBlocks, fabricColor: fabricColor, lineWidth: lineWidth, showJumpStitches: showJumpStitches, in: rect)
+			draw(stitchBlocks, lineWidth: lineWidth, showJumpStitches: showJumpStitches)
 			return
 		}
 
 		if style == .realistic, let renderer = RealisticRenderer.shared {
-			/* Draw on the GPU at the context's resolution, then copy it in,
-			 * flipped so the top of the image is at the top of `rect` */
+			/* Draw the thread on the GPU at the context's resolution, then lay
+			 * it over the fabric, flipped so the top of the image is at the
+			 * top of `rect` */
 			let pixels = context.convertToDeviceSpace(rect).integral
-			if let image = renderer.image(of: stitchBlocks, fabricColor: fabricColor, showJumpStitches: showJumpStitches,
+			if let image = renderer.image(of: stitchBlocks, showJumpStitches: showJumpStitches,
 										  rect: rect, pixelsWide: Int(pixels.width), pixelsHigh: Int(pixels.height)) {
 				context.saveGState()
 				context.translateBy(x: 0, y: rect.minY + rect.maxY)
@@ -48,16 +52,27 @@ public final class PESRenderer: NSObject {
 			}
 		}
 
-		fabricColor.set()
-		rect.fill()
 		ShadedRenderer.draw(stitchBlocks, in: rect, context: context, showJumpStitches: showJumpStitches)
+	}
+
+	/// Fills `rect`, in design units, with the fabric color, as a woven
+	/// texture at its real size if `texture`. The weave lines up with the
+	/// design's origin, so areas filled separately join up.
+	@objc(drawFabricColor:texture:inRect:)
+	public class func drawFabric(_ color: NSColor, texture: Bool, in rect: NSRect) {
+		guard texture, let context = NSGraphicsContext.current?.cgContext else {
+			color.set()
+			rect.fill()
+			return
+		}
+		FabricTexture.shared.draw(color, in: rect, context: context)
 	}
 
 	/// Draws `rect`, in design units, into an image `pixelsWide` by
 	/// `pixelsHigh`, with the top of the design at the top of the image. It
 	/// can be called on any thread.
-	@objc(imageOfStitchBlocks:style:fabricColor:lineWidth:showJumpStitches:rect:pixelsWide:pixelsHigh:)
-	public class func image(of stitchBlocks: [StitchBlock], style: StitchStyle, fabricColor: NSColor, lineWidth: CGFloat, showJumpStitches: Bool, rect: NSRect, pixelsWide: Int, pixelsHigh: Int) -> NSImage? {
+	@objc(imageOfStitchBlocks:style:fabricColor:fabricTexture:lineWidth:showJumpStitches:rect:pixelsWide:pixelsHigh:)
+	public class func image(of stitchBlocks: [StitchBlock], style: StitchStyle, fabricColor: NSColor, fabricTexture: Bool, lineWidth: CGFloat, showJumpStitches: Bool, rect: NSRect, pixelsWide: Int, pixelsHigh: Int) -> NSImage? {
 		guard pixelsWide > 0, pixelsHigh > 0, rect.width > 0, rect.height > 0,
 			  let context = CGContext(data: nil, width: pixelsWide, height: pixelsHigh, bitsPerComponent: 8, bytesPerRow: 0,
 									  space: CGColorSpace(name: CGColorSpace.sRGB)!, bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue) else {
@@ -72,7 +87,7 @@ public final class PESRenderer: NSObject {
 		/* The current graphics context belongs to this thread */
 		let previous = NSGraphicsContext.current
 		NSGraphicsContext.current = NSGraphicsContext(cgContext: context, flipped: true)
-		draw(stitchBlocks, style: style, fabricColor: fabricColor, lineWidth: lineWidth, showJumpStitches: showJumpStitches, in: rect)
+		draw(stitchBlocks, style: style, fabricColor: fabricColor, fabricTexture: fabricTexture, lineWidth: lineWidth, showJumpStitches: showJumpStitches, in: rect)
 		NSGraphicsContext.current = previous
 
 		guard let image = context.makeImage() else {

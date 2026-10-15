@@ -30,7 +30,8 @@
 
 + (void)initialize {
 	if (self == [AppDelegate class]) {
-		[[NSUserDefaults standardUserDefaults] registerDefaults:@{PESStitchStyleKey: @(PESStitchStylePlain)}];
+		[[NSUserDefaults standardUserDefaults] registerDefaults:@{PESStitchStyleKey: @(PESStitchStylePlain),
+																   PESFabricTextureKey: @YES}];
 	}
 }
 
@@ -48,6 +49,19 @@
 
 - (IBAction)toggleInspectorPanel:(id)sender {
 	[[self inspectorPanelController] toggleInspectorPanel:sender];
+}
+
+- (IBAction)toggleFabricTexture:(id)sender {
+	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+	[defaults setBool:![defaults boolForKey:PESFabricTextureKey] forKey:PESFabricTextureKey];
+}
+
+- (BOOL)validateMenuItem:(NSMenuItem *)menuItem {
+	if ([menuItem action] == @selector(toggleFabricTexture:)) {
+		BOOL shown = [[NSUserDefaults standardUserDefaults] boolForKey:PESFabricTextureKey];
+		[menuItem setState:shown ? NSControlStateValueOn : NSControlStateValueOff];
+	}
+	return YES;
 }
 
 - (IBAction)showSettings:(id)sender {

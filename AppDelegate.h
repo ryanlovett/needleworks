@@ -23,7 +23,7 @@
 
 @class InspectorPanelController;
 
-@interface AppDelegate : NSObject {
+@interface AppDelegate : NSObject <NSMenuItemValidation> {
 
 }
 
@@ -34,5 +34,7 @@
 - (IBAction)toggleInspectorPanel:(id)sender;
 
 - (IBAction)showSettings:(id)sender;
+
+- (IBAction)toggleFabricTexture:(id)sender;
 
 @end

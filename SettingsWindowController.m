@@ -23,6 +23,7 @@
 #import <NeedleWorksKit/NeedleWorksKit-Swift.h>
 
 NSString * const PESStitchStyleKey = @"stitchStyle";
+NSString * const PESFabricTextureKey = @"fabricTexture";
 
 NSArray<NSString *> *PESStitchStyleTitles(void) {
 	return @[NSLocalizedString(@"Plain", @"Stitch style: lines"),

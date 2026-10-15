@@ -521,9 +521,16 @@ static NSToolbarItemIdentifier const PESStitchStyleItem = @"StitchStyle";
 	return item;
 }
 
+- (BOOL) showsFabricTexture {
+	return [[NSUserDefaults standardUserDefaults] boolForKey:PESFabricTextureKey];
+}
+
 - (void) showStitchStyle {
 	[stitchStylePopUp selectItemWithTag:[self stitchStyle]];
 	[mainView setNeedsDisplay:YES];
+
+	/* The area around the design shows the fabric too */
+	[[[mainView enclosingScrollView] contentView] setNeedsDisplay:YES];
 }
 
 - (IBAction) chooseStitchStyle:(id)sender {
@@ -537,9 +544,8 @@ static NSToolbarItemIdentifier const PESStitchStyleItem = @"StitchStyle";
 }
 
 - (void) userDefaultsDidChange:(NSNotification *)notification {
-	if (!hasOwnStitchStyle) {
-		[self showStitchStyle];
-	}
+	/* The stitch style in Settings, or the fabric texture, may have changed */
+	[self showStitchStyle];
 }
 
 - (NSPoint) max {

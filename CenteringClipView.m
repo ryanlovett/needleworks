@@ -20,6 +20,8 @@
 //  02111-1307, USA.
 
 #import "CenteringClipView.h"
+#import "DesignView.h"
+#import <NeedleWorksKit/NeedleWorksKit-Swift.h>
 
 
 @implementation CenteringClipView
@@ -37,6 +39,30 @@
 	}
 
 	return constrained;
+}
+
+/* Around the design, show the same woven fabric as under it, lined up with
+ the design so the two join without a seam */
+- (void)drawRect:(NSRect)dirtyRect {
+	DesignView *designView = (DesignView *)[self documentView];
+	PESDocument *doc = [designView isKindOfClass:[DesignView class]] ? [designView delegate] : nil;
+	if (![doc showsFabricTexture]) {
+		[super drawRect:dirtyRect];
+		return;
+	}
+
+	/* Draw in the design's coordinates */
+	NSPoint origin = [self convertPoint:NSZeroPoint fromView:designView];
+	NSPoint unitX = [self convertPoint:NSMakePoint(1, 0) fromView:designView];
+	NSPoint unitY = [self convertPoint:NSMakePoint(0, 1) fromView:designView];
+	NSAffineTransform *transform = [NSAffineTransform transform];
+	[transform setTransformStruct:(NSAffineTransformStruct){
+		unitX.x - origin.x, unitX.y - origin.y, unitY.x - origin.x, unitY.y - origin.y, origin.x, origin.y}];
+
+	[NSGraphicsContext saveGraphicsState];
+	[transform concat];
+	[PESRenderer drawFabricColor:[doc fabricColor] texture:YES inRect:[self convertRect:dirtyRect toView:designView]];
+	[NSGraphicsContext restoreGraphicsState];
 }
 
 @end

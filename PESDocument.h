@@ -100,6 +100,10 @@
 
 /* The window's own stitch style if one was chosen, otherwise the one in Settings */
 - (PESStitchStyle)	stitchStyle;
+
+/* Whether the fabric is drawn with a woven texture, when View > Show Fabric
+ Texture is on */
+- (BOOL)		showsFabricTexture;
 - (IBAction)	chooseStitchStyle:(id)sender;
 
 - (NSPoint)		max;

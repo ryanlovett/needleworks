@@ -55,9 +55,10 @@ final class RealisticRenderer: @unchecked Sendable {
 		self.pipeline = pipeline
 	}
 
-	/// An image of `rect`, in design units, `pixelsWide` by `pixelsHigh`,
-	/// with the top of the design at the top of the image.
-	func image(of stitchBlocks: [StitchBlock], fabricColor: NSColor, showJumpStitches: Bool, rect: CGRect, pixelsWide: Int, pixelsHigh: Int) -> CGImage? {
+	/// An image of the thread in `rect`, in design units, `pixelsWide` by
+	/// `pixelsHigh`, on a transparent background, with the top of the design
+	/// at the top of the image.
+	func image(of stitchBlocks: [StitchBlock], showJumpStitches: Bool, rect: CGRect, pixelsWide: Int, pixelsHigh: Int) -> CGImage? {
 		let limit = device.supportsFamily(.apple3) || device.supportsFamily(.mac2) ? 16384 : 8192
 		guard pixelsWide > 0, pixelsHigh > 0, pixelsWide <= limit, pixelsHigh <= limit else {
 			return nil
@@ -70,11 +71,10 @@ final class RealisticRenderer: @unchecked Sendable {
 			return nil
 		}
 
-		let fabric = Self.linear(fabricColor)
 		let pass = MTLRenderPassDescriptor()
 		pass.colorAttachments[0].texture = target
 		pass.colorAttachments[0].loadAction = .clear
-		pass.colorAttachments[0].clearColor = MTLClearColor(red: Double(fabric.x), green: Double(fabric.y), blue: Double(fabric.z), alpha: 1)
+		pass.colorAttachments[0].clearColor = MTLClearColor(red: 0, green: 0, blue: 0, alpha: 0)
 		pass.colorAttachments[0].storeAction = .store
 
 		guard let commandBuffer = queue.makeCommandBuffer(),
