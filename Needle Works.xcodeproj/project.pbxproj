@@ -13,6 +13,7 @@
 		94028B820E67C314001CD6B0 /* DesignView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94028B800E67C314001CD6B0 /* DesignView.swift */; };
 		94028B850E67C323001CD6B0 /* InspectorPanelController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94028B830E67C323001CD6B0 /* InspectorPanelController.swift */; };
 		94028B880E67C32F001CD6B0 /* PESDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94028B870E67C32F001CD6B0 /* PESDocument.swift */; };
+		94C3C1A00000000000000082 /* DesignSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C3C1A00000000000000081 /* DesignSettings.swift */; };
 		94028B930E67C3D9001CD6B0 /* InspectorPanel.xib in Resources */ = {isa = PBXBuildFile; fileRef = 94028B910E67C3D9001CD6B0 /* InspectorPanel.xib */; };
 		94028B960E67C3E5001CD6B0 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 94028B940E67C3E5001CD6B0 /* MainMenu.xib */; };
 		94028B990E67C3F0001CD6B0 /* PESDocument.xib in Resources */ = {isa = PBXBuildFile; fileRef = 94028B970E67C3F0001CD6B0 /* PESDocument.xib */; };
@@ -83,6 +84,7 @@
 		94028B800E67C314001CD6B0 /* DesignView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignView.swift; sourceTree = "<group>"; };
 		94028B830E67C323001CD6B0 /* InspectorPanelController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InspectorPanelController.swift; sourceTree = "<group>"; };
 		94028B870E67C32F001CD6B0 /* PESDocument.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PESDocument.swift; sourceTree = "<group>"; };
+		94C3C1A00000000000000081 /* DesignSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignSettings.swift; sourceTree = "<group>"; };
 		94028CC10E6BB060001CD6B0 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = en; path = en.lproj/Credits.rtf; sourceTree = "<group>"; };
 		94C3C1A00000000000000061 /* AppIcon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = AppIcon.icns; sourceTree = "<group>"; };
 		94028CDD0E6BB13B001CD6B0 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -228,6 +230,7 @@
 				94028B800E67C314001CD6B0 /* DesignView.swift */,
 				94028B830E67C323001CD6B0 /* InspectorPanelController.swift */,
 				94028B870E67C32F001CD6B0 /* PESDocument.swift */,
+				94C3C1A00000000000000081 /* DesignSettings.swift */,
 				94FC42270E9D41DB00A3B54D /* LegendPrintView.swift */,
 				94A2F8B30E9FDEC200C29361 /* NoDividerSplitView.swift */,
 				94C3C1A00000000000000002 /* CenteringClipView.swift */,
@@ -484,6 +487,7 @@
 				94028B820E67C314001CD6B0 /* DesignView.swift in Sources */,
 				94028B850E67C323001CD6B0 /* InspectorPanelController.swift in Sources */,
 				94028B880E67C32F001CD6B0 /* PESDocument.swift in Sources */,
+				94C3C1A00000000000000082 /* DesignSettings.swift in Sources */,
 				94C97FD00E96D7590090FD3B /* PrintView.swift in Sources */,
 				94FC42280E9D41DB00A3B54D /* LegendPrintView.swift in Sources */,
 				94A2F8B40E9FDEC200C29361 /* NoDividerSplitView.swift in Sources */,

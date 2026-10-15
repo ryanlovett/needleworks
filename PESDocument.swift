@@ -36,9 +36,11 @@ final class PESDocument: NSDocument, NSToolbarDelegate, NSWindowDelegate, NSSpli
 	private static let maximumZoom: CGFloat = 16
 	private static let zoomStep: CGFloat = 2.0.squareRoot()
 
-	/// Plain lines are 1 to 8 design units (0.1 to 0.8 mm) wide
+	/// Plain lines are 1 to 8 design units (0.1 to 0.8 mm) wide, 0.2 mm
+	/// unless chosen otherwise
 	private static let minimumLineWidth = 1
 	private static let maximumLineWidth = 8
+	private static let defaultLineWidth: CGFloat = 2
 
 	/// Document window toolbar items
 	private static let zoomOutItem = NSToolbarItem.Identifier("ZoomOut")
@@ -75,6 +77,10 @@ final class PESDocument: NSDocument, NSToolbarDelegate, NSWindowDelegate, NSSpli
 
 	/// The style chosen for this window from View > Stitch Style, if any
 	private var ownStitchStyle: StitchStyle?
+
+	/// The design file's fingerprint, under which the choices made for its
+	/// window are remembered; nil until they've been restored
+	private var fingerprint: String?
 
 	private var emptyDesignLabel: NSTextField?
 	private var hasSizedWindow = false
@@ -369,6 +375,7 @@ final class PESDocument: NSDocument, NSToolbarDelegate, NSWindowDelegate, NSSpli
 	nonisolated override func read(from url: URL, ofType typeName: String) throws {
 		let parser = try PESDocumentParser(contentsOf: url)
 		let fileSize = (try? FileManager.default.attributesOfItem(atPath: url.path))?[.size] as? NSNumber
+		let fingerprint = (try? Data(contentsOf: url)).map(DesignSettings.fingerprint(of:))
 
 		MainActor.assumeIsolated {
 			docName = url.lastPathComponent
@@ -380,7 +387,30 @@ final class PESDocument: NSDocument, NSToolbarDelegate, NSWindowDelegate, NSSpli
 			numColorChanges = parser.numColorChanges
 			numStitches = parser.numStitches
 			designSize = parser.designSize
+
+			/* The choices made for this design last time, before the window
+			 * opens; they're remembered again once it's known which design
+			 * this is */
+			if let fingerprint {
+				let remembered = DesignSettings.load(for: fingerprint)
+				ownFabricColor = remembered.fabricColor
+				ownStitchStyle = remembered.stitchStyle
+				lineWidth = remembered.lineWidth ?? Self.defaultLineWidth
+				showJumpStitches = remembered.showJumpStitches ?? true
+				self.fingerprint = fingerprint
+			}
 		}
+	}
+
+	/// Remembers the choices made for this design's window
+	private func rememberChoices() {
+		guard let fingerprint else {
+			return
+		}
+		DesignSettings.save(DesignSettings(fabricColor: ownFabricColor, stitchStyle: ownStitchStyle,
+										   lineWidth: lineWidth == Self.defaultLineWidth ? nil : lineWidth,
+										   showJumpStitches: showJumpStitches ? nil : false),
+							for: fingerprint)
 	}
 
 	// MARK: Printing
@@ -473,6 +503,7 @@ final class PESDocument: NSDocument, NSToolbarDelegate, NSWindowDelegate, NSSpli
 		set {
 			ownFabricColor = newValue.copy() as? NSColor
 			showFabricColor()
+			rememberChoices()
 		}
 	}
 
@@ -525,10 +556,11 @@ final class PESDocument: NSDocument, NSToolbarDelegate, NSWindowDelegate, NSSpli
 	// MARK: Line width
 
 	/// The width of lines in the Plain style, in design units
-	@objc var lineWidth: CGFloat = 2 {
+	@objc var lineWidth: CGFloat = PESDocument.defaultLineWidth {
 		didSet {
 			lineWidthSlider?.doubleValue = lineWidth
 			mainView?.needsDisplay = true
+			rememberChoices()
 		}
 	}
 
@@ -586,6 +618,7 @@ final class PESDocument: NSDocument, NSToolbarDelegate, NSWindowDelegate, NSSpli
 	@objc var showJumpStitches = true {
 		didSet {
 			mainView?.needsDisplay = true
+			rememberChoices()
 		}
 	}
 
@@ -660,6 +693,7 @@ final class PESDocument: NSDocument, NSToolbarDelegate, NSWindowDelegate, NSSpli
 		}
 		ownStitchStyle = style
 		showStitchStyle()
+		rememberChoices()
 	}
 
 	@objc private func userDefaultsDidChange(_ notification: Notification) {
