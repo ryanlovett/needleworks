@@ -22,9 +22,10 @@ final class FabricTexture: @unchecked Sendable {
 	private static let patchesAcross = 7
 
 	/// Smaller copies of the tile, each half the size of the last, are drawn
-	/// when zoomed out, as shrinking the full tile while drawing makes stripes.
-	/// The smallest has 1.5 pixels per design unit.
-	private static let tileLevels = 4
+	/// when zoomed out, as shrinking a tile much while drawing it makes
+	/// stripes and false patterns. The smallest has 0.2 pixels per design
+	/// unit, where a weave thread is under a pixel wide.
+	private static let tileLevels = 7
 
 	private let lock = NSLock()
 	private var tileColor: NSColor?
@@ -34,15 +35,9 @@ final class FabricTexture: @unchecked Sendable {
 	/// Fills `rect`, in design units, with the fabric in `color`. The weave
 	/// lines up with the design's origin, so areas drawn separately join up.
 	func draw(_ color: NSColor, in rect: CGRect, context: CGContext) {
-		/* The smallest tile with at least a pixel for each pixel drawn */
 		let ctm = context.ctm
 		let scale = sqrt(abs(ctm.a * ctm.d - ctm.b * ctm.c))
-		var level = 0
-		while level + 1 < Self.tileLevels && CGFloat(Self.pixelsPerUnit) / CGFloat(1 << (level + 1)) >= scale {
-			level += 1
-		}
-
-		guard let (tile, patches) = images(for: color, level: level) else {
+		guard let (tile, patches) = images(for: color, scale: scale) else {
 			context.setFillColor(color.cgColor)
 			context.fill(rect)
 			return
@@ -63,17 +58,19 @@ final class FabricTexture: @unchecked Sendable {
 		context.restoreGState()
 	}
 
-	private func images(for color: NSColor, level: Int) -> (CGImage, CGImage?)? {
+	/// The smallest tile with at least a pixel for each pixel drawn at
+	/// `scale` pixels per design unit, and the patches
+	private func images(for color: NSColor, scale: CGFloat) -> (CGImage, CGImage?)? {
 		lock.lock()
 		defer { lock.unlock() }
 		if tiles.isEmpty || tileColor != color {
 			tiles = Self.makeTiles(color)
 			tileColor = color
 		}
-		guard !tiles.isEmpty else {
+		guard let tile = tiles.last(where: { CGFloat($0.width) / Self.tileSize >= scale }) ?? tiles.first else {
 			return nil
 		}
-		return (tiles[min(level, tiles.count - 1)], patches)
+		return (tile, patches)
 	}
 
 	/// The tile, then copies of it each half the size of the last
@@ -92,13 +89,13 @@ final class FabricTexture: @unchecked Sendable {
 		return tiles
 	}
 
-	/// `tile` at half its size. It's shrunk in the middle of a 3 × 3 grid of
-	/// itself, so its edges blend into the opposite ones as they do when it
-	/// repeats; shrunk alone, its edges would show as seams.
+	/// `tile` at half its size, rounded up. It's shrunk in the middle of a
+	/// 3 × 3 grid of itself, so its edges blend into the opposite ones as they
+	/// do when it repeats; shrunk alone, its edges would show as seams.
 	private static func halved(_ tile: CGImage) -> CGImage? {
-		let size = tile.width, half = size / 2
+		let size = tile.width, half = (size + 1) / 2
 		let space = CGColorSpace(name: CGColorSpace.sRGB)!, info = CGImageAlphaInfo.premultipliedLast.rawValue
-		guard size % 2 == 0,
+		guard size > 1,
 			  let grid = CGContext(data: nil, width: 3 * size, height: 3 * size, bitsPerComponent: 8, bytesPerRow: 0, space: space, bitmapInfo: info),
 			  let small = CGContext(data: nil, width: 3 * half, height: 3 * half, bitsPerComponent: 8, bytesPerRow: 0, space: space, bitmapInfo: info) else {
 			return nil
