@@ -62,7 +62,26 @@ final class CenteringClipView: NSClipView {
 
 		NSGraphicsContext.saveGraphicsState()
 		transform.concat()
-		PESRenderer.drawFabric(doc.fabricColor, texture: true, in: convert(dirtyRect, to: designView))
-		NSGraphicsContext.restoreGraphicsState()
+		defer {
+			NSGraphicsContext.restoreGraphicsState()
+		}
+		guard let context = NSGraphicsContext.current?.cgContext else {
+			return
+		}
+
+		/* Draw the fabric into an image of the screen's pixels and lay it down
+		 * unscaled, as the design view draws the design. Core Graphics
+		 * filters a pattern a little differently drawing straight to the
+		 * screen, which would show as an edge around the design. */
+		let pixelRect = context.convertToDeviceSpace(convert(dirtyRect, to: designView)).integral
+		let imageRect = context.convertToUserSpace(pixelRect)
+		guard let image = PESRenderer.image(of: [], style: .plain, fabric: doc.fabric, fabricTexture: true, lineWidth: 0, showJumpStitches: false,
+											rect: imageRect, pixelsWide: Int(pixelRect.width), pixelsHigh: Int(pixelRect.height))?
+			.cgImage(forProposedRect: nil, context: nil, hints: nil) else {
+			return
+		}
+		context.translateBy(x: 0, y: imageRect.minY + imageRect.maxY)
+		context.scaleBy(x: 1, y: -1)
+		context.draw(image, in: imageRect)
 	}
 }

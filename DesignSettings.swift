@@ -32,7 +32,7 @@ import NeedleWorksKit
 /// a design that's moved or renamed, and a copy opens the same way. Only the
 /// designs used most recently are kept.
 struct DesignSettings: Equatable {
-	var fabricColor: NSColor?
+	var fabric: Fabric?
 	var stitchStyle: StitchStyle?
 	var lineWidth: CGFloat?
 	var showJumpStitches: Bool?
@@ -52,8 +52,8 @@ struct DesignSettings: Equatable {
 			return DesignSettings()
 		}
 		var settings = DesignSettings()
-		if let data = entry["fabricColor"] as? Data {
-			settings.fabricColor = try? NSKeyedUnarchiver.unarchivedObject(ofClass: NSColor.self, from: data)
+		if let fabric = entry["fabric"] as? [String: Any] {
+			settings.fabric = Fabric(propertyList: fabric)
 		}
 		if let style = entry["stitchStyle"] as? Int {
 			settings.stitchStyle = StitchStyle(rawValue: style)
@@ -69,9 +69,8 @@ struct DesignSettings: Equatable {
 	static func save(_ settings: DesignSettings, for fingerprint: String) {
 		var all = UserDefaults.standard.dictionary(forKey: key) ?? [:]
 		var entry: [String: Any] = [:]
-		if let color = settings.fabricColor,
-		   let data = try? NSKeyedArchiver.archivedData(withRootObject: color, requiringSecureCoding: true) {
-			entry["fabricColor"] = data
+		if let fabric = settings.fabric?.propertyList {
+			entry["fabric"] = fabric
 		}
 		if let style = settings.stitchStyle {
 			entry["stitchStyle"] = style.rawValue
@@ -99,5 +98,25 @@ struct DesignSettings: Equatable {
 			}
 		}
 		UserDefaults.standard.set(all, forKey: key)
+	}
+}
+
+extension Fabric {
+	/// The fabric as a property list, to keep in the user defaults: its weave
+	/// and its archived color
+	var propertyList: [String: Any]? {
+		guard let data = try? NSKeyedArchiver.archivedData(withRootObject: color, requiringSecureCoding: true) else {
+			return nil
+		}
+		return ["weave": weave.rawValue, "color": data]
+	}
+
+	init?(propertyList: [String: Any]) {
+		guard let weave = (propertyList["weave"] as? String).flatMap(Weave.init(rawValue:)),
+			  let data = propertyList["color"] as? Data,
+			  let color = try? NSKeyedUnarchiver.unarchivedObject(ofClass: NSColor.self, from: data) else {
+			return nil
+		}
+		self.init(weave: weave, color: color)
 	}
 }

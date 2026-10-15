@@ -72,8 +72,8 @@ final class PESDocument: NSDocument, NSToolbarDelegate, NSWindowDelegate, NSSpli
 	private var minPoint = CGPoint.zero
 	private var maxPoint = CGPoint.zero
 
-	/// The fabric color chosen for this window from the toolbar, if any
-	private var ownFabricColor: NSColor?
+	/// The fabric chosen for this window from the toolbar, if any
+	private var ownFabric: Fabric?
 
 	/// The style chosen for this window from View > Stitch Style, if any
 	private var ownStitchStyle: StitchStyle?
@@ -118,7 +118,7 @@ final class PESDocument: NSDocument, NSToolbarDelegate, NSWindowDelegate, NSSpli
 
 		/* Fill the area around a centered design with the fabric color, so
 		 * the design appears to sit on one continuous piece of fabric. */
-		scrollView.backgroundColor = fabricColor
+		scrollView.backgroundColor = fabric.flatColor
 
 		/* Users zoom with the View menu or by pinching on a trackpad; there
 		 * is nothing to zoom in a blank design */
@@ -354,7 +354,7 @@ final class PESDocument: NSDocument, NSToolbarDelegate, NSWindowDelegate, NSSpli
 	/// Keep the empty design message readable on both light and dark fabrics
 	private func updateEmptyDesignLabelColor() {
 		var brightness: CGFloat = 1
-		if let rgb = fabricColor.usingColorSpace(.sRGB) {
+		if let rgb = fabric.flatColor.usingColorSpace(.sRGB) {
 			brightness = 0.299 * rgb.redComponent + 0.587 * rgb.greenComponent + 0.114 * rgb.blueComponent
 		}
 		emptyDesignLabel?.textColor = NSColor(white: brightness > 0.5 ? 0 : 1, alpha: 0.55)
@@ -393,7 +393,7 @@ final class PESDocument: NSDocument, NSToolbarDelegate, NSWindowDelegate, NSSpli
 			 * this is */
 			if let fingerprint {
 				let remembered = DesignSettings.load(for: fingerprint)
-				ownFabricColor = remembered.fabricColor
+				ownFabric = remembered.fabric
 				ownStitchStyle = remembered.stitchStyle
 				lineWidth = remembered.lineWidth ?? Self.defaultLineWidth
 				showJumpStitches = remembered.showJumpStitches ?? true
@@ -407,7 +407,7 @@ final class PESDocument: NSDocument, NSToolbarDelegate, NSWindowDelegate, NSSpli
 		guard let fingerprint else {
 			return
 		}
-		DesignSettings.save(DesignSettings(fabricColor: ownFabricColor, stitchStyle: ownStitchStyle,
+		DesignSettings.save(DesignSettings(fabric: ownFabric, stitchStyle: ownStitchStyle,
 										   lineWidth: lineWidth == Self.defaultLineWidth ? nil : lineWidth,
 										   showJumpStitches: showJumpStitches ? nil : false),
 							for: fingerprint)
@@ -494,15 +494,15 @@ final class PESDocument: NSDocument, NSToolbarDelegate, NSWindowDelegate, NSSpli
 
 	// MARK: Fabric
 
-	/// The window's own fabric color if one was chosen, otherwise the one in
+	/// The window's own fabric if one was chosen, otherwise the one in
 	/// Settings
-	@objc var fabricColor: NSColor {
+	var fabric: Fabric {
 		get {
-			ownFabricColor ?? SettingsWindowController.defaultFabricColor
+			ownFabric ?? SettingsWindowController.defaultFabric
 		}
 		set {
-			ownFabricColor = newValue.copy() as? NSColor
-			showFabricColor()
+			ownFabric = newValue
+			showFabric()
 			rememberChoices()
 		}
 	}
@@ -513,10 +513,9 @@ final class PESDocument: NSDocument, NSToolbarDelegate, NSWindowDelegate, NSSpli
 		UserDefaults.standard.bool(forKey: SettingsWindowController.fabricTextureKey)
 	}
 
-	private func showFabricColor() {
-		let color = fabricColor
-		fabricColorPopUp?.color = color
-		mainView?.enclosingScrollView?.backgroundColor = color
+	private func showFabric() {
+		fabricColorPopUp?.fabric = fabric
+		mainView?.enclosingScrollView?.backgroundColor = fabric.flatColor
 		updateEmptyDesignLabelColor()
 		mainView?.needsDisplay = true
 
@@ -524,16 +523,16 @@ final class PESDocument: NSDocument, NSToolbarDelegate, NSWindowDelegate, NSSpli
 		mainView?.enclosingScrollView?.contentView.needsDisplay = true
 	}
 
-	@objc private func chooseFabricColor(_ sender: FabricColorPopUpButton) {
-		fabricColor = sender.color
+	@objc private func chooseFabric(_ sender: FabricColorPopUpButton) {
+		fabric = sender.fabric
 	}
 
 	/// A pop-up of fabric colors, which changes the window's fabric
 	private func fabricColorToolbarItem(_ identifier: NSToolbarItem.Identifier, willBeInsertedIntoToolbar flag: Bool) -> NSToolbarItem {
 		let popUp = FabricColorPopUpButton(frame: .zero, pullsDown: false)
-		popUp.color = fabricColor
+		popUp.fabric = fabric
 		popUp.target = self
-		popUp.action = #selector(chooseFabricColor(_:))
+		popUp.action = #selector(chooseFabric(_:))
 		if flag {
 			fabricColorPopUp = popUp
 		}
@@ -700,6 +699,6 @@ final class PESDocument: NSDocument, NSToolbarDelegate, NSWindowDelegate, NSSpli
 		/* The stitch style or fabric color in Settings, or the fabric
 		 * texture, may have changed */
 		showStitchStyle()
-		showFabricColor()
+		showFabric()
 	}
 }

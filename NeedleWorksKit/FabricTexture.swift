@@ -28,16 +28,17 @@ final class FabricTexture: @unchecked Sendable {
 	private static let tileLevels = 7
 
 	private let lock = NSLock()
-	private var tileColor: NSColor?
+	private var tileFabric: Fabric?
 	private var tiles: [CGImage] = []
 	private lazy var patches: CGImage? = Self.makePatches()
 
 	/// Fills `rect`, in design units, with the fabric in `color`. The weave
 	/// lines up with the design's origin, so areas drawn separately join up.
-	func draw(_ color: NSColor, in rect: CGRect, context: CGContext) {
+	func draw(_ fabric: Fabric, in rect: CGRect, context: CGContext) {
+		let color = fabric.flatColor
 		let ctm = context.ctm
 		let scale = sqrt(abs(ctm.a * ctm.d - ctm.b * ctm.c))
-		guard let (tile, patches) = images(for: color, scale: scale) else {
+		guard let (tile, patches) = images(for: fabric, scale: scale) else {
 			context.setFillColor(color.cgColor)
 			context.fill(rect)
 			return
@@ -60,12 +61,12 @@ final class FabricTexture: @unchecked Sendable {
 
 	/// The smallest tile with at least a pixel for each pixel drawn at
 	/// `scale` pixels per design unit, and the patches
-	private func images(for color: NSColor, scale: CGFloat) -> (CGImage, CGImage?)? {
+	private func images(for fabric: Fabric, scale: CGFloat) -> (CGImage, CGImage?)? {
 		lock.lock()
 		defer { lock.unlock() }
-		if tiles.isEmpty || tileColor != color {
-			tiles = Self.makeTiles(color)
-			tileColor = color
+		if tiles.isEmpty || tileFabric != fabric {
+			tiles = Self.makeTiles(fabric)
+			tileFabric = fabric
 		}
 		guard let tile = tiles.last(where: { CGFloat($0.width) / Self.tileSize >= scale }) ?? tiles.first else {
 			return nil
@@ -74,8 +75,8 @@ final class FabricTexture: @unchecked Sendable {
 	}
 
 	/// The tile, then copies of it each half the size of the last
-	private static func makeTiles(_ color: NSColor) -> [CGImage] {
-		guard var tile = makeTile(color) else {
+	private static func makeTiles(_ fabric: Fabric) -> [CGImage] {
+		guard var tile = makeTile(fabric) else {
 			return []
 		}
 		var tiles = [tile]
@@ -113,17 +114,32 @@ final class FabricTexture: @unchecked Sendable {
 		return small.makeImage()?.cropping(to: CGRect(x: half, y: half, width: half, height: half))
 	}
 
-	/// Over and under threads in a checkerboard. Each thread is round, with
-	/// shadowed gaps beside it, and dips into shadow where it passes under
-	/// the threads across it. Threads differ a little in shade and thickness,
-	/// thicken and thin along their length, and show faint lengthwise fibers.
-	private static func makeTile(_ color: NSColor) -> CGImage? {
-		guard let srgb = color.usingColorSpace(.sRGB) else {
+	/// The weave: over and under threads in a checkerboard, or for denim, a
+	/// twill where each warp thread passes over three weft threads and under
+	/// one, a step further along on each row, making diagonal ribs. Each
+	/// thread is round, with shadowed gaps beside it, and dips into shadow
+	/// where it passes under the threads across it. Threads differ a little in
+	/// shade and thickness, thicken and thin along their length, and show
+	/// faint lengthwise fibers, which in heather yarn are light and dark.
+	private static func makeTile(_ fabric: Fabric) -> CGImage? {
+		func rgb(_ color: NSColor) -> [Double]? {
+			color.usingColorSpace(.sRGB).map { [$0.redComponent, $0.greenComponent, $0.blueComponent] }
+		}
+		guard let base = rgb(fabric.color), let white = rgb(Fabric.weftColor) else {
 			return nil
 		}
+		let twoColor = fabric.weave == .chambray || fabric.weave == .denim
+		let warpColor = base
+
+		/* Chambray's white weft takes a hint of the warp's color, so it reads
+		 * as soft blue rather than a check */
+		let weftColor = fabric.weave == .chambray ? zip(white, base).map { $0 + ($1 - $0) * 0.15 } : twoColor ? white : base
+
+		/* Heather yarn is spun from fibers lighter and darker than its color */
+		let light = base.map { $0 + (1 - $0) * 0.3 }, dark = base.map { $0 * 0.72 }
+
 		let size = Int(tileSize) * pixelsPerUnit
 		var pixels = [UInt8](repeating: 255, count: size * size * 4)
-		let base = [srgb.redComponent, srgb.greenComponent, srgb.blueComponent]
 		let length = Double(tileThreads)
 
 		for py in 0..<size {
@@ -135,16 +151,29 @@ final class FabricTexture: @unchecked Sendable {
 				let fx = x - Double(cx), fy = y - Double(cy)
 
 				/* Warp threads run up and down, weft threads across; the one on
-				 * top here, which thread it is, and where along it we are */
-				let warpOver = (cx + cy) % 2 == 0
+				 * top here, which thread it is, and where along it we are. In
+				 * twill a warp thread floats over three rows, so it dips only at
+				 * the ends of the three. */
+				let warpOver: Bool, dip: Double
+				if fabric.weave == .denim {
+					/* Right-hand twill, its ribs rising to the right. (The tile
+					 * is drawn upside down, into the design's coordinates.) */
+					let step = ((cx - cy) % 4 + 4) % 4
+					warpOver = step != 0
+					dip = warpOver ? (Double(step - 1) + fy) / 3 : fx
+				} else {
+					warpOver = (cx + cy) % 2 == 0
+					dip = warpOver ? fy : fx
+				}
 				let thread = warpOver ? cx : cy
 				let along = warpOver ? y : x
 				let seed = warpOver ? 0 : 1000
+				var color = warpOver ? warpColor : weftColor
+
 				/* Threads aren't quite straight: each wanders a little from side
 				 * to side */
 				let wander = 0.16 * (noise(along * 0.9, period: length * 0.9, seed: thread + seed + 200) - 0.5)
 				let across = (warpOver ? fx : fy) - 0.5 - wander
-				let dip = warpOver ? fy : fx
 
 				/* Thickness, from 80 to 100% of the spacing, varying along the
 				 * thread like slubs in spun yarn */
@@ -152,8 +181,13 @@ final class FabricTexture: @unchecked Sendable {
 				let half = thickness / 2
 				var shade: Double
 				if abs(across) > half {
-					/* The gap beside the thread, in shadow */
+					/* The gap beside the thread, showing the thread beneath in
+					 * shadow */
 					shade = 0.86
+					if twoColor {
+						color = warpOver ? weftColor : warpColor
+						shade = 0.8
+					}
 				} else {
 					/* Round across the thread, and darker where it dips under */
 					let s = across / half
@@ -163,6 +197,21 @@ final class FabricTexture: @unchecked Sendable {
 					/* Fibers along the thread */
 					let fiber = Int(((s + 1) * 6).rounded(.down))
 					shade *= 0.985 + 0.03 * noise(along * 2.1, period: length * 2.1, seed: thread * 31 + fiber + seed)
+
+					/* Heather fibers are light or dark, changing slowly as they
+					 * twist along the yarn */
+					if fabric.weave == .heather {
+						let fine = Int(((s + 1) * 11).rounded(.down))
+						let n = noise(along * 4.2, period: length * 4.2, seed: thread * 53 + fine * 7 + seed + 900)
+						let t = min(max((n - 0.35) / 0.3, 0), 1)
+						color = zip(dark, light).map { $0 + ($1 - $0) * t * t * (3 - 2 * t) }
+					}
+
+					/* Denim's warp is dyed unevenly, lighter in places */
+					if fabric.weave == .denim && warpOver {
+						let fade = 0.25 * noise(along * 0.8, period: length * 0.8, seed: thread + 1700)
+						color = color.map { $0 + (1 - $0) * fade }
+					}
 				}
 
 				/* Each thread a little lighter or darker, and blotchy along it */
@@ -170,7 +219,7 @@ final class FabricTexture: @unchecked Sendable {
 				shade *= 0.99 + 0.02 * noise(along * 0.6, period: length * 0.6, seed: thread + seed + 500)
 
 				for c in 0..<3 {
-					pixels[(py * size + px) * 4 + c] = UInt8(max(0, min(255, (base[c] * shade * 255).rounded())))
+					pixels[(py * size + px) * 4 + c] = UInt8(max(0, min(255, (color[c] * shade * 255).rounded())))
 				}
 			}
 		}

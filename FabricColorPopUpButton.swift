@@ -21,9 +21,11 @@
 
 
 import AppKit
+import NeedleWorksKit
 
-/// A pop-up of common fabric colors, each with a swatch, and Other… to pick
-/// any color from the color panel. It sends its action when the color changes.
+/// A pop-up of common fabrics, each with a swatch, and Other… to pick a plain
+/// weave in any color from the color panel. It sends its action when the
+/// fabric changes.
 @objc(FabricColorPopUpButton)
 final class FabricColorPopUpButton: NSPopUpButton {
 	/// The tags of the item for a color that isn't one of the fabrics, and of
@@ -31,21 +33,36 @@ final class FabricColorPopUpButton: NSPopUpButton {
 	private static let customTag = -1
 	private static let otherTag = -2
 
-	/// Common fabrics, in sRGB
-	private static let fabrics: [(name: String, color: NSColor)] = {
+	/// Common fabrics, in sRGB. Heather Gray is spun from light and dark
+	/// fibers, and Denim and Chambray have blue warp and white weft, Denim in
+	/// a twill.
+	private static let fabrics: [(name: String, fabric: Fabric)] = {
 		func rgb(_ r: CGFloat, _ g: CGFloat, _ b: CGFloat) -> NSColor {
 			NSColor(srgbRed: r, green: g, blue: b, alpha: 1)
 		}
-		return [(NSLocalizedString("White", comment: "Fabric color"), rgb(1, 1, 1)),
-				(NSLocalizedString("Natural", comment: "Fabric color: unbleached cotton or linen"), rgb(0.93, 0.89, 0.80)),
-				(NSLocalizedString("Khaki", comment: "Fabric color"), rgb(0.76, 0.69, 0.53)),
-				(NSLocalizedString("Heather Gray", comment: "Fabric color"), rgb(0.62, 0.62, 0.62)),
-				(NSLocalizedString("Red", comment: "Fabric color"), rgb(0.70, 0.10, 0.12)),
-				(NSLocalizedString("Forest Green", comment: "Fabric color"), rgb(0.13, 0.30, 0.20)),
-				(NSLocalizedString("Denim", comment: "Fabric color"), rgb(0.27, 0.36, 0.50)),
-				(NSLocalizedString("Navy", comment: "Fabric color"), rgb(0.13, 0.17, 0.30)),
-				(NSLocalizedString("Black", comment: "Fabric color"), rgb(0.08, 0.08, 0.08))]
+		return [(NSLocalizedString("White", comment: "Fabric"), Fabric(color: rgb(1, 1, 1))),
+				(NSLocalizedString("Natural", comment: "Fabric: unbleached cotton or linen"), Fabric(color: rgb(0.93, 0.89, 0.80))),
+				(NSLocalizedString("Khaki", comment: "Fabric"), Fabric(color: rgb(0.76, 0.69, 0.53))),
+				(NSLocalizedString("Heather Gray", comment: "Fabric"), Fabric(weave: .heather, color: rgb(0.62, 0.62, 0.62))),
+				(NSLocalizedString("Red", comment: "Fabric"), Fabric(color: rgb(0.70, 0.10, 0.12))),
+				(NSLocalizedString("Forest Green", comment: "Fabric"), Fabric(color: rgb(0.13, 0.30, 0.20))),
+				(NSLocalizedString("Chambray", comment: "Fabric: plain weave of blue and white yarn"), Fabric(weave: .chambray, color: rgb(0.40, 0.52, 0.70))),
+				(NSLocalizedString("Denim", comment: "Fabric"), Fabric(weave: .denim, color: rgb(0.15, 0.24, 0.42))),
+				(NSLocalizedString("Navy", comment: "Fabric"), Fabric(color: rgb(0.13, 0.17, 0.30))),
+				(NSLocalizedString("Black", comment: "Fabric"), Fabric(color: rgb(0.08, 0.08, 0.08)))]
 	}()
+
+	/// Denim's color before it was woven as denim, in Needle Works 0.7
+	private static let plainDenimColor = NSColor(srgbRed: 0.27, green: 0.36, blue: 0.50, alpha: 1)
+
+	/// The fabric a color saved by an earlier version stood for: the preset
+	/// of that color, or a plain weave in it
+	static func fabric(savedAs color: NSColor) -> Fabric {
+		if sameColor(color, plainDenimColor), let denim = fabrics.first(where: { $0.fabric.weave == .denim }) {
+			return denim.fabric
+		}
+		return fabrics.first(where: { sameColor($0.fabric.color, color) })?.fabric ?? Fabric(color: color)
+	}
 
 	/// The color panel sends its changes here, and this passes them to the
 	/// pop-up that opened it. The panel doesn't keep its target, so it can't
@@ -55,12 +72,12 @@ final class FabricColorPopUpButton: NSPopUpButton {
 		weak var popUp: FabricColorPopUpButton?
 
 		@objc func colorPanelDidChange(_ panel: NSColorPanel) {
-			popUp?.useColor(panel.color.withAlphaComponent(1))
+			popUp?.useFabric(Fabric(color: panel.color.withAlphaComponent(1)))
 		}
 	}
 	private static let colorPanelRelay = ColorPanelRelay()
 
-	private var currentColor: NSColor = .white
+	private var currentFabric = Fabric(color: .white)
 
 	override init(frame frameRect: NSRect, pullsDown flag: Bool) {
 		super.init(frame: frameRect, pullsDown: false)
@@ -72,15 +89,15 @@ final class FabricColorPopUpButton: NSPopUpButton {
 		buildMenu()
 	}
 
-	@objc var color: NSColor {
+	var fabric: Fabric {
 		get {
-			currentColor
+			currentFabric
 		}
 		set {
-			if newValue == currentColor {
+			if newValue == currentFabric {
 				return
 			}
-			currentColor = newValue.copy() as? NSColor ?? .white
+			currentFabric = newValue
 			buildMenu()
 		}
 	}
@@ -106,9 +123,9 @@ final class FabricColorPopUpButton: NSPopUpButton {
 		}
 	}
 
-	/// The fabrics, the color shown if it's none of them, and Other…. Each
+	/// The fabrics, the fabric shown if it's none of them, and Other…. Each
 	/// item sends its own action to the pop-up, which sends the pop-up's
-	/// action once the color has changed.
+	/// action once the fabric has changed.
 	private func buildMenu() {
 		removeAllItems()
 		guard let menu else {
@@ -116,12 +133,12 @@ final class FabricColorPopUpButton: NSPopUpButton {
 		}
 		var selected: NSMenuItem?
 
-		for fabric in Self.fabrics {
-			let item = menu.addItem(withTitle: fabric.name, action: #selector(chooseItem(_:)), keyEquivalent: "")
+		for (index, preset) in Self.fabrics.enumerated() {
+			let item = menu.addItem(withTitle: preset.name, action: #selector(chooseItem(_:)), keyEquivalent: "")
 			item.target = self
-			item.image = Self.swatch(fabric.color)
-			item.representedObject = fabric.color
-			if selected == nil && Self.sameColor(fabric.color, currentColor) {
+			item.image = Self.swatch(preset.fabric.flatColor)
+			item.tag = index
+			if selected == nil && preset.fabric.weave == currentFabric.weave && Self.sameColor(preset.fabric.color, currentFabric.color) {
 				selected = item
 			}
 		}
@@ -129,8 +146,7 @@ final class FabricColorPopUpButton: NSPopUpButton {
 			let custom = NSMenuItem(title: NSLocalizedString("Custom", comment: "Fabric color chosen from the color panel"),
 									action: #selector(chooseItem(_:)), keyEquivalent: "")
 			custom.target = self
-			custom.image = Self.swatch(currentColor)
-			custom.representedObject = currentColor
+			custom.image = Self.swatch(currentFabric.flatColor)
 			custom.tag = Self.customTag
 			menu.insertItem(custom, at: 0)
 			menu.insertItem(.separator(), at: 1)
@@ -152,7 +168,7 @@ final class FabricColorPopUpButton: NSPopUpButton {
 			buildMenu()
 			let panel = NSColorPanel.shared
 			panel.showsAlpha = false
-			panel.color = currentColor
+			panel.color = currentFabric.flatColor
 			Self.colorPanelRelay.popUp = self
 			panel.setTarget(Self.colorPanelRelay)
 			panel.setAction(#selector(ColorPanelRelay.colorPanelDidChange(_:)))
@@ -160,16 +176,16 @@ final class FabricColorPopUpButton: NSPopUpButton {
 			panel.orderFront(self)
 			return
 		}
-		if let color = item.representedObject as? NSColor {
-			useColor(color)
+		if Self.fabrics.indices.contains(item.tag) {
+			useFabric(Self.fabrics[item.tag].fabric)
 		}
 	}
 
-	fileprivate func useColor(_ newColor: NSColor) {
-		if newColor == currentColor {
+	fileprivate func useFabric(_ newFabric: Fabric) {
+		if newFabric == currentFabric {
 			return
 		}
-		color = newColor
+		fabric = newFabric
 		sendAction(action, to: target)
 	}
 }

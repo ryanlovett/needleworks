@@ -39,14 +39,14 @@ final class DesignView: NSView {
 		var style: StitchStyle
 		var showJumpStitches: Bool
 		var lineWidth: CGFloat
-		var fabricColor: NSColor
+		var fabric: Fabric
 		var fabricTexture: Bool
 
 		@MainActor init(_ doc: PESDocument) {
 			style = doc.stitchStyle
 			showJumpStitches = doc.showJumpStitches
 			lineWidth = doc.lineWidth
-			fabricColor = doc.fabricColor
+			fabric = doc.fabric
 			fabricTexture = doc.showsFabricTexture
 		}
 	}
@@ -109,7 +109,7 @@ final class DesignView: NSView {
 	}
 
 	nonisolated private static func image(of stitchBlocks: [StitchBlock], settings: Settings, rect: NSRect, pixelRect: CGRect) -> NSImage? {
-		PESRenderer.image(of: stitchBlocks, style: settings.style, fabricColor: settings.fabricColor, fabricTexture: settings.fabricTexture,
+		PESRenderer.image(of: stitchBlocks, style: settings.style, fabric: settings.fabric, fabricTexture: settings.fabricTexture,
 						  lineWidth: settings.lineWidth, showJumpStitches: settings.showJumpStitches,
 						  rect: rect, pixelsWide: Int(pixelRect.width), pixelsHigh: Int(pixelRect.height))
 	}
@@ -155,7 +155,7 @@ final class DesignView: NSView {
 			return
 		}
 
-		PESRenderer.draw(stitchBlocks, style: settings.style, fabricColor: settings.fabricColor, fabricTexture: settings.fabricTexture,
+		PESRenderer.draw(stitchBlocks, style: settings.style, fabric: settings.fabric, fabricTexture: settings.fabricTexture,
 						 lineWidth: settings.lineWidth, showJumpStitches: settings.showJumpStitches, in: rect)
 	}
 

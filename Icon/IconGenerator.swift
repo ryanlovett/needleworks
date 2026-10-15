@@ -408,7 +408,7 @@ func drawFabric(_ color: NSColor, in rect: CGRect, context: CGContext) {
 	context.translateBy(x: hoopCenter.x, y: hoopCenter.y)
 	context.scaleBy(x: pixelsPerUnit, y: pixelsPerUnit)
 	let designRect = rect.offsetBy(dx: -hoopCenter.x, dy: -hoopCenter.y).applying(CGAffineTransform(scaleX: 1 / pixelsPerUnit, y: 1 / pixelsPerUnit))
-	FabricTexture.shared.draw(color, in: designRect, context: context)
+	FabricTexture.shared.draw(Fabric(color: color), in: designRect, context: context)
 	context.restoreGState()
 }
 

@@ -34,23 +34,28 @@ final class SettingsWindowController: NSWindowController {
 	/// texture; View > Show Fabric Texture changes it
 	@objc nonisolated static let fabricTextureKey = "fabricTexture"
 
-	/// The user defaults key for the fabric color new windows use. Each window
-	/// can choose its own from the toolbar.
-	@objc nonisolated static let fabricColorKey = "fabricColor"
+	/// The user defaults key for the fabric new windows use. Each window can
+	/// choose its own from the toolbar. Versions before 0.8 kept just a color,
+	/// under the second key.
+	nonisolated static let fabricKey = "fabric"
+	nonisolated static let fabricColorKey = "fabricColor"
 
-	/// The fabric color in Settings
-	@objc static var defaultFabricColor: NSColor {
+	/// The fabric in Settings
+	static var defaultFabric: Fabric {
 		get {
-			guard let data = UserDefaults.standard.data(forKey: fabricColorKey),
-				  let color = try? NSKeyedUnarchiver.unarchivedObject(ofClass: NSColor.self, from: data) else {
-				return .white
+			let defaults = UserDefaults.standard
+			if let fabric = defaults.dictionary(forKey: fabricKey).flatMap(Fabric.init(propertyList:)) {
+				return fabric
 			}
-			return color
+			if let data = defaults.data(forKey: fabricColorKey),
+			   let color = try? NSKeyedUnarchiver.unarchivedObject(ofClass: NSColor.self, from: data) {
+				return FabricColorPopUpButton.fabric(savedAs: color)
+			}
+			return Fabric(color: .white)
 		}
 		set {
-			if let data = try? NSKeyedArchiver.archivedData(withRootObject: newValue, requiringSecureCoding: true) {
-				UserDefaults.standard.set(data, forKey: fabricColorKey)
-			}
+			UserDefaults.standard.set(newValue.propertyList, forKey: fabricKey)
+			UserDefaults.standard.removeObject(forKey: fabricColorKey)
 		}
 	}
 
@@ -97,7 +102,7 @@ final class SettingsWindowController: NSWindowController {
 											   comment: "Settings note under the stitch style"))
 
 		let fabricLabel = NSTextField(labelWithString: NSLocalizedString("Fabric color:", comment: "Settings label for the fabric color"))
-		fabricColorPopUp.color = Self.defaultFabricColor
+		fabricColorPopUp.fabric = Self.defaultFabric
 		fabricColorPopUp.target = self
 		fabricColorPopUp.action = #selector(chooseFabricColor(_:))
 		let fabricNote = note(NSLocalizedString("Windows use this color unless you choose another for a window from the toolbar.",
@@ -128,6 +133,6 @@ final class SettingsWindowController: NSWindowController {
 	}
 
 	@objc private func chooseFabricColor(_ sender: FabricColorPopUpButton) {
-		Self.defaultFabricColor = sender.color
+		Self.defaultFabric = sender.fabric
 	}
 }
