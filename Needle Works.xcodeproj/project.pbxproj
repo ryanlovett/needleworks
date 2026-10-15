@@ -22,6 +22,7 @@
 		94C3C1A00000000000000033 /* PrintHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 94C3C1A00000000000000032 /* PrintHeaderView.m */; };
 		94C3C1A00000000000000023 /* PrintScaleAccessoryController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94C3C1A00000000000000022 /* PrintScaleAccessoryController.m */; };
 		94C3C1A00000000000000043 /* SettingsWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94C3C1A00000000000000042 /* SettingsWindowController.m */; };
+		94C3C1A00000000000000053 /* FabricColorPopUpButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 94C3C1A00000000000000052 /* FabricColorPopUpButton.m */; };
 		94C3C1A00000000000000013 /* PrintLayoutSplitView.m in Sources */ = {isa = PBXBuildFile; fileRef = 94C3C1A00000000000000012 /* PrintLayoutSplitView.m */; };
 		94C97FD00E96D7590090FD3B /* PrintView.m in Sources */ = {isa = PBXBuildFile; fileRef = 94C97FCF0E96D7590090FD3B /* PrintView.m */; };
 		94E60B21307E110F00C0CD5E /* NeedleWorksPreview.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 94E60B1A307E110F00C0CD5E /* NeedleWorksPreview.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -100,6 +101,8 @@
 		94C3C1A00000000000000022 /* PrintScaleAccessoryController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PrintScaleAccessoryController.m; sourceTree = "<group>"; };
 		94C3C1A00000000000000041 /* SettingsWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsWindowController.h; sourceTree = "<group>"; };
 		94C3C1A00000000000000042 /* SettingsWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsWindowController.m; sourceTree = "<group>"; };
+		94C3C1A00000000000000051 /* FabricColorPopUpButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FabricColorPopUpButton.h; sourceTree = "<group>"; };
+		94C3C1A00000000000000052 /* FabricColorPopUpButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FabricColorPopUpButton.m; sourceTree = "<group>"; };
 		94C3C1A00000000000000011 /* PrintLayoutSplitView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PrintLayoutSplitView.h; sourceTree = "<group>"; };
 		94C3C1A00000000000000012 /* PrintLayoutSplitView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PrintLayoutSplitView.m; sourceTree = "<group>"; };
 		94C97FCE0E96D7590090FD3B /* PrintView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PrintView.h; sourceTree = "<group>"; };
@@ -252,6 +255,8 @@
 				94C3C1A00000000000000022 /* PrintScaleAccessoryController.m */,
 				94C3C1A00000000000000041 /* SettingsWindowController.h */,
 				94C3C1A00000000000000042 /* SettingsWindowController.m */,
+				94C3C1A00000000000000051 /* FabricColorPopUpButton.h */,
+				94C3C1A00000000000000052 /* FabricColorPopUpButton.m */,
 				94C3C1A00000000000000011 /* PrintLayoutSplitView.h */,
 				94C3C1A00000000000000012 /* PrintLayoutSplitView.m */,
 				94C97FCE0E96D7590090FD3B /* PrintView.h */,
@@ -508,6 +513,7 @@
 				94C3C1A00000000000000033 /* PrintHeaderView.m in Sources */,
 				94C3C1A00000000000000023 /* PrintScaleAccessoryController.m in Sources */,
 				94C3C1A00000000000000043 /* SettingsWindowController.m in Sources */,
+				94C3C1A00000000000000053 /* FabricColorPopUpButton.m in Sources */,
 				94C3C1A00000000000000013 /* PrintLayoutSplitView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

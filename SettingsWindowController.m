@@ -20,10 +20,25 @@
 //  02111-1307, USA.
 
 #import "SettingsWindowController.h"
+#import "FabricColorPopUpButton.h"
 #import <NeedleWorksKit/NeedleWorksKit-Swift.h>
 
 NSString * const PESStitchStyleKey = @"stitchStyle";
 NSString * const PESFabricTextureKey = @"fabricTexture";
+NSString * const PESFabricColorKey = @"fabricColor";
+
+NSColor *PESDefaultFabricColor(void) {
+	NSData *data = [[NSUserDefaults standardUserDefaults] dataForKey:PESFabricColorKey];
+	NSColor *color = data ? [NSKeyedUnarchiver unarchivedObjectOfClass:[NSColor class] fromData:data error:NULL] : nil;
+	return color ?: [NSColor whiteColor];
+}
+
+void PESSetDefaultFabricColor(NSColor *color) {
+	NSData *data = [NSKeyedArchiver archivedDataWithRootObject:color requiringSecureCoding:YES error:NULL];
+	if (data != nil) {
+		[[NSUserDefaults standardUserDefaults] setObject:data forKey:PESFabricColorKey];
+	}
+}
 
 NSArray<NSString *> *PESStitchStyleTitles(void) {
 	return @[NSLocalizedString(@"Plain", @"Stitch style: lines"),
@@ -32,7 +47,9 @@ NSArray<NSString *> *PESStitchStyleTitles(void) {
 }
 
 
-@implementation SettingsWindowController
+@implementation SettingsWindowController {
+	FabricColorPopUpButton *fabricColorPopUp;
+}
 
 - (instancetype)init {
 	NSWindow *window = [[NSWindow alloc] initWithContentRect:NSZeroRect
@@ -69,11 +86,28 @@ NSArray<NSString *> *PESStitchStyleTitles(void) {
 	[note setPreferredMaxLayoutWidth:260];
 	[[[note widthAnchor] constraintEqualToConstant:260] setActive:YES];
 
+	NSTextField *fabricLabel = [NSTextField labelWithString:NSLocalizedString(@"Fabric color:", @"Settings label for the fabric color")];
+	fabricColorPopUp = [[FabricColorPopUpButton alloc] initWithFrame:NSZeroRect pullsDown:NO];
+	[fabricColorPopUp setColor:PESDefaultFabricColor()];
+	[fabricColorPopUp setTarget:self];
+	[fabricColorPopUp setAction:@selector(chooseFabricColor:)];
+
+	NSTextField *fabricNote = [NSTextField wrappingLabelWithString:NSLocalizedString(@"Windows use this color unless you choose another for a window from the toolbar.", @"Settings note under the fabric color")];
+	[fabricNote setFont:[NSFont systemFontOfSize:[NSFont smallSystemFontSize]]];
+	[fabricNote setTextColor:[NSColor secondaryLabelColor]];
+	[fabricNote setPreferredMaxLayoutWidth:260];
+	[[[fabricNote widthAnchor] constraintEqualToConstant:260] setActive:YES];
+
 	NSGridView *grid = [NSGridView gridViewWithViews:@[@[label, popUp],
-													   @[[NSGridCell emptyContentView], note]]];
+													   @[[NSGridCell emptyContentView], note],
+													   @[fabricLabel, fabricColorPopUp],
+													   @[[NSGridCell emptyContentView], fabricNote]]];
 	[grid setRowSpacing:6];
 	[[grid columnAtIndex:0] setXPlacement:NSGridCellPlacementTrailing];
 	[[grid rowAtIndex:0] setYPlacement:NSGridCellPlacementCenter];
+	[[grid rowAtIndex:2] setYPlacement:NSGridCellPlacementCenter];
+	[[grid rowAtIndex:2] setTopPadding:14];
+	[[grid cellForView:fabricColorPopUp] setXPlacement:NSGridCellPlacementLeading];
 	[grid setTranslatesAutoresizingMaskIntoConstraints:NO];
 
 	NSView *content = [[NSView alloc] initWithFrame:NSZeroRect];
@@ -86,6 +120,10 @@ NSArray<NSString *> *PESStitchStyleTitles(void) {
 	]];
 	[[self window] setContentView:content];
 	[[self window] setContentSize:[content fittingSize]];
+}
+
+- (void)chooseFabricColor:(FabricColorPopUpButton *)sender {
+	PESSetDefaultFabricColor([sender color]);
 }
 
 @end

@@ -23,6 +23,7 @@
 #import "AppDelegate.h"
 #import "PrintScaleAccessoryController.h"
 #import "SettingsWindowController.h"
+#import "FabricColorPopUpButton.h"
 #import <NeedleWorksKit/NeedleWorksKit-Swift.h>
 
 /* Points per design unit (0.1 mm) at 100% zoom. This is the design view's
@@ -41,6 +42,7 @@ static NSToolbarItemIdentifier const PESZoomToFitItem = @"ZoomToFit";
 static NSToolbarItemIdentifier const PESActualSizeItem = @"ActualSize";
 static NSToolbarItemIdentifier const PESDesignInformationItem = @"DesignInformation";
 static NSToolbarItemIdentifier const PESStitchStyleItem = @"StitchStyle";
+static NSToolbarItemIdentifier const PESFabricColorItem = @"FabricColor";
 
 @interface PESDocument () <NSToolbarDelegate>
 @end
@@ -58,7 +60,6 @@ static NSToolbarItemIdentifier const PESStitchStyleItem = @"StitchStyle";
 		docName = @"";
 		docSize = @"";
 		lineWidth = 2;
-		fabricColor = [NSColor whiteColor];
 		showJumpStitches = YES;
 
     }
@@ -93,7 +94,7 @@ static NSToolbarItemIdentifier const PESStitchStyleItem = @"StitchStyle";
 
 	/* Fill the area around a centered design with the fabric color, so the
 	 design appears to sit on one continuous piece of fabric. */
-	[scrollView setBackgroundColor:fabricColor];
+	[scrollView setBackgroundColor:[self fabricColor]];
 
 	/* Users zoom with the View menu or by pinching on a trackpad; there is
 	 nothing to zoom in a blank design */
@@ -250,13 +251,13 @@ static NSToolbarItemIdentifier const PESStitchStyleItem = @"StitchStyle";
 #pragma mark Toolbar
 
 - (NSArray<NSToolbarItemIdentifier> *) toolbarDefaultItemIdentifiers:(NSToolbar *)toolbar {
-	return @[PESZoomOutItem, PESZoomInItem, PESZoomToFitItem, PESStitchStyleItem,
+	return @[PESZoomOutItem, PESZoomInItem, PESZoomToFitItem, PESStitchStyleItem, PESFabricColorItem,
 			 NSToolbarFlexibleSpaceItemIdentifier, PESDesignInformationItem];
 }
 
 - (NSArray<NSToolbarItemIdentifier> *) toolbarAllowedItemIdentifiers:(NSToolbar *)toolbar {
 	return @[PESZoomOutItem, PESZoomInItem, PESZoomToFitItem, PESActualSizeItem,
-			 PESStitchStyleItem, PESDesignInformationItem, NSToolbarSpaceItemIdentifier,
+			 PESStitchStyleItem, PESFabricColorItem, PESDesignInformationItem, NSToolbarSpaceItemIdentifier,
 			 NSToolbarFlexibleSpaceItemIdentifier];
 }
 
@@ -286,6 +287,8 @@ static NSToolbarItemIdentifier const PESStitchStyleItem = @"StitchStyle";
 		action = @selector(zoomToActualSize:);
 	} else if ([identifier isEqualToString:PESStitchStyleItem]) {
 		return [self stitchStyleToolbarItem:identifier willBeInsertedIntoToolbar:flag];
+	} else if ([identifier isEqualToString:PESFabricColorItem]) {
+		return [self fabricColorToolbarItem:identifier willBeInsertedIntoToolbar:flag];
 	} else if ([identifier isEqualToString:PESDesignInformationItem]) {
 		label = NSLocalizedString(@"Design Info", @"Toolbar item");
 		toolTip = NSLocalizedString(@"Show or hide the Design Information panel", @"Toolbar item tooltip");
@@ -307,7 +310,7 @@ static NSToolbarItemIdentifier const PESStitchStyleItem = @"StitchStyle";
 
 /* Keep the empty design message readable on both light and dark fabrics */
 - (void) updateEmptyDesignLabelColor {
-	NSColor *rgb = [fabricColor colorUsingColorSpace:[NSColorSpace sRGBColorSpace]];
+	NSColor *rgb = [[self fabricColor] colorUsingColorSpace:[NSColorSpace sRGBColorSpace]];
 	CGFloat brightness = 1;
 	if (rgb != nil) {
 		brightness = 0.299 * [rgb redComponent] + 0.587 * [rgb greenComponent] + 0.114 * [rgb blueComponent];
@@ -445,14 +448,52 @@ static NSToolbarItemIdentifier const PESStitchStyleItem = @"StitchStyle";
 }
 
 - (NSColor*) fabricColor {
-	return fabricColor;
+	return ownFabricColor ?: PESDefaultFabricColor();
 }
 
 - (void) setFabricColor:(NSColor*) c {
-	fabricColor = c;
-	[[mainView enclosingScrollView] setBackgroundColor:c];
+	ownFabricColor = [c copy];
+	[self showFabricColor];
+}
+
+- (void) showFabricColor {
+	NSColor *color = [self fabricColor];
+	[fabricColorPopUp setColor:color];
+	[[mainView enclosingScrollView] setBackgroundColor:color];
 	[self updateEmptyDesignLabelColor];
 	[mainView setNeedsDisplay:YES];
+
+	/* The area around the design shows the fabric too */
+	[[[mainView enclosingScrollView] contentView] setNeedsDisplay:YES];
+}
+
+- (void) chooseFabricColor:(FabricColorPopUpButton *)sender {
+	[self setFabricColor:[sender color]];
+}
+
+/* A pop-up of fabric colors, which changes the window's fabric */
+- (NSToolbarItem *) fabricColorToolbarItem:(NSToolbarItemIdentifier)identifier willBeInsertedIntoToolbar:(BOOL)flag {
+	FabricColorPopUpButton *popUp = [[FabricColorPopUpButton alloc] initWithFrame:NSZeroRect pullsDown:NO];
+	[popUp setColor:[self fabricColor]];
+	[popUp setTarget:self];
+	[popUp setAction:@selector(chooseFabricColor:)];
+	if (flag) {
+		fabricColorPopUp = popUp;
+	}
+
+	NSString *label = NSLocalizedString(@"Fabric", @"Toolbar item");
+	NSToolbarItem *item = [[NSToolbarItem alloc] initWithItemIdentifier:identifier];
+	[item setLabel:label];
+	[item setPaletteLabel:label];
+	[item setToolTip:NSLocalizedString(@"Choose the color of the fabric in this window", @"Toolbar item tooltip")];
+	[item setView:popUp];
+
+	/* When the window is too narrow for the pop-up, the toolbar's overflow
+	 menu shows the fabrics as a submenu */
+	NSMenuItem *menuForm = [[NSMenuItem alloc] initWithTitle:label action:NULL keyEquivalent:@""];
+	[menuForm setSubmenu:[[popUp menu] copy]];
+	[item setMenuFormRepresentation:menuForm];
+	return item;
 }
 
 - (CGFloat) lineWidth {
@@ -544,8 +585,10 @@ static NSToolbarItemIdentifier const PESStitchStyleItem = @"StitchStyle";
 }
 
 - (void) userDefaultsDidChange:(NSNotification *)notification {
-	/* The stitch style in Settings, or the fabric texture, may have changed */
+	/* The stitch style or fabric color in Settings, or the fabric texture,
+	 may have changed */
 	[self showStitchStyle];
+	[self showFabricColor];
 }
 
 - (NSPoint) max {

@@ -23,7 +23,7 @@
 #import <Cocoa/Cocoa.h>
 #import <NeedleWorksKit/NeedleWorksKit-Swift.h>
 
-@class PrintScaleAccessoryController;
+@class PrintScaleAccessoryController, FabricColorPopUpButton;
 
 @interface PESDocument : NSDocument
 {
@@ -45,7 +45,9 @@
 	NSString*		docName;
 	
 	CGFloat			lineWidth;
-	NSColor*		fabricColor;
+
+	/* The fabric color chosen for this window from the toolbar, if any */
+	NSColor*		ownFabricColor;
 
 	/* The style chosen for this window from View > Stitch Style, if any */
 	PESStitchStyle	ownStitchStyle;
@@ -66,8 +68,10 @@
 	/* The print panel accessory of the current print operation, if any */
 	__weak PrintScaleAccessoryController *printScaleAccessory;
 
-	/* The toolbar's stitch style pop-up, if it's in the toolbar */
+	/* The toolbar's stitch style and fabric color pop-ups, if they're in the
+	 toolbar */
 	__weak NSPopUpButton *stitchStylePopUp;
+	__weak FabricColorPopUpButton *fabricColorPopUp;
 }
 
 
@@ -89,6 +93,8 @@
 - (NSArray*)	stitchBlocks;
 - (void)		setStitchBlocks:(NSMutableArray*) arr;
 
+/* The window's own fabric color if one was chosen, otherwise the one in
+ Settings */
 - (NSColor*)	fabricColor;
 - (void)		setFabricColor:(NSColor*) c;
 

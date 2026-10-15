@@ -17,15 +17,15 @@
         <window title="Design Information" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" hidesOnDeactivate="YES" releasedWhenClosed="NO" animationBehavior="default" id="3" userLabel="Inspector Panel" customClass="NSPanel">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" resizable="YES" utility="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" bottomStrut="YES"/>
-            <rect key="contentRect" x="715" y="718" width="340" height="277"/>
+            <rect key="contentRect" x="715" y="718" width="340" height="255"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1058"/>
-            <value key="minSize" type="size" width="340" height="277"/>
+            <value key="minSize" type="size" width="340" height="255"/>
             <view key="contentView" id="4">
-                <rect key="frame" x="0.0" y="0.0" width="340" height="277"/>
+                <rect key="frame" x="0.0" y="0.0" width="340" height="255"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <textField verticalHuggingPriority="750" id="12">
-                        <rect key="frame" x="42" y="146" width="76" height="14"/>
+                        <rect key="frame" x="42" y="124" width="76" height="14"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Stitch count:" id="41">
                             <font key="font" metaFont="smallSystem"/>
@@ -34,7 +34,7 @@
                         </textFieldCell>
                     </textField>
                     <textField verticalHuggingPriority="750" id="169">
-                        <rect key="frame" x="34" y="124" width="84" height="14"/>
+                        <rect key="frame" x="34" y="102" width="84" height="14"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Stitch width:" id="170">
                             <font key="font" metaFont="smallSystem"/>
@@ -43,7 +43,7 @@
                         </textFieldCell>
                     </textField>
                     <textField verticalHuggingPriority="750" id="66">
-                        <rect key="frame" x="67" y="221" width="51" height="14"/>
+                        <rect key="frame" x="67" y="199" width="51" height="14"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="File size:" id="67">
                             <font key="font" metaFont="smallSystem"/>
@@ -52,7 +52,7 @@
                         </textFieldCell>
                     </textField>
                     <textField verticalHuggingPriority="750" id="68">
-                        <rect key="frame" x="59" y="243" width="59" height="14"/>
+                        <rect key="frame" x="59" y="221" width="59" height="14"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="File name:" id="69">
                             <font key="font" metaFont="smallSystem"/>
@@ -61,7 +61,7 @@
                         </textFieldCell>
                     </textField>
                     <textField verticalHuggingPriority="750" id="70">
-                        <rect key="frame" x="17" y="199" width="101" height="14"/>
+                        <rect key="frame" x="17" y="177" width="101" height="14"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Modification date:" id="71">
                             <font key="font" metaFont="smallSystem"/>
@@ -70,7 +70,7 @@
                         </textFieldCell>
                     </textField>
                     <textField verticalHuggingPriority="750" id="47">
-                        <rect key="frame" x="120" y="221" width="197" height="14"/>
+                        <rect key="frame" x="120" y="199" width="197" height="14"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Label" id="48">
                             <font key="font" metaFont="smallSystem"/>
@@ -87,7 +87,7 @@
                         </connections>
                     </textField>
                     <textField verticalHuggingPriority="750" id="52">
-                        <rect key="frame" x="120" y="243" width="197" height="14"/>
+                        <rect key="frame" x="120" y="221" width="197" height="14"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Label" id="53">
                             <font key="font" metaFont="smallSystem"/>
@@ -104,7 +104,7 @@
                         </connections>
                     </textField>
                     <textField verticalHuggingPriority="750" id="116">
-                        <rect key="frame" x="120" y="177" width="197" height="14"/>
+                        <rect key="frame" x="120" y="155" width="197" height="14"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Label" id="117">
                             <font key="font" metaFont="smallSystem"/>
@@ -120,7 +120,7 @@
                         </connections>
                     </textField>
                     <textField verticalHuggingPriority="750" id="118">
-                        <rect key="frame" x="120" y="146" width="197" height="14"/>
+                        <rect key="frame" x="120" y="124" width="197" height="14"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Label" id="119">
                             <font key="font" metaFont="smallSystem"/>
@@ -136,7 +136,7 @@
                         </connections>
                     </textField>
                     <textField verticalHuggingPriority="750" id="58">
-                        <rect key="frame" x="120" y="199" width="197" height="14"/>
+                        <rect key="frame" x="120" y="177" width="197" height="14"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Label" id="59">
                             <font key="font" metaFont="smallSystem"/>
@@ -153,7 +153,7 @@
                         </connections>
                     </textField>
                     <textField verticalHuggingPriority="750" id="24">
-                        <rect key="frame" x="30" y="177" width="88" height="14"/>
+                        <rect key="frame" x="30" y="155" width="88" height="14"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Design size:" id="46">
                             <font key="font" metaFont="smallSystem"/>
@@ -162,15 +162,15 @@
                         </textFieldCell>
                     </textField>
                     <box autoresizesSubviews="NO" verticalHuggingPriority="750" boxType="separator" id="113">
-                        <rect key="frame" x="20" y="166" width="300" height="5"/>
+                        <rect key="frame" x="20" y="144" width="300" height="5"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                     </box>
                     <box autoresizesSubviews="NO" verticalHuggingPriority="750" boxType="separator" id="173">
-                        <rect key="frame" x="20" y="83" width="300" height="5"/>
+                        <rect key="frame" x="20" y="61" width="300" height="5"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                     </box>
                     <slider verticalHuggingPriority="750" id="167">
-                        <rect key="frame" x="123" y="120" width="197" height="18"/>
+                        <rect key="frame" x="123" y="98" width="197" height="18"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                         <sliderCell key="cell" controlSize="small" state="on" alignment="left" minValue="1" maxValue="8" doubleValue="1" tickMarkPosition="above" numberOfTickMarks="8" allowsTickMarkValuesOnly="YES" sliderType="linear" id="168">
                             <font key="font" metaFont="smallSystem"/>
@@ -180,7 +180,7 @@
                         </connections>
                     </slider>
                     <button imageHugsTitle="YES" id="189">
-                        <rect key="frame" x="111" y="94" width="118" height="19"/>
+                        <rect key="frame" x="111" y="72" width="118" height="19"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="square" title="Show jump stitches" bezelStyle="shadowlessSquare" imagePosition="leading" alignment="center" controlSize="small" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="190">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES" changeBackground="YES" changeGray="YES"/>
@@ -191,7 +191,7 @@
                         </connections>
                     </button>
                     <textField verticalHuggingPriority="750" id="120">
-                        <rect key="frame" x="120" y="63" width="203" height="14"/>
+                        <rect key="frame" x="120" y="41" width="203" height="14"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Label" id="121">
                             <font key="font" metaFont="smallSystem"/>
@@ -207,7 +207,7 @@
                         </connections>
                     </textField>
                     <textField verticalHuggingPriority="750" id="15">
-                        <rect key="frame" x="45" y="63" width="73" height="14"/>
+                        <rect key="frame" x="45" y="41" width="73" height="14"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Total Colors:" id="43">
                             <font key="font" metaFont="smallSystem"/>
@@ -216,7 +216,7 @@
                         </textFieldCell>
                     </textField>
                     <textField verticalHuggingPriority="750" id="114">
-                        <rect key="frame" x="30" y="41" width="88" height="14"/>
+                        <rect key="frame" x="30" y="19" width="88" height="14"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Color Changes:" id="115">
                             <font key="font" metaFont="smallSystem"/>
@@ -225,7 +225,7 @@
                         </textFieldCell>
                     </textField>
                     <textField verticalHuggingPriority="750" id="122">
-                        <rect key="frame" x="120" y="41" width="203" height="14"/>
+                        <rect key="frame" x="120" y="19" width="203" height="14"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Label" id="123">
                             <font key="font" metaFont="smallSystem"/>
@@ -240,23 +240,6 @@
                             </binding>
                         </connections>
                     </textField>
-                    <textField verticalHuggingPriority="750" id="184">
-                        <rect key="frame" x="45" y="19" width="73" height="14"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Fabric Color:" id="185">
-                            <font key="font" metaFont="smallSystem"/>
-                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                        </textFieldCell>
-                    </textField>
-                    <colorWell id="186">
-                        <rect key="frame" x="123" y="17" width="44" height="18"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <color key="color" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <connections>
-                            <binding destination="5" name="value" keyPath="selection.fabricColor" id="221"/>
-                        </connections>
-                    </colorWell>
                 </subviews>
             </view>
             <connections>
@@ -285,7 +268,6 @@
                 <string>backgroundColor</string>
                 <string>showJumpStitches</string>
                 <string>stitchBlocks</string>
-                <string>fabricColor</string>
             </declaredKeys>
             <connections>
                 <binding destination="-2" name="contentObject" keyPath="inspectedDocument" id="27"/>

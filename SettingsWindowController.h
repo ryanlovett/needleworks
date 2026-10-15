@@ -25,9 +25,17 @@
  PESStitchStyle). Each window can choose its own from View > Stitch Style. */
 extern NSString * const PESStitchStyleKey;
 
-/* The user defaults key for whether Shaded and Realistic stitches are drawn
- on a woven fabric texture; View > Show Fabric Texture changes it */
+/* The user defaults key for whether stitches are drawn on a woven fabric
+ texture; View > Show Fabric Texture changes it */
 extern NSString * const PESFabricTextureKey;
+
+/* The user defaults key for the fabric color new windows use. Each window can
+ choose its own from the toolbar. */
+extern NSString * const PESFabricColorKey;
+
+/* The fabric color in Settings, and changing it */
+NSColor *PESDefaultFabricColor(void);
+void PESSetDefaultFabricColor(NSColor *color);
 
 /* The names of the stitch styles, in PESStitchStyle order */
 NSArray<NSString *> *PESStitchStyleTitles(void);
