@@ -72,6 +72,9 @@
 	 toolbar */
 	__weak NSPopUpButton *stitchStylePopUp;
 	__weak FabricColorPopUpButton *fabricColorPopUp;
+
+	/* The toolbar's line width slider, if it's in the toolbar */
+	__weak NSSlider *lineWidthSlider;
 }
 
 
@@ -98,8 +101,13 @@
 - (NSColor*)	fabricColor;
 - (void)		setFabricColor:(NSColor*) c;
 
+/* The width of lines in the Plain style, in design units */
 - (CGFloat)		lineWidth;
 - (void)		setLineWidth:(CGFloat) w;
+- (IBAction)	chooseLineWidth:(id)sender;
+
+/* The width of printed lines */
+- (CGFloat)		printLineWidth;
 
 - (BOOL)		showJumpStitches;
 - (void)		setShowJumpStitches:(BOOL) show;

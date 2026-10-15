@@ -43,6 +43,11 @@ static NSToolbarItemIdentifier const PESActualSizeItem = @"ActualSize";
 static NSToolbarItemIdentifier const PESDesignInformationItem = @"DesignInformation";
 static NSToolbarItemIdentifier const PESStitchStyleItem = @"StitchStyle";
 static NSToolbarItemIdentifier const PESFabricColorItem = @"FabricColor";
+static NSToolbarItemIdentifier const PESLineWidthItem = @"LineWidth";
+
+/* Plain lines are 1 to 8 design units (0.1 to 0.8 mm) wide */
+static const NSInteger PESMinimumLineWidth = 1;
+static const NSInteger PESMaximumLineWidth = 8;
 
 @interface PESDocument () <NSToolbarDelegate>
 @end
@@ -241,6 +246,12 @@ static NSToolbarItemIdentifier const PESFabricColorItem = @"FabricColor";
 			[(NSMenuItem *)item setState:(style == [self stitchStyle]) ? NSControlStateValueOn : NSControlStateValueOff];
 		}
 		return [PESRenderer canDrawStitchStyle:style];
+	} else if (action == @selector(chooseLineWidth:)) {
+		/* Only Plain draws lines */
+		if ([(id)item isKindOfClass:[NSMenuItem class]]) {
+			[(NSMenuItem *)item setState:([item tag] == (NSInteger)lround(lineWidth)) ? NSControlStateValueOn : NSControlStateValueOff];
+		}
+		return [self stitchStyle] == PESStitchStylePlain;
 	} else if (action == @selector(printDocument:)) {
 		/* ...and nothing to print */
 		return numStitches > 0 && [super validateUserInterfaceItem:item];
@@ -251,13 +262,13 @@ static NSToolbarItemIdentifier const PESFabricColorItem = @"FabricColor";
 #pragma mark Toolbar
 
 - (NSArray<NSToolbarItemIdentifier> *) toolbarDefaultItemIdentifiers:(NSToolbar *)toolbar {
-	return @[PESZoomOutItem, PESZoomInItem, PESZoomToFitItem, PESStitchStyleItem, PESFabricColorItem,
-			 NSToolbarFlexibleSpaceItemIdentifier, PESDesignInformationItem];
+	return @[PESZoomOutItem, PESZoomInItem, PESZoomToFitItem, PESStitchStyleItem, PESLineWidthItem,
+			 PESFabricColorItem, NSToolbarFlexibleSpaceItemIdentifier, PESDesignInformationItem];
 }
 
 - (NSArray<NSToolbarItemIdentifier> *) toolbarAllowedItemIdentifiers:(NSToolbar *)toolbar {
 	return @[PESZoomOutItem, PESZoomInItem, PESZoomToFitItem, PESActualSizeItem,
-			 PESStitchStyleItem, PESFabricColorItem, PESDesignInformationItem, NSToolbarSpaceItemIdentifier,
+			 PESStitchStyleItem, PESLineWidthItem, PESFabricColorItem, PESDesignInformationItem, NSToolbarSpaceItemIdentifier,
 			 NSToolbarFlexibleSpaceItemIdentifier];
 }
 
@@ -289,6 +300,8 @@ static NSToolbarItemIdentifier const PESFabricColorItem = @"FabricColor";
 		return [self stitchStyleToolbarItem:identifier willBeInsertedIntoToolbar:flag];
 	} else if ([identifier isEqualToString:PESFabricColorItem]) {
 		return [self fabricColorToolbarItem:identifier willBeInsertedIntoToolbar:flag];
+	} else if ([identifier isEqualToString:PESLineWidthItem]) {
+		return [self lineWidthToolbarItem:identifier willBeInsertedIntoToolbar:flag];
 	} else if ([identifier isEqualToString:PESDesignInformationItem]) {
 		label = NSLocalizedString(@"Design Info", @"Toolbar item");
 		toolTip = NSLocalizedString(@"Show or hide the Design Information panel", @"Toolbar item tooltip");
@@ -422,6 +435,7 @@ static NSToolbarItemIdentifier const PESFabricColorItem = @"FabricColor";
 	 again during pagination. */
 	NSPrintPanel *printPanel = [op printPanel];
 	PrintScaleAccessoryController *accessory = [[PrintScaleAccessoryController alloc] init];
+	[accessory setLineWidth:lineWidth];
 	[printPanel addAccessoryController:accessory];
 	printScaleAccessory = accessory;
 	[printPanel setOptions:[printPanel options] | NSPrintPanelShowsPaperSize | NSPrintPanelShowsOrientation | NSPrintPanelShowsPreview];
@@ -502,8 +516,57 @@ static NSToolbarItemIdentifier const PESFabricColorItem = @"FabricColor";
 
 - (void) setLineWidth:(CGFloat) w {
 	lineWidth = w;
+	[lineWidthSlider setDoubleValue:w];
 	[mainView setNeedsDisplay:YES];
-	//[[mainView window] performZoom:nil];
+}
+
+/* The line width for printing: the one chosen in the print panel while it's
+ open, otherwise the window's */
+- (CGFloat) printLineWidth {
+	return printScaleAccessory != nil ? [printScaleAccessory lineWidth] : lineWidth;
+}
+
+- (IBAction) chooseLineWidth:(id)sender {
+	/* The sender is the toolbar's slider, or a menu item */
+	if ([sender isKindOfClass:[NSSlider class]]) {
+		[self setLineWidth:[sender doubleValue]];
+	} else {
+		[self setLineWidth:[sender tag]];
+	}
+}
+
+/* A slider for the width of Plain lines, which is enabled only in Plain */
+- (NSToolbarItem *) lineWidthToolbarItem:(NSToolbarItemIdentifier)identifier willBeInsertedIntoToolbar:(BOOL)flag {
+	NSSlider *slider = [NSSlider sliderWithValue:lineWidth minValue:PESMinimumLineWidth maxValue:PESMaximumLineWidth
+										   target:self action:@selector(chooseLineWidth:)];
+	[slider setNumberOfTickMarks:PESMaximumLineWidth - PESMinimumLineWidth + 1];
+	[slider setAllowsTickMarkValuesOnly:YES];
+	[slider setControlSize:NSControlSizeSmall];
+	[[[slider widthAnchor] constraintEqualToConstant:96] setActive:YES];
+	[slider setEnabled:[self stitchStyle] == PESStitchStylePlain];
+	if (flag) {
+		lineWidthSlider = slider;
+	}
+
+	NSString *label = NSLocalizedString(@"Line Width", @"Toolbar item");
+	NSToolbarItem *item = [[NSToolbarItem alloc] initWithItemIdentifier:identifier];
+	[item setLabel:label];
+	[item setPaletteLabel:label];
+	[item setToolTip:NSLocalizedString(@"Choose how wide the lines are in the Plain stitch style", @"Toolbar item tooltip")];
+	[item setView:slider];
+
+	/* When the window is too narrow for the slider, the toolbar's overflow
+	 menu shows the widths as a submenu */
+	NSMenu *menu = [[NSMenu alloc] initWithTitle:label];
+	for (NSInteger width = PESMinimumLineWidth; width <= PESMaximumLineWidth; width++) {
+		NSString *title = [NSString localizedStringWithFormat:NSLocalizedString(@"%.1f mm", @"Line width in millimetres"), width / 10.0];
+		NSMenuItem *menuItem = [menu addItemWithTitle:title action:@selector(chooseLineWidth:) keyEquivalent:@""];
+		[menuItem setTag:width];
+	}
+	NSMenuItem *menuForm = [[NSMenuItem alloc] initWithTitle:label action:NULL keyEquivalent:@""];
+	[menuForm setSubmenu:menu];
+	[item setMenuFormRepresentation:menuForm];
+	return item;
 }
 
 - (BOOL) showJumpStitches {
@@ -568,6 +631,7 @@ static NSToolbarItemIdentifier const PESFabricColorItem = @"FabricColor";
 
 - (void) showStitchStyle {
 	[stitchStylePopUp selectItemWithTag:[self stitchStyle]];
+	[lineWidthSlider setEnabled:[self stitchStyle] == PESStitchStylePlain];
 	[mainView setNeedsDisplay:YES];
 
 	/* The area around the design shows the fabric too */

@@ -26,6 +26,11 @@ NSString * const PESPrintScaleKey = @"printScale";
 
 @implementation PrintScaleAccessoryController {
 	NSTextField *_warningLabel;
+	NSTextField *_lineWidthLabel;
+}
+
+- (NSString *)lineWidthText {
+	return [NSString localizedStringWithFormat:NSLocalizedString(@"%.1f mm", @"Line width in millimetres"), [self lineWidth] / 10.0];
 }
 
 - (NSArray<NSString *> *)scaleTitles {
@@ -41,6 +46,16 @@ NSString * const PESPrintScaleKey = @"printScale";
 
 	NSStackView *scaleRow = [NSStackView stackViewWithViews:@[label, popUp]];
 
+	NSTextField *lineWidthTitle = [NSTextField labelWithString:NSLocalizedString(@"Line width:", @"Print panel label for the width of printed lines")];
+	NSSlider *slider = [NSSlider sliderWithValue:[self lineWidth] minValue:1 maxValue:8 target:nil action:NULL];
+	[slider setNumberOfTickMarks:8];
+	[slider setAllowsTickMarkValuesOnly:YES];
+	[[[slider widthAnchor] constraintEqualToConstant:120] setActive:YES];
+	[slider bind:NSValueBinding toObject:self withKeyPath:@"lineWidth" options:nil];
+	_lineWidthLabel = [NSTextField labelWithString:[self lineWidthText]];
+	[_lineWidthLabel setTextColor:[NSColor secondaryLabelColor]];
+	NSStackView *lineWidthRow = [NSStackView stackViewWithViews:@[lineWidthTitle, slider, _lineWidthLabel]];
+
 	/* Size the warning with its text so the panel reserves room for it, then
 	 show it only when it applies */
 	_warningLabel = [NSTextField wrappingLabelWithString:[self warningText]];
@@ -48,7 +63,7 @@ NSString * const PESPrintScaleKey = @"printScale";
 	[_warningLabel setTextColor:[NSColor systemRedColor]];
 	[_warningLabel setPreferredMaxLayoutWidth:320];
 
-	NSStackView *stack = [NSStackView stackViewWithViews:@[scaleRow, _warningLabel]];
+	NSStackView *stack = [NSStackView stackViewWithViews:@[scaleRow, _warningLabel, lineWidthRow]];
 	[stack setOrientation:NSUserInterfaceLayoutOrientationVertical];
 	[stack setAlignment:NSLayoutAttributeLeading];
 	[stack setEdgeInsets:NSEdgeInsetsMake(8, 20, 8, 20)];
@@ -79,17 +94,24 @@ NSString * const PESPrintScaleKey = @"printScale";
 	[[NSUserDefaults standardUserDefaults] setInteger:printScale forKey:PESPrintScaleKey];
 }
 
+- (void)setLineWidth:(CGFloat)lineWidth {
+	_lineWidth = lineWidth;
+	[_lineWidthLabel setStringValue:[self lineWidthText]];
+}
+
 #pragma mark NSPrintPanelAccessorizing
 
 - (NSArray<NSDictionary<NSPrintPanelAccessorySummaryKey, NSString *> *> *)localizedSummaryItems {
 	NSArray *titles = [self scaleTitles];
 	NSInteger scale = MIN(MAX([self printScale], 0), (NSInteger)[titles count] - 1);
 	return @[@{NSPrintPanelAccessorySummaryItemNameKey: NSLocalizedString(@"Scale", @"Print panel summary item name"),
-			   NSPrintPanelAccessorySummaryItemDescriptionKey: titles[scale]}];
+			   NSPrintPanelAccessorySummaryItemDescriptionKey: titles[scale]},
+			 @{NSPrintPanelAccessorySummaryItemNameKey: NSLocalizedString(@"Line Width", @"Print panel summary item name"),
+			   NSPrintPanelAccessorySummaryItemDescriptionKey: [self lineWidthText]}];
 }
 
 - (NSSet<NSString *> *)keyPathsForValuesAffectingPreview {
-	return [NSSet setWithObject:@"printScale"];
+	return [NSSet setWithObjects:@"printScale", @"lineWidth", nil];
 }
 
 @end

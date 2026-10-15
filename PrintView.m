@@ -31,7 +31,7 @@
 	PESDocument* doc = [self delegate];
 
 	[PESRenderer drawStitchBlocks:[doc stitchBlocks]
-						lineWidth:[doc lineWidth]
+						lineWidth:[doc printLineWidth]
 				 showJumpStitches:[doc showJumpStitches]];
 }
 

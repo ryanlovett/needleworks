@@ -25,10 +25,14 @@
  actual size, 1 scales them to fit the page. */
 extern NSString * const PESPrintScaleKey;
 
-/* Adds a Scale choice (Actual Size or Fit to Page) to the print panel */
+/* Adds a Scale choice (Actual Size or Fit to Page) and the width of the
+ printed lines to the print panel */
 @interface PrintScaleAccessoryController : NSViewController <NSPrintPanelAccessorizing>
 
 @property (nonatomic) NSInteger printScale;
+
+/* The width of printed lines, in design units; it starts as the window's */
+@property (nonatomic) CGFloat lineWidth;
 
 /* Set by the document when the design doesn't fit on the page at actual
  size, which shows a warning under the Scale choice */
