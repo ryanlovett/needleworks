@@ -114,12 +114,12 @@ final class RealisticRenderer: @unchecked Sendable {
 			let color = linear(stitchBlock.color)
 			for (i, stitch) in stitchBlock.stitches.enumerated() {
 				/* A block's first stitch carries the thread from the last block,
-				 * trims are cut, and jumps are loose strands only when shown */
-				guard i > 0, stitch.type != .trim, stitch.type == .normal || showJumpStitches else {
+				 * and jumps and trims are loose strands, drawn only when shown */
+				guard i > 0, stitch.type == .normal || showJumpStitches else {
 					continue
 				}
 				var random = Random(seed: UInt64(blockIndex) << 32 | UInt64(i))
-				let width: Float = stitch.type == .jump ? 1.2 : 4 * (0.92 + 0.14 * random.next())
+				let width: Float = stitch.type != .normal ? 1.2 : 4 * (0.92 + 0.14 * random.next())
 				let tone = (random.next() - 0.5) * 0.12
 				let phase = random.next() * 10
 				let a = wander(stitch.start), b = wander(stitch.end)

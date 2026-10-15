@@ -40,9 +40,8 @@ struct ShadedRenderer {
 									  locations: [0, 0.3, 0.7, 1])!
 
 	/// Draws the stitches that touch `rect`, in design units, into `context`.
-	/// Jump stitches, the loose threads left between sewn areas, are drawn
-	/// as thin strands if `showJumpStitches`; trimmed threads are cut, so
-	/// they never are.
+	/// Jumps and trims, the threads between sewn areas, are drawn as thin
+	/// loose strands if `showJumpStitches`, as they are left until clipped.
 	static func draw(_ stitchBlocks: [StitchBlock], in rect: CGRect, context: CGContext, showJumpStitches: Bool) {
 		var renderer = ShadedRenderer()
 		let r = threadWidth / 2
@@ -57,10 +56,10 @@ struct ShadedRenderer {
 				let bounds = CGRect(x: min(a.x, b.x), y: min(a.y, b.y), width: abs(b.x - a.x), height: abs(b.y - a.y)).insetBy(dx: -threadWidth, dy: -threadWidth)
 
 				/* A block's first stitch carries the thread from the last block */
-				guard i > 0, stitch.type != .trim, bounds.intersects(rect) else {
+				guard i > 0, bounds.intersects(rect) else {
 					continue
 				}
-				if stitch.type == .jump {
+				if stitch.type != .normal {
 					if showJumpStitches {
 						drawStrand(from: a, to: b, color: color, context: context)
 					}
@@ -103,7 +102,7 @@ struct ShadedRenderer {
 		}
 	}
 
-	/// A loose jump thread: a thin strand in the thread's color.
+	/// A loose thread between sewn areas: a thin strand in the thread's color.
 	private static func drawStrand(from a: CGPoint, to b: CGPoint, color: SIMD3<Double>, context: CGContext) {
 		context.saveGState()
 		context.setStrokeColor(shade(color, 0.8))
