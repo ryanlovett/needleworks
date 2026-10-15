@@ -101,7 +101,7 @@ final class SettingsWindowController: NSWindowController {
 		let styleNote = note(NSLocalizedString("Windows use this style unless you choose another for a window from View > Stitch Style.",
 											   comment: "Settings note under the stitch style"))
 
-		let fabricLabel = NSTextField(labelWithString: NSLocalizedString("Fabric color:", comment: "Settings label for the fabric color"))
+		let fabricLabel = NSTextField(labelWithString: NSLocalizedString("Fabric:", comment: "Settings label for the fabric"))
 		fabricColorPopUp.fabric = Self.defaultFabric
 		fabricColorPopUp.target = self
 		fabricColorPopUp.action = #selector(chooseFabricColor(_:))

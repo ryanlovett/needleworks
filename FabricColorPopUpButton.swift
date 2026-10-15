@@ -112,13 +112,22 @@ final class FabricColorPopUpButton: NSPopUpButton {
 			abs(ca.blueComponent - cb.blueComponent) < 0.002
 	}
 
-	private static func swatch(_ color: NSColor) -> NSImage {
-		NSImage(size: NSSize(width: 16, height: 12), flipped: false) { rect in
-			let path = NSBezierPath(roundedRect: rect.insetBy(dx: 0.5, dy: 0.5), xRadius: 2.5, yRadius: 2.5)
-			color.setFill()
-			path.fill()
+	/// A swatch of the fabric: a piece of its weave, enlarged to about two
+	/// points a thread, so the weave shows at menu size and denim's twill
+	/// shows a few diagonals
+	private static func swatch(_ fabric: Fabric) -> NSImage {
+		NSImage(size: NSSize(width: 16, height: 12), flipped: true) { rect in
+			let shape = NSBezierPath(roundedRect: rect.insetBy(dx: 0.5, dy: 0.5), xRadius: 2.5, yRadius: 2.5)
+			NSGraphicsContext.saveGraphicsState()
+			shape.addClip()
+			let scale: CGFloat = 0.75
+			let transform = NSAffineTransform()
+			transform.scale(by: scale)
+			transform.concat()
+			PESRenderer.drawFabric(fabric, texture: true, in: NSRect(x: 0, y: 0, width: rect.width / scale, height: rect.height / scale))
+			NSGraphicsContext.restoreGraphicsState()
 			NSColor.tertiaryLabelColor.setStroke()
-			path.stroke()
+			shape.stroke()
 			return true
 		}
 	}
@@ -136,7 +145,7 @@ final class FabricColorPopUpButton: NSPopUpButton {
 		for (index, preset) in Self.fabrics.enumerated() {
 			let item = menu.addItem(withTitle: preset.name, action: #selector(chooseItem(_:)), keyEquivalent: "")
 			item.target = self
-			item.image = Self.swatch(preset.fabric.flatColor)
+			item.image = Self.swatch(preset.fabric)
 			item.tag = index
 			if selected == nil && preset.fabric.weave == currentFabric.weave && Self.sameColor(preset.fabric.color, currentFabric.color) {
 				selected = item
@@ -146,7 +155,7 @@ final class FabricColorPopUpButton: NSPopUpButton {
 			let custom = NSMenuItem(title: NSLocalizedString("Custom", comment: "Fabric color chosen from the color panel"),
 									action: #selector(chooseItem(_:)), keyEquivalent: "")
 			custom.target = self
-			custom.image = Self.swatch(currentFabric.flatColor)
+			custom.image = Self.swatch(currentFabric)
 			custom.tag = Self.customTag
 			menu.insertItem(custom, at: 0)
 			menu.insertItem(.separator(), at: 1)
