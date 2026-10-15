@@ -10,20 +10,38 @@ final class FabricTexture: @unchecked Sendable {
 	static let shared = FabricTexture()
 
 	/// The width of a weave thread, in design units (0.3 mm), and the size of
-	/// the tile the weave repeats in.
+	/// the tile the weave repeats in (6 mm).
 	private static let threadSize = 3
-	private static let tileThreads = 8
+	private static let tileThreads = 20
 	private static let tileSize = CGFloat(threadSize * tileThreads)
 	private static let pixelsPerUnit = 12
 
+	/// Faint patches across the cloth repeat at a size that shares no factor
+	/// with the weave's, so neither repeat shows (16.1 mm, 7 patches across)
+	private static let patchSize = 161
+	private static let patchesAcross = 7
+
+	/// Smaller copies of the tile, each half the size of the last, are drawn
+	/// when zoomed out, as shrinking the full tile while drawing makes stripes
+	private static let tileLevels = 5
+
 	private let lock = NSLock()
 	private var tileColor: NSColor?
-	private var tile: CGImage?
+	private var tiles: [CGImage] = []
+	private lazy var patches: CGImage? = Self.makePatches()
 
 	/// Fills `rect`, in design units, with the fabric in `color`. The weave
 	/// lines up with the design's origin, so areas drawn separately join up.
 	func draw(_ color: NSColor, in rect: CGRect, context: CGContext) {
-		guard let tile = tile(for: color) else {
+		/* The smallest tile with at least a pixel for each pixel drawn */
+		let ctm = context.ctm
+		let scale = sqrt(abs(ctm.a * ctm.d - ctm.b * ctm.c))
+		var level = 0
+		while level + 1 < Self.tileLevels && CGFloat(Self.pixelsPerUnit) / CGFloat(1 << (level + 1)) >= scale {
+			level += 1
+		}
+
+		guard let (tile, patches) = images(for: color, level: level) else {
 			context.setFillColor(color.cgColor)
 			context.fill(rect)
 			return
@@ -32,22 +50,52 @@ final class FabricTexture: @unchecked Sendable {
 		context.clip(to: rect)
 		context.interpolationQuality = .medium
 		context.draw(tile, in: CGRect(x: 0, y: 0, width: Self.tileSize, height: Self.tileSize), byTiling: true)
+		if let patches {
+			context.draw(patches, in: CGRect(x: 0, y: 0, width: Self.patchSize, height: Self.patchSize), byTiling: true)
+		}
 		context.restoreGState()
 	}
 
-	private func tile(for color: NSColor) -> CGImage? {
+	private func images(for color: NSColor, level: Int) -> (CGImage, CGImage?)? {
 		lock.lock()
 		defer { lock.unlock() }
-		if let tile, tileColor == color {
-			return tile
+		if tiles.isEmpty || tileColor != color {
+			tiles = Self.makeTiles(color)
+			tileColor = color
 		}
-		tile = Self.makeTile(color)
-		tileColor = color
-		return tile
+		guard !tiles.isEmpty else {
+			return nil
+		}
+		return (tiles[min(level, tiles.count - 1)], patches)
 	}
 
-	/// Over and under threads in a checkerboard, each shaded so it looks
-	/// round, with a little variation from thread to thread.
+	/// The tile, then copies of it each half the size of the last
+	private static func makeTiles(_ color: NSColor) -> [CGImage] {
+		guard var tile = makeTile(color) else {
+			return []
+		}
+		var tiles = [tile]
+		for _ in 1..<tileLevels {
+			let size = tile.width / 2
+			guard size > 0, let context = CGContext(data: nil, width: size, height: size, bitsPerComponent: 8, bytesPerRow: 0,
+													 space: CGColorSpace(name: CGColorSpace.sRGB)!, bitmapInfo: CGImageAlphaInfo.noneSkipLast.rawValue) else {
+				break
+			}
+			context.interpolationQuality = .high
+			context.draw(tile, in: CGRect(x: 0, y: 0, width: size, height: size))
+			guard let smaller = context.makeImage() else {
+				break
+			}
+			tiles.append(smaller)
+			tile = smaller
+		}
+		return tiles
+	}
+
+	/// Over and under threads in a checkerboard. Each thread is round, with
+	/// shadowed gaps beside it, and dips into shadow where it passes under
+	/// the threads across it. Threads differ a little in shade and thickness,
+	/// thicken and thin along their length, and show faint lengthwise fibers.
 	private static func makeTile(_ color: NSColor) -> CGImage? {
 		guard let srgb = color.usingColorSpace(.sRGB) else {
 			return nil
@@ -55,17 +103,51 @@ final class FabricTexture: @unchecked Sendable {
 		let size = Int(tileSize) * pixelsPerUnit
 		var pixels = [UInt8](repeating: 255, count: size * size * 4)
 		let base = [srgb.redComponent, srgb.greenComponent, srgb.blueComponent]
+		let length = Double(tileThreads)
 
 		for py in 0..<size {
 			for px in 0..<size {
-				let x = (CGFloat(px) + 0.5) / CGFloat(pixelsPerUnit), y = (CGFloat(py) + 0.5) / CGFloat(pixelsPerUnit)
-				let cx = Int(x) / threadSize, cy = Int(y) / threadSize
-				let fx = x / CGFloat(threadSize) - CGFloat(cx), fy = y / CGFloat(threadSize) - CGFloat(cy)
-				let over = (cx + cy) % 2 == 0
-				let across = over ? fy : fx
-				var shade = 0.955 + 0.045 * sin(across * .pi)
-				shade *= 0.985 + 0.03 * hash(cx, cy)
-				shade *= 0.99 + 0.02 * hash(over ? cy : cx, over ? 7 : 13)
+				/* Position in threads */
+				let x = (Double(px) + 0.5) / Double(pixelsPerUnit * threadSize)
+				let y = (Double(py) + 0.5) / Double(pixelsPerUnit * threadSize)
+				let cx = Int(x), cy = Int(y)
+				let fx = x - Double(cx), fy = y - Double(cy)
+
+				/* Warp threads run up and down, weft threads across; the one on
+				 * top here, which thread it is, and where along it we are */
+				let warpOver = (cx + cy) % 2 == 0
+				let thread = warpOver ? cx : cy
+				let along = warpOver ? y : x
+				let seed = warpOver ? 0 : 1000
+				/* Threads aren't quite straight: each wanders a little from side
+				 * to side */
+				let wander = 0.16 * (noise(along * 0.9, period: length * 0.9, seed: thread + seed + 200) - 0.5)
+				let across = (warpOver ? fx : fy) - 0.5 - wander
+				let dip = warpOver ? fy : fx
+
+				/* Thickness, from 80 to 100% of the spacing, varying along the
+				 * thread like slubs in spun yarn */
+				let thickness = 0.87 + 0.02 * hash(thread, seed + 1) + 0.11 * noise(along * 1.3, period: length * 1.3, seed: thread + seed)
+				let half = thickness / 2
+				var shade: Double
+				if abs(across) > half {
+					/* The gap beside the thread, in shadow */
+					shade = 0.86
+				} else {
+					/* Round across the thread, and darker where it dips under */
+					let s = across / half
+					shade = 0.9 + 0.1 * sqrt(1 - s * s)
+					shade *= 0.93 + 0.07 * sin(dip * .pi)
+
+					/* Fibers along the thread */
+					let fiber = Int(((s + 1) * 6).rounded(.down))
+					shade *= 0.985 + 0.03 * noise(along * 2.1, period: length * 2.1, seed: thread * 31 + fiber + seed)
+				}
+
+				/* Each thread a little lighter or darker, and blotchy along it */
+				shade *= 0.99 + 0.012 * hash(thread, seed + 7)
+				shade *= 0.99 + 0.02 * noise(along * 0.6, period: length * 0.6, seed: thread + seed + 500)
+
 				for c in 0..<3 {
 					pixels[(py * size + px) * 4 + c] = UInt8(max(0, min(255, (base[c] * shade * 255).rounded())))
 				}
@@ -80,12 +162,58 @@ final class FabricTexture: @unchecked Sendable {
 					   provider: provider, decode: nil, shouldInterpolate: true, intent: .defaultIntent)
 	}
 
-	/// A repeatable number from 0 up to 1 for a weave cell.
-	private static func hash(_ a: Int, _ b: Int) -> CGFloat {
+	/// Soft patches, a few millimetres across, that darken the cloth slightly:
+	/// black, partly transparent, one pixel per design unit, laid over the
+	/// weave in any color.
+	private static func makePatches() -> CGImage? {
+		let size = patchSize
+		var pixels = [UInt8](repeating: 0, count: size * size * 4)
+		let period = Double(patchesAcross)
+		for py in 0..<size {
+			for px in 0..<size {
+				let x = Double(px) * period / Double(size), y = Double(py) * period / Double(size)
+				let n = 0.65 * noise2(x, y, period: period, seed: 1) + 0.35 * noise2(x * 2, y * 2, period: period * 2, seed: 2)
+				pixels[(py * size + px) * 4 + 3] = UInt8((n * 0.05 * 255).rounded())
+			}
+		}
+		guard let provider = CGDataProvider(data: Data(pixels) as CFData) else {
+			return nil
+		}
+		return CGImage(width: size, height: size, bitsPerComponent: 8, bitsPerPixel: 32, bytesPerRow: size * 4,
+					   space: CGColorSpace(name: CGColorSpace.sRGB)!, bitmapInfo: CGBitmapInfo(rawValue: CGImageAlphaInfo.premultipliedLast.rawValue),
+					   provider: provider, decode: nil, shouldInterpolate: true, intent: .defaultIntent)
+	}
+
+	/// Smooth noise from 0 to 1 along a line, repeating every `period`, which
+	/// is rounded to a whole number of lattice steps.
+	private static func noise(_ t: Double, period: Double, seed: Int) -> Double {
+		let n = max(1, Int(period.rounded()))
+		let i = Int(t.rounded(.down)), f = t - t.rounded(.down)
+		let k = f * f * (3 - 2 * f)
+		let a = hash(((i % n) + n) % n, seed), b = hash((((i + 1) % n) + n) % n, seed)
+		return a + (b - a) * k
+	}
+
+	/// Smooth noise from 0 to 1 over a plane, repeating every `period` both ways.
+	private static func noise2(_ x: Double, _ y: Double, period: Double, seed: Int) -> Double {
+		let n = max(1, Int(period.rounded()))
+		let i = Int(x.rounded(.down)), j = Int(y.rounded(.down))
+		let fx = x - Double(i), fy = y - Double(j)
+		let kx = fx * fx * (3 - 2 * fx), ky = fy * fy * (3 - 2 * fy)
+		func h(_ a: Int, _ b: Int) -> Double {
+			hash(((a % n) + n) % n * 7919 + ((b % n) + n) % n, seed)
+		}
+		let top = h(i, j) + (h(i + 1, j) - h(i, j)) * kx
+		let bottom = h(i, j + 1) + (h(i + 1, j + 1) - h(i, j + 1)) * kx
+		return top + (bottom - top) * ky
+	}
+
+	/// A repeatable number from 0 up to 1 for a pair of numbers.
+	private static func hash(_ a: Int, _ b: Int) -> Double {
 		var z = UInt64(bitPattern: Int64(a &* 73_856_093 ^ b &* 19_349_663)) &+ 0x9E37_79B9_7F4A_7C15
 		z = (z ^ (z >> 30)) &* 0xBF58_476D_1CE4_E5B9
 		z = (z ^ (z >> 27)) &* 0x94D0_49BB_1331_11EB
 		z ^= z >> 31
-		return CGFloat(z >> 40) / CGFloat(1 << 24)
+		return Double(z >> 40) / Double(1 << 24)
 	}
 }
