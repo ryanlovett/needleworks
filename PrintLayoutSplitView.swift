@@ -1,8 +1,8 @@
 //
-//  LegendPrintView.h
+//  PrintLayoutSplitView.swift
 //  Needle Works
 //
-//  Copyright 2008 Ryan Lovett <ryan@spacecoaster.org>. All rights reserved.
+//  Copyright 2026 Ryan Lovett <ryan@spacecoaster.org>. All rights reserved.
 //  
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -19,14 +19,19 @@
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 //  02111-1307, USA.
 
-#import <Cocoa/Cocoa.h>
-#import "PESDocument.h"
 
-@interface LegendPrintView : NSView {
-	__weak PESDocument* delegate;
+import AppKit
+
+/// The root view of a printed page. Each time the print system paginates,
+/// including when the print panel refreshes its preview, it asks its delegate
+/// (the document) to lay out the page for the current paper size, orientation
+/// and print scale.
+@objc(PrintLayoutSplitView)
+final class PrintLayoutSplitView: NSSplitView {
+	override func knowsPageRange(_ range: NSRangePointer) -> Bool {
+		if let operation = NSPrintOperation.current, let document = delegate as? PESDocument {
+			document.layoutPrintViews(for: operation.printInfo)
+		}
+		return super.knowsPageRange(range)
+	}
 }
-
-@property (nonatomic, weak) PESDocument* delegate;
-
-
-@end

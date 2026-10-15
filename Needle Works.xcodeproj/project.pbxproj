@@ -18,17 +18,17 @@
 		94028B990E67C3F0001CD6B0 /* PESDocument.xib in Resources */ = {isa = PBXBuildFile; fileRef = 94028B970E67C3F0001CD6B0 /* PESDocument.xib */; };
 		94028CC20E6BB060001CD6B0 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 94028CC00E6BB060001CD6B0 /* Credits.rtf */; };
 		94C3C1A00000000000000062 /* AppIcon.icns in Resources */ = {isa = PBXBuildFile; fileRef = 94C3C1A00000000000000061 /* AppIcon.icns */; };
-		94A2F8B40E9FDEC200C29361 /* NoDividerSplitView.m in Sources */ = {isa = PBXBuildFile; fileRef = 94A2F8B30E9FDEC200C29361 /* NoDividerSplitView.m */; };
-		94C3C1A00000000000000003 /* CenteringClipView.m in Sources */ = {isa = PBXBuildFile; fileRef = 94C3C1A00000000000000002 /* CenteringClipView.m */; };
-		94C3C1A00000000000000033 /* PrintHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 94C3C1A00000000000000032 /* PrintHeaderView.m */; };
+		94A2F8B40E9FDEC200C29361 /* NoDividerSplitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94A2F8B30E9FDEC200C29361 /* NoDividerSplitView.swift */; };
+		94C3C1A00000000000000003 /* CenteringClipView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C3C1A00000000000000002 /* CenteringClipView.swift */; };
+		94C3C1A00000000000000033 /* PrintHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C3C1A00000000000000032 /* PrintHeaderView.swift */; };
 		94C3C1A00000000000000023 /* PrintScaleAccessoryController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94C3C1A00000000000000022 /* PrintScaleAccessoryController.m */; };
 		94C3C1A00000000000000043 /* SettingsWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94C3C1A00000000000000042 /* SettingsWindowController.m */; };
 		94C3C1A00000000000000053 /* FabricColorPopUpButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 94C3C1A00000000000000052 /* FabricColorPopUpButton.m */; };
-		94C3C1A00000000000000013 /* PrintLayoutSplitView.m in Sources */ = {isa = PBXBuildFile; fileRef = 94C3C1A00000000000000012 /* PrintLayoutSplitView.m */; };
-		94C97FD00E96D7590090FD3B /* PrintView.m in Sources */ = {isa = PBXBuildFile; fileRef = 94C97FCF0E96D7590090FD3B /* PrintView.m */; };
+		94C3C1A00000000000000013 /* PrintLayoutSplitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C3C1A00000000000000012 /* PrintLayoutSplitView.swift */; };
+		94C97FD00E96D7590090FD3B /* PrintView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C97FCF0E96D7590090FD3B /* PrintView.swift */; };
 		94E60B21307E110F00C0CD5E /* NeedleWorksPreview.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 94E60B1A307E110F00C0CD5E /* NeedleWorksPreview.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		94E60B35307E11BD00C0CD5E /* NeedleWorksThumbnail.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 94E60B2E307E11BD00C0CD5E /* NeedleWorksThumbnail.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		94FC42280E9D41DB00A3B54D /* LegendPrintView.m in Sources */ = {isa = PBXBuildFile; fileRef = 94FC42270E9D41DB00A3B54D /* LegendPrintView.m */; };
+		94FC42280E9D41DB00A3B54D /* LegendPrintView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94FC42270E9D41DB00A3B54D /* LegendPrintView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -93,28 +93,23 @@
 		94930B312251FA3700121BDB /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		94930B322251FAA000121BDB /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/PESDocument.xib; sourceTree = "<group>"; };
 		94930B332251FAB600121BDB /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/InspectorPanel.xib; sourceTree = "<group>"; };
-		94A2F8B20E9FDEC200C29361 /* NoDividerSplitView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NoDividerSplitView.h; sourceTree = "<group>"; };
-		94A2F8B30E9FDEC200C29361 /* NoDividerSplitView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NoDividerSplitView.m; sourceTree = "<group>"; };
-		94C3C1A00000000000000001 /* CenteringClipView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CenteringClipView.h; sourceTree = "<group>"; };
-		94C3C1A00000000000000002 /* CenteringClipView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CenteringClipView.m; sourceTree = "<group>"; };
-		94C3C1A00000000000000031 /* PrintHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PrintHeaderView.h; sourceTree = "<group>"; };
-		94C3C1A00000000000000032 /* PrintHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PrintHeaderView.m; sourceTree = "<group>"; };
+		94A2F8B30E9FDEC200C29361 /* NoDividerSplitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoDividerSplitView.swift; sourceTree = "<group>"; };
+		94C3C1A00000000000000002 /* CenteringClipView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CenteringClipView.swift; sourceTree = "<group>"; };
+		94C3C1A00000000000000032 /* PrintHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrintHeaderView.swift; sourceTree = "<group>"; };
 		94C3C1A00000000000000021 /* PrintScaleAccessoryController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PrintScaleAccessoryController.h; sourceTree = "<group>"; };
 		94C3C1A00000000000000022 /* PrintScaleAccessoryController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PrintScaleAccessoryController.m; sourceTree = "<group>"; };
 		94C3C1A00000000000000041 /* SettingsWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsWindowController.h; sourceTree = "<group>"; };
+		94C3C1A00000000000000071 /* Needle Works-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Needle Works-Bridging-Header.h"; sourceTree = "<group>"; };
 		94C3C1A00000000000000042 /* SettingsWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsWindowController.m; sourceTree = "<group>"; };
 		94C3C1A00000000000000051 /* FabricColorPopUpButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FabricColorPopUpButton.h; sourceTree = "<group>"; };
 		94C3C1A00000000000000052 /* FabricColorPopUpButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FabricColorPopUpButton.m; sourceTree = "<group>"; };
-		94C3C1A00000000000000011 /* PrintLayoutSplitView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PrintLayoutSplitView.h; sourceTree = "<group>"; };
-		94C3C1A00000000000000012 /* PrintLayoutSplitView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PrintLayoutSplitView.m; sourceTree = "<group>"; };
-		94C97FCE0E96D7590090FD3B /* PrintView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PrintView.h; sourceTree = "<group>"; };
-		94C97FCF0E96D7590090FD3B /* PrintView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PrintView.m; sourceTree = "<group>"; };
+		94C3C1A00000000000000012 /* PrintLayoutSplitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrintLayoutSplitView.swift; sourceTree = "<group>"; };
+		94C97FCF0E96D7590090FD3B /* PrintView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrintView.swift; sourceTree = "<group>"; };
 		94E60AF6307E0BFB00C0CD5E /* NeedleWorksKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = NeedleWorksKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		94E60B0F307E109F00C0CD5E /* NeedleWorksRenderCheck */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = NeedleWorksRenderCheck; sourceTree = BUILT_PRODUCTS_DIR; };
 		94E60B1A307E110F00C0CD5E /* NeedleWorksPreview.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.extensionkit-extension"; includeInIndex = 0; path = NeedleWorksPreview.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		94E60B2E307E11BD00C0CD5E /* NeedleWorksThumbnail.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.extensionkit-extension"; includeInIndex = 0; path = NeedleWorksThumbnail.appex; sourceTree = BUILT_PRODUCTS_DIR; };
-		94FC42260E9D41DB00A3B54D /* LegendPrintView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LegendPrintView.h; sourceTree = "<group>"; };
-		94FC42270E9D41DB00A3B54D /* LegendPrintView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LegendPrintView.m; sourceTree = "<group>"; };
+		94FC42270E9D41DB00A3B54D /* LegendPrintView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegendPrintView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -245,24 +240,19 @@
 				94028B830E67C323001CD6B0 /* InspectorPanelController.m */,
 				94028B860E67C32F001CD6B0 /* PESDocument.h */,
 				94028B870E67C32F001CD6B0 /* PESDocument.m */,
-				94FC42260E9D41DB00A3B54D /* LegendPrintView.h */,
-				94FC42270E9D41DB00A3B54D /* LegendPrintView.m */,
-				94A2F8B20E9FDEC200C29361 /* NoDividerSplitView.h */,
-				94A2F8B30E9FDEC200C29361 /* NoDividerSplitView.m */,
-				94C3C1A00000000000000001 /* CenteringClipView.h */,
-				94C3C1A00000000000000002 /* CenteringClipView.m */,
-				94C3C1A00000000000000031 /* PrintHeaderView.h */,
-				94C3C1A00000000000000032 /* PrintHeaderView.m */,
+				94FC42270E9D41DB00A3B54D /* LegendPrintView.swift */,
+				94A2F8B30E9FDEC200C29361 /* NoDividerSplitView.swift */,
+				94C3C1A00000000000000002 /* CenteringClipView.swift */,
+				94C3C1A00000000000000032 /* PrintHeaderView.swift */,
 				94C3C1A00000000000000021 /* PrintScaleAccessoryController.h */,
 				94C3C1A00000000000000022 /* PrintScaleAccessoryController.m */,
 				94C3C1A00000000000000041 /* SettingsWindowController.h */,
+				94C3C1A00000000000000071 /* Needle Works-Bridging-Header.h */,
 				94C3C1A00000000000000042 /* SettingsWindowController.m */,
 				94C3C1A00000000000000051 /* FabricColorPopUpButton.h */,
 				94C3C1A00000000000000052 /* FabricColorPopUpButton.m */,
-				94C3C1A00000000000000011 /* PrintLayoutSplitView.h */,
-				94C3C1A00000000000000012 /* PrintLayoutSplitView.m */,
-				94C97FCE0E96D7590090FD3B /* PrintView.h */,
-				94C97FCF0E96D7590090FD3B /* PrintView.m */,
+				94C3C1A00000000000000012 /* PrintLayoutSplitView.swift */,
+				94C97FCF0E96D7590090FD3B /* PrintView.swift */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -510,15 +500,15 @@
 				94028B820E67C314001CD6B0 /* DesignView.m in Sources */,
 				94028B850E67C323001CD6B0 /* InspectorPanelController.m in Sources */,
 				94028B880E67C32F001CD6B0 /* PESDocument.m in Sources */,
-				94C97FD00E96D7590090FD3B /* PrintView.m in Sources */,
-				94FC42280E9D41DB00A3B54D /* LegendPrintView.m in Sources */,
-				94A2F8B40E9FDEC200C29361 /* NoDividerSplitView.m in Sources */,
-				94C3C1A00000000000000003 /* CenteringClipView.m in Sources */,
-				94C3C1A00000000000000033 /* PrintHeaderView.m in Sources */,
+				94C97FD00E96D7590090FD3B /* PrintView.swift in Sources */,
+				94FC42280E9D41DB00A3B54D /* LegendPrintView.swift in Sources */,
+				94A2F8B40E9FDEC200C29361 /* NoDividerSplitView.swift in Sources */,
+				94C3C1A00000000000000003 /* CenteringClipView.swift in Sources */,
+				94C3C1A00000000000000033 /* PrintHeaderView.swift in Sources */,
 				94C3C1A00000000000000023 /* PrintScaleAccessoryController.m in Sources */,
 				94C3C1A00000000000000043 /* SettingsWindowController.m in Sources */,
 				94C3C1A00000000000000053 /* FabricColorPopUpButton.m in Sources */,
-				94C3C1A00000000000000013 /* PrintLayoutSplitView.m in Sources */,
+				94C3C1A00000000000000013 /* PrintLayoutSplitView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1124,6 +1114,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.spacecoaster.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "Needle Works";
+				SWIFT_OBJC_BRIDGING_HEADER = "Needle Works-Bridging-Header.h";
+				SWIFT_VERSION = 6.0;
 			};
 			name = Debug;
 		};
@@ -1144,6 +1136,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.spacecoaster.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "Needle Works";
+				SWIFT_OBJC_BRIDGING_HEADER = "Needle Works-Bridging-Header.h";
+				SWIFT_VERSION = 6.0;
 			};
 			name = Release;
 		};

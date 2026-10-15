@@ -1,8 +1,8 @@
 //
-//  CenteringClipView.h
+//  NoDividerSplitView.swift
 //  Needle Works
 //
-//  Copyright 2026 Ryan Lovett <ryan@spacecoaster.org>. All rights reserved.
+//  Copyright 2008 Ryan Lovett <ryan@spacecoaster.org>. All rights reserved.
 //  
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -19,10 +19,13 @@
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 //  02111-1307, USA.
 
-#import <Cocoa/Cocoa.h>
 
-/* A clip view that centers its document view when the document is smaller
- than the visible area, instead of pinning it to the bottom-left corner. */
-@interface CenteringClipView : NSClipView
+import AppKit
 
-@end
+/// A split view with no divider, for laying out the printed page.
+@objc(NoDividerSplitView)
+final class NoDividerSplitView: NSSplitView {
+	override var dividerThickness: CGFloat {
+		0
+	}
+}
