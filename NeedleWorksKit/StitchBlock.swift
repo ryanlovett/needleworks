@@ -32,9 +32,20 @@ public final class StitchBlock: NSObject {
 	/// no colors.
 	@objc public let colorIndex: Int
 
+	/// A color that isn't in the PEC palette, for tools built with the kit's
+	/// sources, such as the icon generator
+	private let customColor: NSColor?
+
 	public init(stitches: [Stitch], colorIndex: Int) {
 		self.stitches = stitches
 		self.colorIndex = colorIndex
+		self.customColor = nil
+	}
+
+	init(stitches: [Stitch], color: NSColor) {
+		self.stitches = stitches
+		self.colorIndex = 0
+		self.customColor = color
 	}
 
 	@objc public var numStitches: Int {
@@ -46,6 +57,9 @@ public final class StitchBlock: NSObject {
 	}
 
 	@objc public var color: NSColor {
+		if let customColor {
+			return customColor
+		}
 		guard let thread else {
 			return .black
 		}

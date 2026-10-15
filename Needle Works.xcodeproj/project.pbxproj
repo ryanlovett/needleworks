@@ -17,6 +17,7 @@
 		94028B960E67C3E5001CD6B0 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 94028B940E67C3E5001CD6B0 /* MainMenu.xib */; };
 		94028B990E67C3F0001CD6B0 /* PESDocument.xib in Resources */ = {isa = PBXBuildFile; fileRef = 94028B970E67C3F0001CD6B0 /* PESDocument.xib */; };
 		94028CC20E6BB060001CD6B0 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 94028CC00E6BB060001CD6B0 /* Credits.rtf */; };
+		94C3C1A00000000000000062 /* AppIcon.icns in Resources */ = {isa = PBXBuildFile; fileRef = 94C3C1A00000000000000061 /* AppIcon.icns */; };
 		94A2F8B40E9FDEC200C29361 /* NoDividerSplitView.m in Sources */ = {isa = PBXBuildFile; fileRef = 94A2F8B30E9FDEC200C29361 /* NoDividerSplitView.m */; };
 		94C3C1A00000000000000003 /* CenteringClipView.m in Sources */ = {isa = PBXBuildFile; fileRef = 94C3C1A00000000000000002 /* CenteringClipView.m */; };
 		94C3C1A00000000000000033 /* PrintHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 94C3C1A00000000000000032 /* PrintHeaderView.m */; };
@@ -87,6 +88,7 @@
 		94028B860E67C32F001CD6B0 /* PESDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PESDocument.h; sourceTree = "<group>"; };
 		94028B870E67C32F001CD6B0 /* PESDocument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PESDocument.m; sourceTree = "<group>"; };
 		94028CC10E6BB060001CD6B0 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = en; path = en.lproj/Credits.rtf; sourceTree = "<group>"; };
+		94C3C1A00000000000000061 /* AppIcon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = AppIcon.icns; sourceTree = "<group>"; };
 		94028CDD0E6BB13B001CD6B0 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		94930B312251FA3700121BDB /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		94930B322251FAA000121BDB /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/PESDocument.xib; sourceTree = "<group>"; };
@@ -277,6 +279,7 @@
 			isa = PBXGroup;
 			children = (
 				94028CC00E6BB060001CD6B0 /* Credits.rtf */,
+				94C3C1A00000000000000061 /* AppIcon.icns */,
 				94028CDD0E6BB13B001CD6B0 /* Info.plist */,
 				94028B970E67C3F0001CD6B0 /* PESDocument.xib */,
 				94028B940E67C3E5001CD6B0 /* MainMenu.xib */,
@@ -470,6 +473,7 @@
 				94028B960E67C3E5001CD6B0 /* MainMenu.xib in Resources */,
 				94028B990E67C3F0001CD6B0 /* PESDocument.xib in Resources */,
 				94028CC20E6BB060001CD6B0 /* Credits.rtf in Resources */,
+				94C3C1A00000000000000062 /* AppIcon.icns in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
