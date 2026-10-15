@@ -1,5 +1,5 @@
 //
-//  main.m
+//  main.swift
 //  Needle Works
 //
 //  Copyright 2008 Ryan Lovett <ryan@spacecoaster.org>. All rights reserved.
@@ -19,9 +19,7 @@
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 //  02111-1307, USA.
 
-#import <Cocoa/Cocoa.h>
 
-int main(int argc, char *argv[])
-{
-    return NSApplicationMain(argc, (const char **) argv);
-}
+import AppKit
+
+_ = NSApplicationMain(CommandLine.argc, CommandLine.unsafeArgv)

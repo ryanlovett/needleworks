@@ -43,11 +43,11 @@ final class DesignView: NSView {
 		var fabricTexture: Bool
 
 		@MainActor init(_ doc: PESDocument) {
-			style = doc.stitchStyle()
-			showJumpStitches = doc.showJumpStitches()
-			lineWidth = doc.lineWidth()
-			fabricColor = doc.fabricColor()
-			fabricTexture = doc.showsFabricTexture()
+			style = doc.stitchStyle
+			showJumpStitches = doc.showJumpStitches
+			lineWidth = doc.lineWidth
+			fabricColor = doc.fabricColor
+			fabricTexture = doc.showsFabricTexture
 		}
 	}
 
@@ -115,7 +115,7 @@ final class DesignView: NSView {
 	}
 
 	private var stitchBlocks: [StitchBlock] {
-		delegate?.stitchBlocks() as? [StitchBlock] ?? []
+		delegate?.stitchBlocks ?? []
 	}
 
 	override func draw(_ rect: NSRect) {

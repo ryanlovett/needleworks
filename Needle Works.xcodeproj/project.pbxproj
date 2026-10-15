@@ -7,12 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		8D15AC320486D014006FF6A4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A37F4B0FDCFA73011CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
+		8D15AC320486D014006FF6A4 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A37F4B0FDCFA73011CA2CEA /* main.swift */; settings = {ATTRIBUTES = (); }; };
 		8D15AC340486D014006FF6A4 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A7FEA54F5311CA2CBB /* Cocoa.framework */; };
 		94028B7F0E67C308001CD6B0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94028B7D0E67C308001CD6B0 /* AppDelegate.swift */; };
 		94028B820E67C314001CD6B0 /* DesignView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94028B800E67C314001CD6B0 /* DesignView.swift */; };
 		94028B850E67C323001CD6B0 /* InspectorPanelController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94028B830E67C323001CD6B0 /* InspectorPanelController.swift */; };
-		94028B880E67C32F001CD6B0 /* PESDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 94028B870E67C32F001CD6B0 /* PESDocument.m */; };
+		94028B880E67C32F001CD6B0 /* PESDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94028B870E67C32F001CD6B0 /* PESDocument.swift */; };
 		94028B930E67C3D9001CD6B0 /* InspectorPanel.xib in Resources */ = {isa = PBXBuildFile; fileRef = 94028B910E67C3D9001CD6B0 /* InspectorPanel.xib */; };
 		94028B960E67C3E5001CD6B0 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 94028B940E67C3E5001CD6B0 /* MainMenu.xib */; };
 		94028B990E67C3F0001CD6B0 /* PESDocument.xib in Resources */ = {isa = PBXBuildFile; fileRef = 94028B970E67C3F0001CD6B0 /* PESDocument.xib */; };
@@ -75,15 +75,14 @@
 /* Begin PBXFileReference section */
 		1058C7A7FEA54F5311CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
 		13E42FBA07B3F13500E4EEF1 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = /System/Library/Frameworks/CoreData.framework; sourceTree = "<absolute>"; };
-		2A37F4B0FDCFA73011CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		2A37F4B0FDCFA73011CA2CEA /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		2A37F4C4FDCFA73011CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		2A37F4C5FDCFA73011CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		8D15AC370486D014006FF6A4 /* Needle Works.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Needle Works.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		94028B7D0E67C308001CD6B0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		94028B800E67C314001CD6B0 /* DesignView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignView.swift; sourceTree = "<group>"; };
 		94028B830E67C323001CD6B0 /* InspectorPanelController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InspectorPanelController.swift; sourceTree = "<group>"; };
-		94028B860E67C32F001CD6B0 /* PESDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PESDocument.h; sourceTree = "<group>"; };
-		94028B870E67C32F001CD6B0 /* PESDocument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PESDocument.m; sourceTree = "<group>"; };
+		94028B870E67C32F001CD6B0 /* PESDocument.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PESDocument.swift; sourceTree = "<group>"; };
 		94028CC10E6BB060001CD6B0 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = en; path = en.lproj/Credits.rtf; sourceTree = "<group>"; };
 		94C3C1A00000000000000061 /* AppIcon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = AppIcon.icns; sourceTree = "<group>"; };
 		94028CDD0E6BB13B001CD6B0 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -94,7 +93,6 @@
 		94C3C1A00000000000000002 /* CenteringClipView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CenteringClipView.swift; sourceTree = "<group>"; };
 		94C3C1A00000000000000032 /* PrintHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrintHeaderView.swift; sourceTree = "<group>"; };
 		94C3C1A00000000000000022 /* PrintScaleAccessoryController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrintScaleAccessoryController.swift; sourceTree = "<group>"; };
-		94C3C1A00000000000000071 /* Needle Works-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Needle Works-Bridging-Header.h"; sourceTree = "<group>"; };
 		94C3C1A00000000000000042 /* SettingsWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsWindowController.swift; sourceTree = "<group>"; };
 		94C3C1A00000000000000052 /* FabricColorPopUpButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FabricColorPopUpButton.swift; sourceTree = "<group>"; };
 		94C3C1A00000000000000012 /* PrintLayoutSplitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrintLayoutSplitView.swift; sourceTree = "<group>"; };
@@ -229,14 +227,12 @@
 				94028B7D0E67C308001CD6B0 /* AppDelegate.swift */,
 				94028B800E67C314001CD6B0 /* DesignView.swift */,
 				94028B830E67C323001CD6B0 /* InspectorPanelController.swift */,
-				94028B860E67C32F001CD6B0 /* PESDocument.h */,
-				94028B870E67C32F001CD6B0 /* PESDocument.m */,
+				94028B870E67C32F001CD6B0 /* PESDocument.swift */,
 				94FC42270E9D41DB00A3B54D /* LegendPrintView.swift */,
 				94A2F8B30E9FDEC200C29361 /* NoDividerSplitView.swift */,
 				94C3C1A00000000000000002 /* CenteringClipView.swift */,
 				94C3C1A00000000000000032 /* PrintHeaderView.swift */,
 				94C3C1A00000000000000022 /* PrintScaleAccessoryController.swift */,
-				94C3C1A00000000000000071 /* Needle Works-Bridging-Header.h */,
 				94C3C1A00000000000000042 /* SettingsWindowController.swift */,
 				94C3C1A00000000000000052 /* FabricColorPopUpButton.swift */,
 				94C3C1A00000000000000012 /* PrintLayoutSplitView.swift */,
@@ -248,7 +244,7 @@
 		2A37F4AFFDCFA73011CA2CEA /* Other Sources */ = {
 			isa = PBXGroup;
 			children = (
-				2A37F4B0FDCFA73011CA2CEA /* main.m */,
+				2A37F4B0FDCFA73011CA2CEA /* main.swift */,
 			);
 			name = "Other Sources";
 			sourceTree = "<group>";
@@ -483,11 +479,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8D15AC320486D014006FF6A4 /* main.m in Sources */,
+				8D15AC320486D014006FF6A4 /* main.swift in Sources */,
 				94028B7F0E67C308001CD6B0 /* AppDelegate.swift in Sources */,
 				94028B820E67C314001CD6B0 /* DesignView.swift in Sources */,
 				94028B850E67C323001CD6B0 /* InspectorPanelController.swift in Sources */,
-				94028B880E67C32F001CD6B0 /* PESDocument.m in Sources */,
+				94028B880E67C32F001CD6B0 /* PESDocument.swift in Sources */,
 				94C97FD00E96D7590090FD3B /* PrintView.swift in Sources */,
 				94FC42280E9D41DB00A3B54D /* LegendPrintView.swift in Sources */,
 				94A2F8B40E9FDEC200C29361 /* NoDividerSplitView.swift in Sources */,
@@ -1102,7 +1098,6 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.spacecoaster.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "Needle Works";
-				SWIFT_OBJC_BRIDGING_HEADER = "Needle Works-Bridging-Header.h";
 				SWIFT_VERSION = 6.0;
 			};
 			name = Debug;
@@ -1124,7 +1119,6 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.spacecoaster.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "Needle Works";
-				SWIFT_OBJC_BRIDGING_HEADER = "Needle Works-Bridging-Header.h";
 				SWIFT_VERSION = 6.0;
 			};
 			name = Release;
@@ -1163,11 +1157,6 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(DEVELOPER_DIR)/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/$(PLATFORM_NAME)",
-					"$(SDKROOT)/usr/lib/swift",
-				);
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				MARKETING_VERSION = 0.7.0;
 				ONLY_ACTIVE_ARCH = YES;
@@ -1207,11 +1196,6 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(DEVELOPER_DIR)/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/$(PLATFORM_NAME)",
-					"$(SDKROOT)/usr/lib/swift",
-				);
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				MARKETING_VERSION = 0.7.0;
 				SDKROOT = macosx;

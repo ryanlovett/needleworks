@@ -32,7 +32,7 @@ final class PrintView: NSView {
 		guard let doc = delegate else {
 			return
 		}
-		PESRenderer.draw(doc.stitchBlocks() as? [StitchBlock] ?? [], lineWidth: doc.printLineWidth(), showJumpStitches: doc.showJumpStitches())
+		PESRenderer.draw(doc.stitchBlocks, lineWidth: doc.printLineWidth, showJumpStitches: doc.showJumpStitches)
 	}
 
 	/* http://developer.apple.com/documentation/Cocoa/Conceptual/CocoaViewsGuide/Optimizing/chapter_8_section_7.html */

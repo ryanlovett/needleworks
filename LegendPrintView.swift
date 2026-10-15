@@ -40,7 +40,7 @@ final class LegendPrintView: NSView {
 		let attributes: [NSAttributedString.Key: Any] = [.foregroundColor: NSColor.black,
 														 .font: NSFont.systemFont(ofSize: textHeight)]
 
-		for stitchBlock in doc.stitchBlocks() as? [StitchBlock] ?? [] {
+		for stitchBlock in doc.stitchBlocks {
 			/* A generic label for colors that aren't in the PEC palette */
 			let label = stitchBlock.threadName ?? String(format: NSLocalizedString("Color %lu", comment: "Legend label for a thread color with no name"), stitchBlock.colorIndex)
 

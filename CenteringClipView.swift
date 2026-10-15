@@ -46,7 +46,7 @@ final class CenteringClipView: NSClipView {
 	/// Around the design, show the same woven fabric as under it, lined up
 	/// with the design so the two join without a seam
 	override func draw(_ dirtyRect: NSRect) {
-		guard let designView = documentView as? DesignView, let doc = designView.delegate, doc.showsFabricTexture() else {
+		guard let designView = documentView as? DesignView, let doc = designView.delegate, doc.showsFabricTexture else {
 			super.draw(dirtyRect)
 			return
 		}
@@ -62,7 +62,7 @@ final class CenteringClipView: NSClipView {
 
 		NSGraphicsContext.saveGraphicsState()
 		transform.concat()
-		PESRenderer.drawFabric(doc.fabricColor(), texture: true, in: convert(dirtyRect, to: designView))
+		PESRenderer.drawFabric(doc.fabricColor, texture: true, in: convert(dirtyRect, to: designView))
 		NSGraphicsContext.restoreGraphicsState()
 	}
 }
