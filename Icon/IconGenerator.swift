@@ -451,8 +451,8 @@ func drawIcon(stitches: [(CGPoint, CGPoint)]) -> CGImage {
 	let block = StitchBlock(stitches: kitStitches, color: NSColor(cgColor: srgb(threadColor))!)
 	let designRect = CGRect(x: -hoopInnerRadius / pixelsPerUnit, y: -hoopInnerRadius / pixelsPerUnit,
 							width: 2 * hoopInnerRadius / pixelsPerUnit, height: 2 * hoopInnerRadius / pixelsPerUnit)
-	guard let renderer = RealisticRenderer.shared,
-		  let thread = renderer.image(of: [block], showJumpStitches: false, rect: designRect,
+	guard let renderer = ThreadRenderer.shared,
+		  let thread = renderer.image(of: [block], style: .realistic, showJumpStitches: false, rect: designRect,
 									  pixelsWide: Int(inner.width), pixelsHigh: Int(inner.height)) else {
 		fatalError("Can't draw Realistic thread on this Mac")
 	}

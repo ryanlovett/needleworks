@@ -1,19 +1,23 @@
 //
-//  RealisticRenderer.swift
+//  ThreadRenderer.swift
 //  NeedleWorksKit
 //
 
 import AppKit
 import Metal
 
-/// Draws stitches as realistic thread on the GPU, for the Realistic style.
-final class RealisticRenderer: @unchecked Sendable {
+/// Draws stitches as thread on the GPU, for the Shaded and Realistic styles.
+final class ThreadRenderer: @unchecked Sendable {
 	/// The renderer, or nil if this Mac can't run it.
-	static let shared = RealisticRenderer()
+	static let shared = ThreadRenderer()
 
 	private let device: MTLDevice
 	private let queue: MTLCommandQueue
-	private let pipeline: MTLRenderPipelineState
+
+	/// Realistic works in linear light and draws into an sRGB texture. Shaded
+	/// works in sRGB and blends there, as Core Graphics does.
+	private let realisticPipeline: MTLRenderPipelineState
+	private let shadedPipeline: MTLRenderPipelineState
 
 	private struct StitchData {
 		var ab: SIMD4<Float>		/* start and end, in design units */
@@ -31,40 +35,44 @@ final class RealisticRenderer: @unchecked Sendable {
 	private init?() {
 		guard let device = MTLCreateSystemDefaultDevice(),
 			  let queue = device.makeCommandQueue(),
-			  let library = try? device.makeLibrary(source: realisticShaderSource, options: nil) else {
+			  let library = try? device.makeLibrary(source: threadShaderSource, options: nil),
+			  let realisticPipeline = Self.pipeline(device, library, vertex: "stitchVertex", fragment: "stitchFragment", format: .rgba8Unorm_srgb),
+			  let shadedPipeline = Self.pipeline(device, library, vertex: "shadedVertex", fragment: "shadedFragment", format: .rgba8Unorm) else {
 			return nil
 		}
+		self.device = device
+		self.queue = queue
+		self.realisticPipeline = realisticPipeline
+		self.shadedPipeline = shadedPipeline
+	}
 
+	private static func pipeline(_ device: MTLDevice, _ library: MTLLibrary, vertex: String, fragment: String, format: MTLPixelFormat) -> MTLRenderPipelineState? {
 		let descriptor = MTLRenderPipelineDescriptor()
-		descriptor.vertexFunction = library.makeFunction(name: "stitchVertex")
-		descriptor.fragmentFunction = library.makeFunction(name: "stitchFragment")
+		descriptor.vertexFunction = library.makeFunction(name: vertex)
+		descriptor.fragmentFunction = library.makeFunction(name: fragment)
 		let attachment = descriptor.colorAttachments[0]!
-		attachment.pixelFormat = .rgba8Unorm_srgb
-		/* The shader returns premultiplied colors */
+		attachment.pixelFormat = format
+		/* The shaders return premultiplied colors */
 		attachment.isBlendingEnabled = true
 		attachment.sourceRGBBlendFactor = .one
 		attachment.destinationRGBBlendFactor = .oneMinusSourceAlpha
 		attachment.sourceAlphaBlendFactor = .one
 		attachment.destinationAlphaBlendFactor = .oneMinusSourceAlpha
-		guard let pipeline = try? device.makeRenderPipelineState(descriptor: descriptor) else {
-			return nil
-		}
-
-		self.device = device
-		self.queue = queue
-		self.pipeline = pipeline
+		return try? device.makeRenderPipelineState(descriptor: descriptor)
 	}
 
 	/// An image of the thread in `rect`, in design units, `pixelsWide` by
 	/// `pixelsHigh`, on a transparent background, with the top of the design
-	/// at the top of the image.
-	func image(of stitchBlocks: [StitchBlock], showJumpStitches: Bool, rect: CGRect, pixelsWide: Int, pixelsHigh: Int) -> CGImage? {
+	/// at the top of the image, in the Shaded or Realistic style.
+	func image(of stitchBlocks: [StitchBlock], style: StitchStyle, showJumpStitches: Bool, rect: CGRect, pixelsWide: Int, pixelsHigh: Int) -> CGImage? {
+		let shaded = style == .shaded
 		let limit = device.supportsFamily(.apple3) || device.supportsFamily(.mac2) ? 16384 : 8192
 		guard pixelsWide > 0, pixelsHigh > 0, pixelsWide <= limit, pixelsHigh <= limit else {
 			return nil
 		}
 
-		let textureDescriptor = MTLTextureDescriptor.texture2DDescriptor(pixelFormat: .rgba8Unorm_srgb, width: pixelsWide, height: pixelsHigh, mipmapped: false)
+		let textureDescriptor = MTLTextureDescriptor.texture2DDescriptor(pixelFormat: shaded ? .rgba8Unorm : .rgba8Unorm_srgb,
+																		 width: pixelsWide, height: pixelsHigh, mipmapped: false)
 		textureDescriptor.usage = [.renderTarget]
 		textureDescriptor.storageMode = .shared
 		guard let target = device.makeTexture(descriptor: textureDescriptor) else {
@@ -82,12 +90,13 @@ final class RealisticRenderer: @unchecked Sendable {
 			return nil
 		}
 
-		let stitches = Self.stitchData(stitchBlocks, showJumpStitches: showJumpStitches)
+		let stitches = shaded ? Self.shadedStitchData(stitchBlocks, showJumpStitches: showJumpStitches)
+							  : Self.stitchData(stitchBlocks, showJumpStitches: showJumpStitches)
 		if !stitches.isEmpty, let buffer = device.makeBuffer(bytes: stitches, length: MemoryLayout<StitchData>.stride * stitches.count, options: .storageModeShared) {
 			var uniforms = Uniforms(origin: SIMD2(Float(rect.minX), Float(rect.minY)),
 									size: SIMD2(Float(rect.width), Float(rect.height)),
 									pixelsPerUnit: Float(CGFloat(pixelsWide) / rect.width))
-			encoder.setRenderPipelineState(pipeline)
+			encoder.setRenderPipelineState(shaded ? shadedPipeline : realisticPipeline)
 			encoder.setVertexBuffer(buffer, offset: 0, index: 0)
 			encoder.setVertexBytes(&uniforms, length: MemoryLayout<Uniforms>.stride, index: 1)
 			encoder.drawPrimitives(type: .triangle, vertexStart: 0, vertexCount: 12, instanceCount: stitches.count)
@@ -125,6 +134,25 @@ final class RealisticRenderer: @unchecked Sendable {
 				let a = wander(stitch.start), b = wander(stitch.end)
 				data.append(StitchData(ab: SIMD4(a.x, a.y, b.x, b.y), color: color,
 									   params: SIMD4(width, Float(i % 997) + Float(blockIndex) * 0.37, tone, phase)))
+			}
+		}
+		return data
+	}
+
+	/// Shaded's stitches: each where it was sewn, 0.4 mm wide, in its sRGB
+	/// color. Jumps and trims are loose strands, drawn only when shown.
+	private static func shadedStitchData(_ stitchBlocks: [StitchBlock], showJumpStitches: Bool) -> [StitchData] {
+		var data: [StitchData] = []
+		for stitchBlock in stitchBlocks {
+			let srgb = stitchBlock.color.usingColorSpace(.sRGB)
+			let color = SIMD4(Float(srgb?.redComponent ?? 0), Float(srgb?.greenComponent ?? 0), Float(srgb?.blueComponent ?? 0), 1)
+			for (i, stitch) in stitchBlock.stitches.enumerated() {
+				/* A block's first stitch carries the thread from the last block */
+				guard i > 0, stitch.type == .normal || showJumpStitches else {
+					continue
+				}
+				data.append(StitchData(ab: SIMD4(Float(stitch.start.x), Float(stitch.start.y), Float(stitch.end.x), Float(stitch.end.y)),
+									   color: color, params: SIMD4(Float(ShadedRenderer.threadWidth), 0, stitch.type == .normal ? 0 : 1, 0)))
 			}
 		}
 		return data

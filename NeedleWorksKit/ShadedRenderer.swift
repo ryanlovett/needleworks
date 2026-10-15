@@ -6,7 +6,10 @@
 import AppKit
 import simd
 
-/// Draws stitches as round thread at its real width, lit from the top left.
+/// Draws stitches as round thread at its real width, lit from the top left,
+/// with Core Graphics. The Shaded style is drawn on the GPU (see
+/// ThreadShaders); this draws it on a Mac without Metal, or an area too big
+/// for the GPU.
 ///
 /// Each stitch is a capsule with a faint shadow, shaded across its width so
 /// it looks round, and darker at the ends where it goes into the fabric. How

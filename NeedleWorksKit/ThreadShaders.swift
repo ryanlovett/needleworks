@@ -1,24 +1,32 @@
 //
-//  RealisticShaders.swift
+//  ThreadShaders.swift
 //  NeedleWorksKit
 //
 
-/// The Metal shaders for the Realistic style, compiled when first used.
+/// The Metal shaders for the Shaded and Realistic styles, compiled when first
+/// used.
 ///
-/// Each stitch is drawn as two quads: a soft shadow, then the thread. The
-/// fragment shader models the thread itself: slightly flattened and round
-/// across its width, sinking into the fabric at its ends, two plies twisted
-/// at a shallow angle, and fibres along them that reflect light along their
-/// length (Kajiya-Kay), with glints that vary along each fibre. Each stitch
-/// also wanders and varies in thickness a little, and its fibres end raggedly.
-let realisticShaderSource = """
+/// Each stitch is drawn as two quads: a soft shadow, then the thread.
+///
+/// Realistic's fragment shader models the thread itself: slightly flattened
+/// and round across its width, sinking into the fabric at its ends, two plies
+/// twisted at a shallow angle, and fibres along them that reflect light along
+/// their length (Kajiya-Kay), with glints that vary along each fibre. Each
+/// stitch also wanders and varies in thickness a little, and its fibres end
+/// raggedly. It works in linear light.
+///
+/// Shaded's is simpler: a smooth round thread, lit by its direction, with
+/// darker ends and a faint shadow. It works in sRGB, as Core Graphics does, so
+/// it looks as the Core Graphics version it replaced did.
+let threadShaderSource = """
 #include <metal_stdlib>
 using namespace metal;
 
 struct StitchData {
     float4 ab;      // start.xy, end.xy in design units (y down)
-    float4 color;   // linear rgb
-    float4 params;  // width, seed, tone, twist phase
+    float4 color;   // Realistic: linear rgb; Shaded: sRGB
+    float4 params;  // Realistic: width, seed, tone, twist phase
+                    // Shaded: width, unused, 1 for a loose strand, unused
 };
 
 struct Uniforms {
@@ -60,6 +68,42 @@ vertex VOut stitchVertex(uint vid [[vertex_id]], uint iid [[instance_id]],
     float acrossPos = (c & 2) ? pad : -pad;
     float2 p = a + dir * alongPos + across * acrossPos;
     if (shadow) { p += float2(0.7, 0.7); }
+    float2 ndc = (p - u.origin) / u.size * 2.0 - 1.0;
+    VOut o;
+    o.position = float4(ndc.x, -ndc.y, 0, 1);
+    o.local = float2(alongPos, acrossPos);
+    o.length = len;
+    o.radius = r;
+    o.dir = dir;
+    o.color = s.color;
+    o.params = s.params;
+    o.shadow = shadow;
+    return o;
+}
+
+// Shaded's quads are the same, with its shadow a little closer. (Its own
+// copy, so Realistic's compiled shader, and the icon drawn with it, stay as
+// they were.)
+vertex VOut shadedVertex(uint vid [[vertex_id]], uint iid [[instance_id]],
+                         const device StitchData *stitches [[buffer(0)]],
+                         constant Uniforms &u [[buffer(1)]]) {
+    StitchData s = stitches[iid];
+    float2 a = s.ab.xy, b = s.ab.zw;
+    float2 d = b - a;
+    float len = max(length(d), 0.5);
+    float2 dir = d / len;
+    float2 across = float2(-dir.y, dir.x);
+    float r = s.params.x * 0.5;
+    uint shadow = vid < 6 ? 1 : 0;
+    uint corner = vid % 6;
+    // two triangles: (0,1,2) (2,1,3)
+    const uint ids[6] = {0, 1, 2, 2, 1, 3};
+    uint c = ids[corner];
+    float pad = r * 1.6;
+    float alongPos = (c & 1) ? len + pad : -pad;
+    float acrossPos = (c & 2) ? pad : -pad;
+    float2 p = a + dir * alongPos + across * acrossPos;
+    if (shadow) { p += float2(0.6, 0.6); }
     float2 ndc = (p - u.origin) / u.size * 2.0 - 1.0;
     VOut o;
     o.position = float4(ndc.x, -ndc.y, 0, 1);
@@ -202,6 +246,76 @@ fragment float4 stitchFragment(VOut in [[stage_in]]) {
     float3 specColor = mix(float3(1.0), base / max(max(base.r, base.g), max(base.b, 1e-3)), 0.15);
     float3 sheenColor = mix(base, specColor * 0.35, 0.5);
     color += (specColor * spec * 0.65 + sheenColor * sheen) * mix(0.7, 1.0, groove) * ends * edge;
+    return float4(color * coverage, coverage);
+}
+
+// Shaded: a round thread at its real width, lit from the top left.
+//
+// The thread is a capsule with elliptical ends, shaded across its width with
+// five colors, as a Core Graphics gradient would, and darker at the ends
+// where it goes into the fabric. How bright it is depends on its direction,
+// as with real thread, whose fibers reflect light along their length
+// (Kajiya-Kay shading). Jumps and trims are thin flat strands.
+
+// Darkens the color for k < 1, and blends it toward white for k > 1
+static float3 shade(float3 c, float k) {
+    return k <= 1.0 ? c * k : c + (1.0 - c) * min(k - 1.0, 1.0);
+}
+
+fragment float4 shadedFragment(VOut in [[stage_in]]) {
+    float L = in.length, r = in.radius;
+    float u = in.local.x, w = in.local.y;
+    bool strand = in.params.z > 0.5;
+
+    if (strand) {
+        // A loose thread: a thin line with round ends, and no shadow
+        if (in.shadow) { discard_fragment(); }
+        float rs = r * 0.3;
+        float dist = length(float2(u - clamp(u, 0.0, L), w)) / rs;
+        float coverage = saturate((1.0 - dist) / max(fwidth(dist), 1e-4) + 0.5);
+        if (coverage <= 0.0) { discard_fragment(); }
+        return float4(shade(in.color.rgb, 0.8) * coverage, coverage);
+    }
+
+    // The capsule's ends are half ellipses, 0.6 of the radius long
+    float dist = length(float2((u - clamp(u, 0.0, L)) / (r * 0.6), w / r));
+    float coverage = saturate((1.0 - dist) / max(fwidth(dist), 1e-4) + 0.5);
+    if (coverage <= 0.0) { discard_fragment(); }
+
+    if (in.shadow) {
+        return float4(0, 0, 0, 0.22 * coverage);
+    }
+
+    // Light from the top left (y down) and above
+    float3 light = normalize(float3(-1.0, -1.0, 1.4));
+    float3 halfway = normalize(light + float3(0, 0, 1));
+    float3 t = float3(in.dir, 0);
+    float tl = dot(t, light), th = dot(t, halfway);
+    float diffuse = sqrt(max(0.0, 1.0 - tl * tl));
+    float specular = pow(sqrt(max(0.0, 1.0 - th * th)), 40.0);
+    float base = 0.62 + 0.38 * diffuse;
+    float crown = base + 0.55 * specular + 0.08;
+
+    // Across the thread, from one edge to the other
+    float3 c = in.color.rgb;
+    float3 stops[5] = { shade(c, base * 0.55), shade(c, base * 0.92), shade(c, crown), shade(c, base * 0.92), shade(c, base * 0.5) };
+    float at[5] = { 0.0, 0.25, 0.45, 0.7, 1.0 };
+    float x = saturate((w / r + 1.0) * 0.5);
+    float3 color = stops[4];
+    for (int i = 0; i < 4; i++) {
+        if (x <= at[i + 1]) {
+            color = mix(stops[i], stops[i + 1], (x - at[i]) / (at[i + 1] - at[i]));
+            break;
+        }
+    }
+
+    // Darker where the thread goes into the fabric at each end
+    if (L > 3.0) {
+        float along = saturate((u + r * 0.6) / (L + r * 1.2));
+        float dark = 0.45 * max(0.0, max(1.0 - along / 0.3, (along - 0.7) / 0.3));
+        color *= 1.0 - dark;
+    }
+
     return float4(color * coverage, coverage);
 }
 """

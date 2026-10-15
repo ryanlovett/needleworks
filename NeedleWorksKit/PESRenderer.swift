@@ -22,7 +22,7 @@ public final class PESRenderer: NSObject {
 	/// Whether the renderer can draw in `style` yet.
 	@objc(canDrawStitchStyle:)
 	public class func canDraw(_ style: StitchStyle) -> Bool {
-		style != .realistic || RealisticRenderer.shared != nil
+		style != .realistic || ThreadRenderer.shared != nil
 	}
 
 	/// Fills `rect` with the fabric, as a woven texture if `fabricTexture`,
@@ -36,12 +36,12 @@ public final class PESRenderer: NSObject {
 			return
 		}
 
-		if style == .realistic, let renderer = RealisticRenderer.shared {
+		if let renderer = ThreadRenderer.shared {
 			/* Draw the thread on the GPU at the context's resolution, then lay
 			 * it over the fabric, flipped so the top of the image is at the
 			 * top of `rect` */
 			let pixels = context.convertToDeviceSpace(rect).integral
-			if let image = renderer.image(of: stitchBlocks, showJumpStitches: showJumpStitches,
+			if let image = renderer.image(of: stitchBlocks, style: style, showJumpStitches: showJumpStitches,
 										  rect: rect, pixelsWide: Int(pixels.width), pixelsHigh: Int(pixels.height)) {
 				context.saveGState()
 				context.translateBy(x: 0, y: rect.minY + rect.maxY)
@@ -52,6 +52,8 @@ public final class PESRenderer: NSObject {
 			}
 		}
 
+		/* Without the GPU, or for an area too big for it, Shaded is drawn
+		 * with Core Graphics, and Realistic falls back to Shaded */
 		ShadedRenderer.draw(stitchBlocks, in: rect, context: context, showJumpStitches: showJumpStitches)
 	}
 
