@@ -10,7 +10,7 @@
 		8D15AC320486D014006FF6A4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A37F4B0FDCFA73011CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
 		8D15AC340486D014006FF6A4 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A7FEA54F5311CA2CBB /* Cocoa.framework */; };
 		94028B7F0E67C308001CD6B0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94028B7D0E67C308001CD6B0 /* AppDelegate.swift */; };
-		94028B820E67C314001CD6B0 /* DesignView.m in Sources */ = {isa = PBXBuildFile; fileRef = 94028B800E67C314001CD6B0 /* DesignView.m */; };
+		94028B820E67C314001CD6B0 /* DesignView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94028B800E67C314001CD6B0 /* DesignView.swift */; };
 		94028B850E67C323001CD6B0 /* InspectorPanelController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94028B830E67C323001CD6B0 /* InspectorPanelController.swift */; };
 		94028B880E67C32F001CD6B0 /* PESDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 94028B870E67C32F001CD6B0 /* PESDocument.m */; };
 		94028B930E67C3D9001CD6B0 /* InspectorPanel.xib in Resources */ = {isa = PBXBuildFile; fileRef = 94028B910E67C3D9001CD6B0 /* InspectorPanel.xib */; };
@@ -80,8 +80,7 @@
 		2A37F4C5FDCFA73011CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		8D15AC370486D014006FF6A4 /* Needle Works.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Needle Works.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		94028B7D0E67C308001CD6B0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		94028B800E67C314001CD6B0 /* DesignView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DesignView.m; sourceTree = "<group>"; };
-		94028B810E67C314001CD6B0 /* DesignView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DesignView.h; sourceTree = "<group>"; };
+		94028B800E67C314001CD6B0 /* DesignView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignView.swift; sourceTree = "<group>"; };
 		94028B830E67C323001CD6B0 /* InspectorPanelController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InspectorPanelController.swift; sourceTree = "<group>"; };
 		94028B860E67C32F001CD6B0 /* PESDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PESDocument.h; sourceTree = "<group>"; };
 		94028B870E67C32F001CD6B0 /* PESDocument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PESDocument.m; sourceTree = "<group>"; };
@@ -228,8 +227,7 @@
 			isa = PBXGroup;
 			children = (
 				94028B7D0E67C308001CD6B0 /* AppDelegate.swift */,
-				94028B810E67C314001CD6B0 /* DesignView.h */,
-				94028B800E67C314001CD6B0 /* DesignView.m */,
+				94028B800E67C314001CD6B0 /* DesignView.swift */,
 				94028B830E67C323001CD6B0 /* InspectorPanelController.swift */,
 				94028B860E67C32F001CD6B0 /* PESDocument.h */,
 				94028B870E67C32F001CD6B0 /* PESDocument.m */,
@@ -487,7 +485,7 @@
 			files = (
 				8D15AC320486D014006FF6A4 /* main.m in Sources */,
 				94028B7F0E67C308001CD6B0 /* AppDelegate.swift in Sources */,
-				94028B820E67C314001CD6B0 /* DesignView.m in Sources */,
+				94028B820E67C314001CD6B0 /* DesignView.swift in Sources */,
 				94028B850E67C323001CD6B0 /* InspectorPanelController.swift in Sources */,
 				94028B880E67C32F001CD6B0 /* PESDocument.m in Sources */,
 				94C97FD00E96D7590090FD3B /* PrintView.swift in Sources */,
