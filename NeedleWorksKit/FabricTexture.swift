@@ -22,8 +22,9 @@ final class FabricTexture: @unchecked Sendable {
 	private static let patchesAcross = 7
 
 	/// Smaller copies of the tile, each half the size of the last, are drawn
-	/// when zoomed out, as shrinking the full tile while drawing makes stripes
-	private static let tileLevels = 5
+	/// when zoomed out, as shrinking the full tile while drawing makes stripes.
+	/// The smallest has 1.5 pixels per design unit.
+	private static let tileLevels = 4
 
 	private let lock = NSLock()
 	private var tileColor: NSColor?
@@ -48,6 +49,12 @@ final class FabricTexture: @unchecked Sendable {
 		}
 		context.saveGState()
 		context.clip(to: rect)
+
+		/* Core Graphics can leave the odd pixel bare where tiles meet; this
+		 * shows the fabric's color there */
+		context.setFillColor(color.cgColor)
+		context.fill(rect)
+
 		context.interpolationQuality = .medium
 		context.draw(tile, in: CGRect(x: 0, y: 0, width: Self.tileSize, height: Self.tileSize), byTiling: true)
 		if let patches {
@@ -76,20 +83,37 @@ final class FabricTexture: @unchecked Sendable {
 		}
 		var tiles = [tile]
 		for _ in 1..<tileLevels {
-			let size = tile.width / 2
-			guard size > 0, let context = CGContext(data: nil, width: size, height: size, bitsPerComponent: 8, bytesPerRow: 0,
-													 space: CGColorSpace(name: CGColorSpace.sRGB)!, bitmapInfo: CGImageAlphaInfo.noneSkipLast.rawValue) else {
-				break
-			}
-			context.interpolationQuality = .high
-			context.draw(tile, in: CGRect(x: 0, y: 0, width: size, height: size))
-			guard let smaller = context.makeImage() else {
+			guard let smaller = halved(tile) else {
 				break
 			}
 			tiles.append(smaller)
 			tile = smaller
 		}
 		return tiles
+	}
+
+	/// `tile` at half its size. It's shrunk in the middle of a 3 × 3 grid of
+	/// itself, so its edges blend into the opposite ones as they do when it
+	/// repeats; shrunk alone, its edges would show as seams.
+	private static func halved(_ tile: CGImage) -> CGImage? {
+		let size = tile.width, half = size / 2
+		let space = CGColorSpace(name: CGColorSpace.sRGB)!, info = CGImageAlphaInfo.premultipliedLast.rawValue
+		guard size % 2 == 0,
+			  let grid = CGContext(data: nil, width: 3 * size, height: 3 * size, bitsPerComponent: 8, bytesPerRow: 0, space: space, bitmapInfo: info),
+			  let small = CGContext(data: nil, width: 3 * half, height: 3 * half, bitsPerComponent: 8, bytesPerRow: 0, space: space, bitmapInfo: info) else {
+			return nil
+		}
+		for i in 0..<3 {
+			for j in 0..<3 {
+				grid.draw(tile, in: CGRect(x: i * size, y: j * size, width: size, height: size))
+			}
+		}
+		guard let gridImage = grid.makeImage() else {
+			return nil
+		}
+		small.interpolationQuality = .high
+		small.draw(gridImage, in: CGRect(x: 0, y: 0, width: 3 * half, height: 3 * half))
+		return small.makeImage()?.cropping(to: CGRect(x: half, y: half, width: half, height: half))
 	}
 
 	/// Over and under threads in a checkerboard. Each thread is round, with
@@ -158,7 +182,7 @@ final class FabricTexture: @unchecked Sendable {
 			return nil
 		}
 		return CGImage(width: size, height: size, bitsPerComponent: 8, bitsPerPixel: 32, bytesPerRow: size * 4,
-					   space: CGColorSpace(name: CGColorSpace.sRGB)!, bitmapInfo: CGBitmapInfo(rawValue: CGImageAlphaInfo.noneSkipLast.rawValue),
+					   space: CGColorSpace(name: CGColorSpace.sRGB)!, bitmapInfo: CGBitmapInfo(rawValue: CGImageAlphaInfo.premultipliedLast.rawValue),
 					   provider: provider, decode: nil, shouldInterpolate: true, intent: .defaultIntent)
 	}
 
