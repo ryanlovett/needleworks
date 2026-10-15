@@ -20,9 +20,7 @@
 //  02111-1307, USA.
 
 #import "PESDocument.h"
-#import "AppDelegate.h"
 #import "Needle_Works-Swift.h"
-#import "SettingsWindowController.h"
 #import <NeedleWorksKit/NeedleWorksKit-Swift.h>
 
 /* Points per design unit (0.1 mm) at 100% zoom. This is the design view's
@@ -466,7 +464,7 @@ static const NSInteger PESMaximumLineWidth = 8;
 }
 
 - (NSColor*) fabricColor {
-	return ownFabricColor ?: PESDefaultFabricColor();
+	return ownFabricColor ?: [SettingsWindowController defaultFabricColor];
 }
 
 - (void) setFabricColor:(NSColor*) c {
@@ -587,7 +585,7 @@ static const NSInteger PESMaximumLineWidth = 8;
 }
 
 - (PESStitchStyle) stitchStyle {
-	PESStitchStyle style = hasOwnStitchStyle ? ownStitchStyle : (PESStitchStyle)[[NSUserDefaults standardUserDefaults] integerForKey:PESStitchStyleKey];
+	PESStitchStyle style = hasOwnStitchStyle ? ownStitchStyle : (PESStitchStyle)[[NSUserDefaults standardUserDefaults] integerForKey:[SettingsWindowController stitchStyleKey]];
 	return [PESRenderer canDrawStitchStyle:style] ? style : PESStitchStylePlain;
 }
 
@@ -599,7 +597,7 @@ static const NSInteger PESMaximumLineWidth = 8;
 	 styles the renderer can draw */
 	NSPopUpButton *popUp = [[NSPopUpButton alloc] initWithFrame:NSZeroRect pullsDown:NO];
 	[popUp setAutoenablesItems:NO];
-	NSArray *titles = PESStitchStyleTitles();
+	NSArray *titles = [SettingsWindowController stitchStyleTitles];
 	for (NSUInteger style = 0; style < [titles count]; style++) {
 		[popUp addItemWithTitle:titles[style]];
 		[[popUp lastItem] setTag:(NSInteger)style];
@@ -633,7 +631,7 @@ static const NSInteger PESMaximumLineWidth = 8;
 }
 
 - (BOOL) showsFabricTexture {
-	return [[NSUserDefaults standardUserDefaults] boolForKey:PESFabricTextureKey];
+	return [[NSUserDefaults standardUserDefaults] boolForKey:[SettingsWindowController fabricTextureKey]];
 }
 
 - (void) showStitchStyle {

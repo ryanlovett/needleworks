@@ -28,7 +28,7 @@ import AppKit
 final class PrintScaleAccessoryController: NSViewController, NSPrintPanelAccessorizing {
 	/// The user defaults key for the print scale: 0 prints designs at their
 	/// actual size, 1 scales them to fit the page.
-	@objc static let printScaleKey = "printScale"
+	@objc nonisolated static let printScaleKey = "printScale"
 
 	private var warningLabel: NSTextField?
 	private var lineWidthLabel: NSTextField?

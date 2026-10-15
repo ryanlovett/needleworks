@@ -9,9 +9,9 @@
 /* Begin PBXBuildFile section */
 		8D15AC320486D014006FF6A4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A37F4B0FDCFA73011CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
 		8D15AC340486D014006FF6A4 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A7FEA54F5311CA2CBB /* Cocoa.framework */; };
-		94028B7F0E67C308001CD6B0 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 94028B7D0E67C308001CD6B0 /* AppDelegate.m */; };
+		94028B7F0E67C308001CD6B0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94028B7D0E67C308001CD6B0 /* AppDelegate.swift */; };
 		94028B820E67C314001CD6B0 /* DesignView.m in Sources */ = {isa = PBXBuildFile; fileRef = 94028B800E67C314001CD6B0 /* DesignView.m */; };
-		94028B850E67C323001CD6B0 /* InspectorPanelController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94028B830E67C323001CD6B0 /* InspectorPanelController.m */; };
+		94028B850E67C323001CD6B0 /* InspectorPanelController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94028B830E67C323001CD6B0 /* InspectorPanelController.swift */; };
 		94028B880E67C32F001CD6B0 /* PESDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 94028B870E67C32F001CD6B0 /* PESDocument.m */; };
 		94028B930E67C3D9001CD6B0 /* InspectorPanel.xib in Resources */ = {isa = PBXBuildFile; fileRef = 94028B910E67C3D9001CD6B0 /* InspectorPanel.xib */; };
 		94028B960E67C3E5001CD6B0 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 94028B940E67C3E5001CD6B0 /* MainMenu.xib */; };
@@ -22,7 +22,7 @@
 		94C3C1A00000000000000003 /* CenteringClipView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C3C1A00000000000000002 /* CenteringClipView.swift */; };
 		94C3C1A00000000000000033 /* PrintHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C3C1A00000000000000032 /* PrintHeaderView.swift */; };
 		94C3C1A00000000000000023 /* PrintScaleAccessoryController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C3C1A00000000000000022 /* PrintScaleAccessoryController.swift */; };
-		94C3C1A00000000000000043 /* SettingsWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94C3C1A00000000000000042 /* SettingsWindowController.m */; };
+		94C3C1A00000000000000043 /* SettingsWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C3C1A00000000000000042 /* SettingsWindowController.swift */; };
 		94C3C1A00000000000000053 /* FabricColorPopUpButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C3C1A00000000000000052 /* FabricColorPopUpButton.swift */; };
 		94C3C1A00000000000000013 /* PrintLayoutSplitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C3C1A00000000000000012 /* PrintLayoutSplitView.swift */; };
 		94C97FD00E96D7590090FD3B /* PrintView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C97FCF0E96D7590090FD3B /* PrintView.swift */; };
@@ -79,12 +79,10 @@
 		2A37F4C4FDCFA73011CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		2A37F4C5FDCFA73011CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		8D15AC370486D014006FF6A4 /* Needle Works.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Needle Works.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		94028B7D0E67C308001CD6B0 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		94028B7E0E67C308001CD6B0 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		94028B7D0E67C308001CD6B0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		94028B800E67C314001CD6B0 /* DesignView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DesignView.m; sourceTree = "<group>"; };
 		94028B810E67C314001CD6B0 /* DesignView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DesignView.h; sourceTree = "<group>"; };
-		94028B830E67C323001CD6B0 /* InspectorPanelController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InspectorPanelController.m; sourceTree = "<group>"; };
-		94028B840E67C323001CD6B0 /* InspectorPanelController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InspectorPanelController.h; sourceTree = "<group>"; };
+		94028B830E67C323001CD6B0 /* InspectorPanelController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InspectorPanelController.swift; sourceTree = "<group>"; };
 		94028B860E67C32F001CD6B0 /* PESDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PESDocument.h; sourceTree = "<group>"; };
 		94028B870E67C32F001CD6B0 /* PESDocument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PESDocument.m; sourceTree = "<group>"; };
 		94028CC10E6BB060001CD6B0 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = en; path = en.lproj/Credits.rtf; sourceTree = "<group>"; };
@@ -97,9 +95,8 @@
 		94C3C1A00000000000000002 /* CenteringClipView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CenteringClipView.swift; sourceTree = "<group>"; };
 		94C3C1A00000000000000032 /* PrintHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrintHeaderView.swift; sourceTree = "<group>"; };
 		94C3C1A00000000000000022 /* PrintScaleAccessoryController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrintScaleAccessoryController.swift; sourceTree = "<group>"; };
-		94C3C1A00000000000000041 /* SettingsWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsWindowController.h; sourceTree = "<group>"; };
 		94C3C1A00000000000000071 /* Needle Works-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Needle Works-Bridging-Header.h"; sourceTree = "<group>"; };
-		94C3C1A00000000000000042 /* SettingsWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsWindowController.m; sourceTree = "<group>"; };
+		94C3C1A00000000000000042 /* SettingsWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsWindowController.swift; sourceTree = "<group>"; };
 		94C3C1A00000000000000052 /* FabricColorPopUpButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FabricColorPopUpButton.swift; sourceTree = "<group>"; };
 		94C3C1A00000000000000012 /* PrintLayoutSplitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrintLayoutSplitView.swift; sourceTree = "<group>"; };
 		94C97FCF0E96D7590090FD3B /* PrintView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrintView.swift; sourceTree = "<group>"; };
@@ -230,12 +227,10 @@
 		2A37F4ABFDCFA73011CA2CEA /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				94028B7E0E67C308001CD6B0 /* AppDelegate.h */,
-				94028B7D0E67C308001CD6B0 /* AppDelegate.m */,
+				94028B7D0E67C308001CD6B0 /* AppDelegate.swift */,
 				94028B810E67C314001CD6B0 /* DesignView.h */,
 				94028B800E67C314001CD6B0 /* DesignView.m */,
-				94028B840E67C323001CD6B0 /* InspectorPanelController.h */,
-				94028B830E67C323001CD6B0 /* InspectorPanelController.m */,
+				94028B830E67C323001CD6B0 /* InspectorPanelController.swift */,
 				94028B860E67C32F001CD6B0 /* PESDocument.h */,
 				94028B870E67C32F001CD6B0 /* PESDocument.m */,
 				94FC42270E9D41DB00A3B54D /* LegendPrintView.swift */,
@@ -243,9 +238,8 @@
 				94C3C1A00000000000000002 /* CenteringClipView.swift */,
 				94C3C1A00000000000000032 /* PrintHeaderView.swift */,
 				94C3C1A00000000000000022 /* PrintScaleAccessoryController.swift */,
-				94C3C1A00000000000000041 /* SettingsWindowController.h */,
 				94C3C1A00000000000000071 /* Needle Works-Bridging-Header.h */,
-				94C3C1A00000000000000042 /* SettingsWindowController.m */,
+				94C3C1A00000000000000042 /* SettingsWindowController.swift */,
 				94C3C1A00000000000000052 /* FabricColorPopUpButton.swift */,
 				94C3C1A00000000000000012 /* PrintLayoutSplitView.swift */,
 				94C97FCF0E96D7590090FD3B /* PrintView.swift */,
@@ -492,9 +486,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				8D15AC320486D014006FF6A4 /* main.m in Sources */,
-				94028B7F0E67C308001CD6B0 /* AppDelegate.m in Sources */,
+				94028B7F0E67C308001CD6B0 /* AppDelegate.swift in Sources */,
 				94028B820E67C314001CD6B0 /* DesignView.m in Sources */,
-				94028B850E67C323001CD6B0 /* InspectorPanelController.m in Sources */,
+				94028B850E67C323001CD6B0 /* InspectorPanelController.swift in Sources */,
 				94028B880E67C32F001CD6B0 /* PESDocument.m in Sources */,
 				94C97FD00E96D7590090FD3B /* PrintView.swift in Sources */,
 				94FC42280E9D41DB00A3B54D /* LegendPrintView.swift in Sources */,
@@ -502,7 +496,7 @@
 				94C3C1A00000000000000003 /* CenteringClipView.swift in Sources */,
 				94C3C1A00000000000000033 /* PrintHeaderView.swift in Sources */,
 				94C3C1A00000000000000023 /* PrintScaleAccessoryController.swift in Sources */,
-				94C3C1A00000000000000043 /* SettingsWindowController.m in Sources */,
+				94C3C1A00000000000000043 /* SettingsWindowController.swift in Sources */,
 				94C3C1A00000000000000053 /* FabricColorPopUpButton.swift in Sources */,
 				94C3C1A00000000000000013 /* PrintLayoutSplitView.swift in Sources */,
 			);
