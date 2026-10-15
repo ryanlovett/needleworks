@@ -232,6 +232,11 @@
                                     <action selector="toggleFabricTexture:" target="-1" id="NWf-01-tex-a"/>
                                 </connections>
                             </menuItem>
+                            <menuItem title="Show Jump Stitches" id="NWj-01-jmp">
+                                <connections>
+                                    <action selector="toggleJumpStitches:" target="-1" id="NWj-01-jmp-a"/>
+                                </connections>
+                            </menuItem>
                             <menuItem isSeparatorItem="YES" id="NWs-15-sep"/>
                             <menuItem title="Show Toolbar" keyEquivalent="t" id="297">
                                 <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>

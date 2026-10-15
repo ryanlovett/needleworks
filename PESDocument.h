@@ -111,6 +111,7 @@
 
 - (BOOL)		showJumpStitches;
 - (void)		setShowJumpStitches:(BOOL) show;
+- (IBAction)	toggleJumpStitches:(id)sender;
 
 /* The window's own stitch style if one was chosen, otherwise the one in Settings */
 - (PESStitchStyle)	stitchStyle;

@@ -246,6 +246,11 @@ static const NSInteger PESMaximumLineWidth = 8;
 			[(NSMenuItem *)item setState:(style == [self stitchStyle]) ? NSControlStateValueOn : NSControlStateValueOff];
 		}
 		return [PESRenderer canDrawStitchStyle:style];
+	} else if (action == @selector(toggleJumpStitches:)) {
+		if ([(id)item isKindOfClass:[NSMenuItem class]]) {
+			[(NSMenuItem *)item setState:showJumpStitches ? NSControlStateValueOn : NSControlStateValueOff];
+		}
+		return numStitches > 0;
 	} else if (action == @selector(chooseLineWidth:)) {
 		/* Only Plain draws lines */
 		if ([(id)item isKindOfClass:[NSMenuItem class]]) {
@@ -574,9 +579,12 @@ static const NSInteger PESMaximumLineWidth = 8;
 }
 
 - (void) setShowJumpStitches:(BOOL) show {
-	showJumpStitches = !showJumpStitches;
+	showJumpStitches = show;
 	[mainView setNeedsDisplay:YES];
-	//[[mainView window] performZoom:nil];
+}
+
+- (IBAction) toggleJumpStitches:(id)sender {
+	[self setShowJumpStitches:!showJumpStitches];
 }
 
 - (PESStitchStyle) stitchStyle {
