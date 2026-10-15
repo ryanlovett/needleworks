@@ -21,9 +21,8 @@
 
 #import "PESDocument.h"
 #import "AppDelegate.h"
-#import "PrintScaleAccessoryController.h"
+#import "Needle_Works-Swift.h"
 #import "SettingsWindowController.h"
-#import "FabricColorPopUpButton.h"
 #import <NeedleWorksKit/NeedleWorksKit-Swift.h>
 
 /* Points per design unit (0.1 mm) at 100% zoom. This is the design view's
@@ -413,7 +412,7 @@ static const NSInteger PESMaximumLineWidth = 8;
 	CGFloat unitsPerPoint = 254.0 / 72;
 
 	// User wants the printed size scaled to fit, keeping its proportions
-	NSInteger printScale = [[NSUserDefaults standardUserDefaults] integerForKey:PESPrintScaleKey];
+	NSInteger printScale = [[NSUserDefaults standardUserDefaults] integerForKey:[PrintScaleAccessoryController printScaleKey]];
 	if (printScale == 1 && xdiff > 0 && ydiff > 0) {
 		unitsPerPoint = MAX(xdiff / printSize.width, ydiff / printSize.height);
 	}

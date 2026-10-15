@@ -30,7 +30,7 @@ import AppKit
 final class PrintHeaderView: NSView {
 	override func draw(_ rect: NSRect) {
 		/* The check only makes sense when the design prints at actual size */
-		if UserDefaults.standard.integer(forKey: PESPrintScaleKey) != 0 {
+		if UserDefaults.standard.integer(forKey: PrintScaleAccessoryController.printScaleKey) != 0 {
 			return
 		}
 

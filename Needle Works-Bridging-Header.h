@@ -8,4 +8,3 @@
 
 #import "PESDocument.h"
 #import "DesignView.h"
-#import "PrintScaleAccessoryController.h"

@@ -21,9 +21,9 @@
 		94A2F8B40E9FDEC200C29361 /* NoDividerSplitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94A2F8B30E9FDEC200C29361 /* NoDividerSplitView.swift */; };
 		94C3C1A00000000000000003 /* CenteringClipView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C3C1A00000000000000002 /* CenteringClipView.swift */; };
 		94C3C1A00000000000000033 /* PrintHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C3C1A00000000000000032 /* PrintHeaderView.swift */; };
-		94C3C1A00000000000000023 /* PrintScaleAccessoryController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94C3C1A00000000000000022 /* PrintScaleAccessoryController.m */; };
+		94C3C1A00000000000000023 /* PrintScaleAccessoryController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C3C1A00000000000000022 /* PrintScaleAccessoryController.swift */; };
 		94C3C1A00000000000000043 /* SettingsWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94C3C1A00000000000000042 /* SettingsWindowController.m */; };
-		94C3C1A00000000000000053 /* FabricColorPopUpButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 94C3C1A00000000000000052 /* FabricColorPopUpButton.m */; };
+		94C3C1A00000000000000053 /* FabricColorPopUpButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C3C1A00000000000000052 /* FabricColorPopUpButton.swift */; };
 		94C3C1A00000000000000013 /* PrintLayoutSplitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C3C1A00000000000000012 /* PrintLayoutSplitView.swift */; };
 		94C97FD00E96D7590090FD3B /* PrintView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C97FCF0E96D7590090FD3B /* PrintView.swift */; };
 		94E60B21307E110F00C0CD5E /* NeedleWorksPreview.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 94E60B1A307E110F00C0CD5E /* NeedleWorksPreview.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -96,13 +96,11 @@
 		94A2F8B30E9FDEC200C29361 /* NoDividerSplitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoDividerSplitView.swift; sourceTree = "<group>"; };
 		94C3C1A00000000000000002 /* CenteringClipView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CenteringClipView.swift; sourceTree = "<group>"; };
 		94C3C1A00000000000000032 /* PrintHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrintHeaderView.swift; sourceTree = "<group>"; };
-		94C3C1A00000000000000021 /* PrintScaleAccessoryController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PrintScaleAccessoryController.h; sourceTree = "<group>"; };
-		94C3C1A00000000000000022 /* PrintScaleAccessoryController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PrintScaleAccessoryController.m; sourceTree = "<group>"; };
+		94C3C1A00000000000000022 /* PrintScaleAccessoryController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrintScaleAccessoryController.swift; sourceTree = "<group>"; };
 		94C3C1A00000000000000041 /* SettingsWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsWindowController.h; sourceTree = "<group>"; };
 		94C3C1A00000000000000071 /* Needle Works-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Needle Works-Bridging-Header.h"; sourceTree = "<group>"; };
 		94C3C1A00000000000000042 /* SettingsWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsWindowController.m; sourceTree = "<group>"; };
-		94C3C1A00000000000000051 /* FabricColorPopUpButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FabricColorPopUpButton.h; sourceTree = "<group>"; };
-		94C3C1A00000000000000052 /* FabricColorPopUpButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FabricColorPopUpButton.m; sourceTree = "<group>"; };
+		94C3C1A00000000000000052 /* FabricColorPopUpButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FabricColorPopUpButton.swift; sourceTree = "<group>"; };
 		94C3C1A00000000000000012 /* PrintLayoutSplitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrintLayoutSplitView.swift; sourceTree = "<group>"; };
 		94C97FCF0E96D7590090FD3B /* PrintView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrintView.swift; sourceTree = "<group>"; };
 		94E60AF6307E0BFB00C0CD5E /* NeedleWorksKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = NeedleWorksKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -244,13 +242,11 @@
 				94A2F8B30E9FDEC200C29361 /* NoDividerSplitView.swift */,
 				94C3C1A00000000000000002 /* CenteringClipView.swift */,
 				94C3C1A00000000000000032 /* PrintHeaderView.swift */,
-				94C3C1A00000000000000021 /* PrintScaleAccessoryController.h */,
-				94C3C1A00000000000000022 /* PrintScaleAccessoryController.m */,
+				94C3C1A00000000000000022 /* PrintScaleAccessoryController.swift */,
 				94C3C1A00000000000000041 /* SettingsWindowController.h */,
 				94C3C1A00000000000000071 /* Needle Works-Bridging-Header.h */,
 				94C3C1A00000000000000042 /* SettingsWindowController.m */,
-				94C3C1A00000000000000051 /* FabricColorPopUpButton.h */,
-				94C3C1A00000000000000052 /* FabricColorPopUpButton.m */,
+				94C3C1A00000000000000052 /* FabricColorPopUpButton.swift */,
 				94C3C1A00000000000000012 /* PrintLayoutSplitView.swift */,
 				94C97FCF0E96D7590090FD3B /* PrintView.swift */,
 			);
@@ -505,9 +501,9 @@
 				94A2F8B40E9FDEC200C29361 /* NoDividerSplitView.swift in Sources */,
 				94C3C1A00000000000000003 /* CenteringClipView.swift in Sources */,
 				94C3C1A00000000000000033 /* PrintHeaderView.swift in Sources */,
-				94C3C1A00000000000000023 /* PrintScaleAccessoryController.m in Sources */,
+				94C3C1A00000000000000023 /* PrintScaleAccessoryController.swift in Sources */,
 				94C3C1A00000000000000043 /* SettingsWindowController.m in Sources */,
-				94C3C1A00000000000000053 /* FabricColorPopUpButton.m in Sources */,
+				94C3C1A00000000000000053 /* FabricColorPopUpButton.swift in Sources */,
 				94C3C1A00000000000000013 /* PrintLayoutSplitView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

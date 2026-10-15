@@ -20,7 +20,7 @@
 //  02111-1307, USA.
 
 #import "SettingsWindowController.h"
-#import "FabricColorPopUpButton.h"
+#import "Needle_Works-Swift.h"
 #import <NeedleWorksKit/NeedleWorksKit-Swift.h>
 
 NSString * const PESStitchStyleKey = @"stitchStyle";
