@@ -17,7 +17,7 @@ trap 'rm -rf "$BUILD"' EXIT
 # A clean environment, so tools such as conda can't change the build, and
 # for the same macOS as the app.
 env -i PATH=/usr/bin:/bin HOME="$HOME" xcrun swiftc -O -target "$(uname -m)-apple-macos12.0" \
-	-o "$BUILD/IconGenerator" -parse-as-library IconGenerator.swift ../NeedleWorksKit/*.swift
+	-o "$BUILD/IconGenerator" -parse-as-library IconGenerator.swift Satin.swift ../NeedleWorksKit/*.swift
 
 "$BUILD/IconGenerator" "$FONT" "$BUILD/AppIcon.iconset" "$SEED"
 iconutil -c icns -o ../AppIcon.icns "$BUILD/AppIcon.iconset"

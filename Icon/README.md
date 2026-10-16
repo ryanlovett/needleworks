@@ -8,8 +8,9 @@ To make it again:
 
     Icon/make-icon.sh [seed]
 
-This builds `IconGenerator.swift` with NeedleWorksKit's sources, writes
-`AppIcon.icns`, and keeps a 1024-pixel copy in `icon-1024.png` to look at.
+This builds `IconGenerator.swift` with the satin stitches in `Satin.swift`
+and NeedleWorksKit's sources, writes `AppIcon.icns`, and keeps a
+1024-pixel copy in `icon-1024.png` to look at.
 The same font and seed always give the same icon, byte for byte. Another
 seed lays the stitches out a little differently. The icon was made with
 seed 1.
@@ -22,6 +23,8 @@ stitch spacing, and the layout of the 1024-pixel canvas. The font is set
 in `make-icon.sh`.
 
 ## How the stitches are placed
+
+This is in `Satin.swift`, which the sample designs in `Designs` use too.
 
 The letter's outline is rasterized at one cell per design unit. An exact
 distance transform finds the middle of each stroke, and the smoothed
