@@ -5,6 +5,9 @@ format. It shows a design's stitches in their thread colors, prints them
 with a legend of the threads, and adds Quick Look previews and thumbnails
 for PES files in the Finder.
 
+Screenshots and more are on the
+[project page](https://ryanlovett.github.io/needleworks/).
+
 ## Features
 
 - Three stitch styles: Plain lines, Shaded thread drawn at its real
