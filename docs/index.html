@@ -1,0 +1,298 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Needle Works</title>
+<meta name="description" content="A macOS viewer for Brother PES embroidery designs.">
+<link rel="icon" href="images/icon.webp">
+<style>
+:root {
+	--bg: #faf8f4;
+	--text: #26241f;
+	--muted: #6b665c;
+	--rule: #e3ded3;
+	--link: #2b3f8c;
+	--tile: #ffffff;
+}
+@media (prefers-color-scheme: dark) {
+	:root {
+		--bg: #1c1b19;
+		--text: #e9e5dc;
+		--muted: #a39d90;
+		--rule: #3a3833;
+		--link: #9fb1f0;
+		--tile: #26251f;
+	}
+}
+* {
+	box-sizing: border-box;
+}
+body {
+	margin: 0;
+	background: var(--bg);
+	color: var(--text);
+	font: 17px/1.55 -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, Arial, sans-serif;
+	-webkit-font-smoothing: antialiased;
+}
+main {
+	max-width: 920px;
+	margin: 0 auto;
+	padding: 56px 16px 40px;
+}
+a {
+	color: var(--link);
+}
+img {
+	display: block;
+	max-width: 100%;
+	height: auto;
+}
+header {
+	display: flex;
+	align-items: center;
+	gap: 24px;
+	margin-bottom: 40px;
+}
+header img {
+	width: 112px;
+	flex: none;
+}
+h1 {
+	margin: 0;
+	font-size: 40px;
+	line-height: 1.1;
+	font-weight: 600;
+	letter-spacing: -0.01em;
+}
+header p {
+	margin: 6px 0 0;
+	color: var(--muted);
+}
+.links {
+	margin-top: 10px;
+	font-size: 15px;
+}
+.links a {
+	margin-right: 18px;
+}
+.window {
+	margin: 0 auto 8px;
+	filter: drop-shadow(0 10px 24px rgba(0, 0, 0, 0.18));
+}
+h2 {
+	margin: 56px 0 8px;
+	padding-top: 24px;
+	border-top: 1px solid var(--rule);
+	font-size: 22px;
+	font-weight: 600;
+}
+h2 + p {
+	margin-top: 0;
+}
+p {
+	max-width: 680px;
+}
+.grid {
+	display: grid;
+	gap: 16px;
+	margin: 20px 0 0;
+}
+.styles {
+	grid-template-columns: repeat(3, 1fr);
+}
+.fabrics {
+	grid-template-columns: repeat(6, 1fr);
+	gap: 12px;
+}
+figure {
+	margin: 0;
+}
+figure img {
+	width: 100%;
+	border-radius: 6px;
+}
+figcaption {
+	margin-top: 6px;
+	font-size: 14px;
+	color: var(--muted);
+}
+figcaption strong {
+	color: var(--text);
+	font-weight: 600;
+}
+.finder {
+	display: flex;
+	align-items: flex-end;
+	justify-content: center;
+	gap: 40px;
+	margin-top: 20px;
+	padding: 28px 16px 20px;
+	background: var(--tile);
+	border: 1px solid var(--rule);
+	border-radius: 10px;
+}
+.finder figure {
+	text-align: center;
+}
+.finder img {
+	margin: 0 auto;
+	border-radius: 0;
+	width: auto;
+	max-height: 140px;
+}
+.finder img.wide {
+	width: 200px;
+	max-height: none;
+}
+.finder figcaption {
+	color: var(--text);
+	font-size: 13px;
+}
+ul {
+	padding-left: 20px;
+	max-width: 680px;
+}
+li {
+	margin: 6px 0;
+}
+ol {
+	padding-left: 22px;
+	max-width: 680px;
+}
+footer {
+	margin-top: 56px;
+	padding-top: 20px;
+	border-top: 1px solid var(--rule);
+	font-size: 14px;
+	color: var(--muted);
+}
+footer p {
+	margin: 4px 0;
+}
+@media (max-width: 640px) {
+	main {
+		padding-top: 32px;
+	}
+	header {
+		gap: 16px;
+	}
+	header img {
+		width: 72px;
+	}
+	h1 {
+		font-size: 30px;
+	}
+	.styles {
+		grid-template-columns: 1fr;
+	}
+	.fabrics {
+		grid-template-columns: repeat(3, 1fr);
+	}
+	.finder {
+		gap: 20px;
+	}
+	.finder img {
+		max-height: 90px;
+	}
+	.finder img.wide {
+		width: 110px;
+	}
+}
+</style>
+</head>
+<body>
+<main>
+
+<header>
+	<img src="images/icon.webp" alt="" width="256" height="256">
+	<div>
+		<h1>Needle Works</h1>
+		<p>A viewer for Brother PES embroidery designs on the Mac.</p>
+		<div class="links">
+			<a href="https://github.com/ryanlovett/needleworks/releases/latest">Download</a>
+			<a href="https://github.com/ryanlovett/needleworks">Source code</a>
+		</div>
+	</div>
+</header>
+
+<img class="window" src="images/window.webp" width="1800" height="1322"
+	alt="A Needle Works window showing a peace sign design in white satin over a blue fill, drawn as realistic thread on natural fabric">
+
+<p>Needle Works opens PES files and shows the stitches in their thread
+colors. It can print them, and it adds Quick Look previews and thumbnails
+for PES files in the Finder. It needs macOS 12 or later.</p>
+
+<h2>Stitch styles</h2>
+<p>Each window can show the stitches in one of three styles.</p>
+<div class="grid styles">
+	<figure>
+		<img src="images/style-plain.webp" width="560" height="560" alt="The flower's petals drawn as thin lines">
+		<figcaption><strong>Plain</strong>: lines in each thread's color, of a width you choose, as they're printed.</figcaption>
+	</figure>
+	<figure>
+		<img src="images/style-shaded.webp" width="560" height="560" alt="The petals drawn as shaded thread">
+		<figcaption><strong>Shaded</strong>: thread at its real width of 0.4 mm, lit from the top left.</figcaption>
+	</figure>
+	<figure>
+		<img src="images/style-realistic.webp" width="560" height="560" alt="The petals drawn as realistic twisted thread">
+		<figcaption><strong>Realistic</strong>: shaded thread with its twist and natural variation.</figcaption>
+	</figure>
+</div>
+
+<h2>Fabrics</h2>
+<p>Designs are shown on a woven fabric at its real scale: white, natural,
+khaki, heather gray, red, forest green, chambray, denim, navy or black, or a
+plain weave in any color. The texture can be turned off to show a flat
+color.</p>
+<div class="grid fabrics">
+	<figure><img src="images/fabric-white.webp" width="320" height="320" alt="A leaf on white fabric"><figcaption>White</figcaption></figure>
+	<figure><img src="images/fabric-heather.webp" width="320" height="320" alt="A leaf on heather gray fabric"><figcaption>Heather Gray</figcaption></figure>
+	<figure><img src="images/fabric-khaki.webp" width="320" height="320" alt="A leaf on khaki fabric"><figcaption>Khaki</figcaption></figure>
+	<figure><img src="images/fabric-chambray.webp" width="320" height="320" alt="A leaf on chambray"><figcaption>Chambray</figcaption></figure>
+	<figure><img src="images/fabric-denim.webp" width="320" height="320" alt="A leaf on denim"><figcaption>Denim</figcaption></figure>
+	<figure><img src="images/fabric-black.webp" width="320" height="320" alt="A leaf on black fabric"><figcaption>Black</figcaption></figure>
+</div>
+
+<h2>In the Finder</h2>
+<p>PES files get thumbnails in the Finder, and a preview when you press the
+Space bar.</p>
+<div class="finder">
+	<figure><img src="images/thumb-needle-works.webp" width="400" height="73" alt="Thumbnail of the Needle Works design" class="wide"><figcaption>Needle Works.pes</figcaption></figure>
+	<figure><img src="images/thumb-peace.webp" width="400" height="400" alt="Thumbnail of the peace sign design"><figcaption>Peace.pes</figcaption></figure>
+	<figure><img src="images/thumb-flower.webp" width="199" height="400" alt="Thumbnail of the flower design"><figcaption>Flower.pes</figcaption></figure>
+</div>
+
+<h2>Also</h2>
+<ul>
+	<li>Jump stitches and trims can be shown or hidden.</li>
+	<li>The fabric, stitch style and other choices made for a design are
+	remembered for the next time it's opened. Design files are never
+	changed.</li>
+	<li>Designs print at actual size, with a line to check the scale with a
+	ruler, or scaled to fit the page, with a legend of the threads in sewing
+	order.</li>
+	<li>The Design Information panel shows a design's size, stitch count,
+	colors and color changes.</li>
+</ul>
+
+<h2>Installing</h2>
+<ol>
+	<li><a href="https://github.com/ryanlovett/needleworks/releases/latest">Download the zip</a>, unzip it, and drag Needle Works to your Applications folder.</li>
+	<li>Needle Works isn't notarized by Apple, so the first time you open it,
+	macOS says it can't be opened. Click Done.</li>
+	<li>Open System Settings &gt; Privacy &amp; Security, scroll down to the
+	message about Needle Works, and click Open Anyway.</li>
+</ol>
+<p>After that, it opens normally.</p>
+
+<footer>
+	<p>Needle Works is free software by Ryan Lovett, under the
+	<a href="https://github.com/ryanlovett/needleworks/blob/master/GPL-2">GNU General Public License</a>, version 2 or later.</p>
+	<p>The designs shown were made for Needle Works and are in the
+	<a href="https://github.com/ryanlovett/needleworks/tree/master/Designs">repository</a>.</p>
+</footer>
+
+</main>
+</body>
+</html>
