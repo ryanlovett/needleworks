@@ -101,11 +101,15 @@ final class DesignView: NSView {
 	private var liveMagnifying = false
 	private var shownMagnification: CGFloat = 0
 
-	/// Whether two areas cover the same pixels, allowing for rounding
+	/// Whether two areas cover the same pixels, allowing for rounding. The
+	/// part of the window under the toolbar is drawn in a layer of its own,
+	/// a fraction of a pixel from the rest, so the same area can round to
+	/// pixels one apart in each layer. Those count as the same, or each layer
+	/// would ask for a new image in turn, forever.
 	private static func samePixels(_ context: CGContext, _ a: NSRect, _ b: NSRect) -> Bool {
 		let da = context.convertToDeviceSpace(a), db = context.convertToDeviceSpace(b)
-		return abs(da.minX - db.minX) < 0.01 && abs(da.minY - db.minY) < 0.01 &&
-			abs(da.width - db.width) < 0.01 && abs(da.height - db.height) < 0.01
+		return abs(da.minX - db.minX) <= 1.01 && abs(da.minY - db.minY) <= 1.01 &&
+			abs(da.width - db.width) <= 1.01 && abs(da.height - db.height) <= 1.01
 	}
 
 	nonisolated private static func image(of stitchBlocks: [StitchBlock], settings: Settings, rect: NSRect, pixelRect: CGRect) -> NSImage? {
